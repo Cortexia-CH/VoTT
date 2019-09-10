@@ -410,3 +410,12 @@ export interface ITFRecordMetadata {
     ymaxArray: number[];
     textArray: string[];
 }
+
+/**
+ * @name - Auth
+ * @description - Defines an auth parameters
+ * @member accessToken - Unique authentication token
+ */
+export interface IAuth {
+    accessToken: string;
+}
