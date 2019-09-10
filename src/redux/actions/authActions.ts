@@ -1,7 +1,7 @@
 import { ActionTypes } from "./actionTypes";
-import { IPayloadAction, createPayloadAction } from "./actionCreators";
+import { IPayloadAction, createPayloadAction, createAction } from "./actionCreators";
 import { IAuth } from "../../models/applicationState";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { IpcRendererProxy } from "../../common/ipcRendererProxy";
 
 /**
@@ -26,6 +26,18 @@ export function signIn(accessToken: string): (disptach: Dispatch) => Promise<voi
 }
 
 /**
+ * Sign out from the application
+ */
+export function signOut(): (dispatch: Dispatch) => Promise<void> {
+    return (dispatch: Dispatch) => {
+        return IpcRendererProxy.send("SIGN_OUT")
+        .then(() => {
+            dispatch(signOutAction());
+        });
+    };
+}
+
+/**
  * Sign in action type
  */
 export interface ISignInAction extends IPayloadAction<string, string> {
@@ -35,7 +47,7 @@ export interface ISignInAction extends IPayloadAction<string, string> {
 /**
  * Sign out action type
  */
-export interface ISignOutAction extends IPayloadAction<string, string> {
+export interface ISignOutAction extends Action<string> {
     type: ActionTypes.SIGN_OUT_SUCCESS;
 }
 
@@ -46,4 +58,4 @@ export const signInAction = createPayloadAction<ISignInAction>(ActionTypes.SIGN_
 /**
  * Instance of sign out action
  */
-export const signOutAction = createPayloadAction<ISignOutAction>(ActionTypes.SIGN_OUT_SUCCESS);
+export const signOutAction = createAction<ISignOutAction>(ActionTypes.SIGN_OUT_SUCCESS);
