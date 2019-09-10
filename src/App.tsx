@@ -4,7 +4,7 @@ import { Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Sidebar from "./react/components/shell/sidebar";
 import MainContentRouter from "./react/components/shell/mainContentRouter";
-import { IAppError, IApplicationState, IProject, ErrorCode, IAuth } from "./models/applicationState";
+import { IAppError, IApplicationState, IProject, ErrorCode } from "./models/applicationState";
 import "./App.scss";
 import "react-toastify/dist/ReactToastify.css";
 import IAppErrorActions, * as appErrorActions from "./redux/actions/appErrorActions";
@@ -21,7 +21,6 @@ interface IAppProps {
     currentProject?: IProject;
     appError?: IAppError;
     actions?: IAppErrorActions;
-    auth?: IAuth;
 }
 
 function mapStateToProps(state: IApplicationState) {
@@ -48,7 +47,6 @@ export default class App extends React.Component<IAppProps> {
 
         this.state = {
             currentProject: this.props.currentProject,
-            auth: this.props.auth,
         };
     }
 

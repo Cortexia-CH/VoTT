@@ -5,7 +5,7 @@ import {signInAction, signOutAction} from "../actions/authActions";
 import { anyOtherAction } from "../actions/actionCreators";
 
 describe("Auth Reducer", () => {
-    it("Save auth with new access token", () => {
+    it("Saves auth with new access token", () => {
         const testAuth = MockFactory.createTestAuth();
         const state: IAuth = testAuth;
         const newAuth = MockFactory.createTestAuth("new_auth");
