@@ -7,9 +7,11 @@ import { IpcRendererProxy } from "../../common/ipcRendererProxy";
 /**
  * Actions which manage users auth
  * @member signIn - Allows to sign in to the application
+ * @member signIn - Allows to sign out from the application
  */
 export default interface IAuthActions {
     signIn(accessToken: IAuth): Promise<void>;
+    signOut(): Promise<void>;
 }
 
 /**
