@@ -8,6 +8,7 @@ import { HelpMenu } from "./helpMenu";
 export interface ITitleBarProps extends React.Props<TitleBar> {
     icon?: string | JSX.Element;
     title?: string;
+    email?: string;
 }
 
 export interface ITitleBarState {
@@ -62,6 +63,7 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
         if (this.state.fullscreen) {
             return null;
         }
+        const {email} = this.props;
 
         return (
             <div className="title-bar bg-lighter-3">
@@ -83,6 +85,11 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
                     </div>
                 }
                 <div className="title-bar-main">{this.props.title || "Welcome"} - VoTT</div>
+                {email &&
+                <div className="title-bar-user-email">
+                   {email}
+                </div>
+                }
                 <div className="title-bar-controls">
                     {this.props.children}
                     {this.state.platform === PlatformType.Windows &&
