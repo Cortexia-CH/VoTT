@@ -8,6 +8,7 @@ describe("TileBar Component", () => {
     const defaultProps: ITitleBarProps = {
         title: "Test Title",
         icon: "fas fa-tags",
+        email: "email@test.com",
     };
 
     let handlerMapping = {};
@@ -84,15 +85,26 @@ describe("TileBar Component", () => {
             });
         });
 
-        it("renders ico, title and children", () => {
+        it("renders ico, title, email and children", () => {
             const icon = wrapper.find(".title-bar-icon");
             const title = wrapper.find(".title-bar-main");
+            const email = wrapper.find(".title-bar-user-email");
 
             expect(icon.exists()).toBe(true);
             expect(icon.find(".fa-tags").exists()).toBe(true);
             expect(title.exists()).toBe(true);
             expect(title.text()).toEqual(`${defaultProps.title} - VoTT`);
+            expect(email.exists()).toBe(true);
+            expect(email.text()).toEqual(`${defaultProps.email}`);
             expect(wrapper.find(".fa-user-circle").exists()).toBe(true);
+        });
+
+        it("does not render user email", () => {
+            const props = {};
+            const newWrapper = createComponent(props);
+            const email = newWrapper.find(".title-bar-user-email");
+
+            expect(email.exists()).toBe(false);
         });
     });
 
@@ -112,6 +124,7 @@ describe("TileBar Component", () => {
                 expect(wrapper.find(".title-bar-icon").exists()).toBe(true);
                 expect(wrapper.find(".title-bar-menu").exists()).toBe(true);
                 expect(wrapper.find(".title-bar-main").exists()).toBe(true);
+                expect(wrapper.find(".title-bar-user-email").exists()).toBe(true);
                 expect(wrapper.find(".btn-window-minimize").exists()).toBe(true);
                 expect(wrapper.find(".btn-window-maximize").exists()).toBe(true);
                 expect(wrapper.find(".btn-window-close").exists()).toBe(true);
@@ -234,6 +247,7 @@ describe("TileBar Component", () => {
                 expect(wrapper.find(".title-bar-icon").exists()).toBe(false);
                 expect(wrapper.find(".title-bar-menu").exists()).toBe(false);
                 expect(wrapper.find(".title-bar-main").exists()).toBe(true);
+                expect(wrapper.find(".title-bar-user-email").exists()).toBe(true);
                 expect(wrapper.find(".btn-window-minimize").exists()).toBe(false);
                 expect(wrapper.find(".btn-window-maximize").exists()).toBe(false);
                 expect(wrapper.find(".btn-window-close").exists()).toBe(false);
@@ -252,6 +266,7 @@ describe("TileBar Component", () => {
                 expect(wrapper.find(".title-bar-icon").exists()).toBe(false);
                 expect(wrapper.find(".title-bar-menu").exists()).toBe(false);
                 expect(wrapper.find(".title-bar-main").exists()).toBe(true);
+                expect(wrapper.find(".title-bar-user-email").exists()).toBe(true);
                 expect(wrapper.find(".btn-window-minimize").exists()).toBe(false);
                 expect(wrapper.find(".btn-window-maximize").exists()).toBe(false);
                 expect(wrapper.find(".btn-window-close").exists()).toBe(false);
