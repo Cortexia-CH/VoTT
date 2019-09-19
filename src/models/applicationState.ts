@@ -420,5 +420,5 @@ export interface ITFRecordMetadata {
  */
 export interface IAuth {
     accessToken?: string;
-    email?: string;
+    fullName?: string;
 }

@@ -76,7 +76,7 @@ export default class App extends React.Component<IAppProps> {
                             <div className={`app-shell platform-${platform}`}>
                                 <TitleBar icon="fas fa-tags"
                                     title={this.props.currentProject ? this.props.currentProject.name : ""}
-                                    email={this.props.auth.email}>
+                                    fullName={this.props.auth.fullName}>
                                     <div className="app-help-menu-icon"><HelpMenu/></div>
                                 </TitleBar>
                                 <div className="app-main">

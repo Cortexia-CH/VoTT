@@ -33,7 +33,7 @@ describe("Auth Reducer", () => {
 
         const result = reducer(state, action);
         expect(result.accessToken).toEqual(null);
-        expect(result.email).toEqual(null);
+        expect(result.fullName).toEqual(null);
     });
 
     it("Unknown action performs a noop", () => {

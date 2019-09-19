@@ -18,7 +18,7 @@ const initialState: IApplicationState = {
     currentProject: null,
     auth: {
         accessToken: null,
-        email: null,
+        fullName: null,
     },
     appError: null,
 };

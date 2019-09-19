@@ -22,7 +22,7 @@ describe("Auth Redux Actions", () => {
     });
 
     it("Sign in action forwards call to IpcRenderer proxy and dispatches redux action", async () => {
-        const authObject = MockFactory.createTestAuth("access_token", "email@test");
+        const authObject = MockFactory.createTestAuth("access_token", "John Doe");
         await authActions.signIn(authObject)(store.dispatch);
         const actions = store.getActions();
 
