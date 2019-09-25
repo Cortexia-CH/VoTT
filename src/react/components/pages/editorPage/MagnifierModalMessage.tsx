@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 
-export function MagnifierMessage(): ReactElement<any> {
+export function MagnifierModalMessage(): ReactElement<any> {
     return (
         <div>
         Application does not have it's own magnifier, but you could use

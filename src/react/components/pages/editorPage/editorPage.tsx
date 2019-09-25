@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { RefObject, ReactElement } from "react";
+import React, { RefObject } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 import SplitPane from "react-split-pane";
@@ -31,8 +31,7 @@ import Alert from "../../common/alert/alert";
 import Confirm from "../../common/confirm/confirm";
 import { ActiveLearningService } from "../../../../services/activeLearningService";
 import { toast } from "react-toastify";
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { MagnifierMessage } from "./MagnifierMessage";
+import { MagnifierModalMessage } from "./MagnifierModalMessage";
 
 /**
  * Properties for Editor Page
@@ -80,9 +79,6 @@ export interface IEditorPageState {
     isValid: boolean;
     /** Whether the show invalid region warning alert should display */
     showInvalidRegionWarning: boolean;
-    /**
-     * Whether or not the magnifier modal is open
-     */
     magnifierModalIsOpen: boolean;
 }
 
@@ -271,7 +267,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 <Alert show={this.state.magnifierModalIsOpen}
                     title="Native Magnifier Instruction"
                     // tslint:disable-next-line:max-line-length
-                    message={<MagnifierMessage />}
+                    message={<MagnifierModalMessage />}
                     closeButtonColor="info"
                     onClose={this.closeNativeMagnifierModal} />
 
@@ -588,7 +584,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             case ToolbarItemName.ActiveLearning:
                 await this.predictRegions();
                 break;
-            case ToolbarItemName.Magnifief:
+            case ToolbarItemName.Magnifier:
                 this.showNativeMagnifierModal();
                 break;
         }

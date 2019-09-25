@@ -18,7 +18,7 @@ export enum ToolbarItemName {
     SaveProject = "saveProject",
     ExportProject = "exportProject",
     ActiveLearning = "activeLearning",
-    Magnifief = "magnifier",
+    Magnifier = "magnifier",
 }
 
 export enum ToolbarItemGroup {
@@ -151,7 +151,7 @@ export default function registerToolbar() {
     }, ExportProject);
 
     ToolbarItemFactory.register({
-        name: ToolbarItemName.Magnifief,
+        name: ToolbarItemName.Magnifier,
         tooltip: strings.editorPage.toolbar.magnifier,
         icon: "fas fa-search-plus",
         group: ToolbarItemGroup.Helper,
