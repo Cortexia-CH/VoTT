@@ -156,6 +156,5 @@ export default function registerToolbar() {
         icon: "fas fa-search-plus",
         group: ToolbarItemGroup.Helper,
         type: ToolbarItemType.Action,
-        accelerators: ["CmdOrCtrl and +", "CmdOrCtrl and -"],
     });
 }
