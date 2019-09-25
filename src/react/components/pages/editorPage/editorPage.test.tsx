@@ -398,7 +398,7 @@ describe("Editor Page Component", () => {
         const wrapper = createComponent(store, props);
         const editorPage = wrapper.find(EditorPage).childAt(0) as ReactWrapper<IEditorPageProps, IEditorPageState>;
 
-        // Attempt to navigate to different asset
+        // Attempt to click on magnifier from toolbar
         wrapper.find(`.${ToolbarItemName.Magnifier}`).simulate("click");
 
         expect(editorPage.state().magnifierModalIsOpen).toBe(true);
