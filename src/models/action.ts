@@ -3,8 +3,8 @@ import { IRegion } from "./applicationState";
 export interface IAction {
     type: ActionType;
     timestamp: number;
-    user_id: number;
-    image_id: number;
+    userId: number;
+    imageId: number;
     regions: IRegion[];
 }
 
@@ -22,4 +22,19 @@ export enum ActionType {
     ImgDelete = "img_delete",
     Logout = "logout",
     Login = "login",
+}
+
+class Action implements IAction {
+    public timestamp = Date.now();
+    public type: ActionType;
+    public userId: number;
+    public imageId: number;
+    public regions: IRegion[];
+
+    constructor(type: ActionType, userId: number, imageId: number, regions: IRegion[]) {
+        this.type = type;
+        this.userId = userId;
+        this.imageId = imageId;
+        this.regions = regions;
+    }
 }
