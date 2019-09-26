@@ -5,7 +5,7 @@ export function MagnifierModalMessage(): ReactElement<any> {
         <div>
         Application does not have it's own magnifier, but you could use
         native magnifier of your operating system. Below are videos which
-        shows how to native magnifiers on macOS, Ubuntu and Windows 10.
+        shows how to use native magnifiers on macOS, Ubuntu and Windows 10.
         <br />
         <div>
             <i className="fab fa-apple" /> macOS -
