@@ -1,29 +1,31 @@
-import { Dispatch, Action } from "redux";
-import { createAction } from "./actionCreators";
+import { Dispatch } from "redux";
+import { createPayloadAction, IPayloadAction } from "./actionCreators";
 import { ActionTypes } from "./actionTypes";
+import { ITrackAction, TrackActionType } from "../../models/trackAction";
 
 /**
  * Actions which manage tracking
- * @member signIn - Tracks user signs in to the app
- * @member signOut - Tracks user signs out from the app
- * @member imgIn - Tracks user enters on the image
- * @member imgOut - Tracks user leaves the image
- * @member imgDelete - Tracks user deletes the image
+ * @member trackSignIn - Tracks user signs in to the app
+ * @member trackSignOut - Tracks user signs out from the app
+ * @member trackImgIn - Tracks user enters on the image
+ * @member trackImgOut - Tracks user leaves the image
+ * @member trackImgDelete - Tracks user deletes the image
  */
 export default interface ITrackActions {
-    trackSignIn(): Promise<void>;
-    trackSignOut(): Promise<void>;
-    trackImgIn(): Promise<void>;
-    trackImgOut(): Promise<void>;
-    trackImgDelete(): Promise<void>;
+    trackSignIn(trackAction: ITrackAction): Promise<void>;
+    trackSignOut(trackAction: ITrackAction): Promise<void>;
+    trackImgIn(trackAction: ITrackAction): Promise<void>;
+    trackImgOut(trackAction: ITrackAction): Promise<void>;
+    trackImgDelete(trackAction: ITrackAction): Promise<void>;
 }
 
 /**
  * Tracks user signs in to the application
  */
-export function trackSignIn(): (dispatch: Dispatch) => Promise<void> {
+export function trackSignIn(trackAction: ITrackAction): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(trackSignInAction());
+        trackAction.type = TrackActionType.SignIn;
+        dispatch(trackSignInAction(trackAction));
         return Promise.resolve();
     };
 }
@@ -31,9 +33,10 @@ export function trackSignIn(): (dispatch: Dispatch) => Promise<void> {
 /**
  * Tracks user signs out from the application
  */
-export function trackSignOut(): (dispatch: Dispatch) => Promise<void> {
+export function trackSignOut(trackAction: ITrackAction): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(trackSignOutAction());
+        trackAction.type = TrackActionType.SignOut;
+        dispatch(trackSignOutAction(trackAction));
         return Promise.resolve();
     };
 }
@@ -41,9 +44,10 @@ export function trackSignOut(): (dispatch: Dispatch) => Promise<void> {
 /**
  * Tracks user enters on the image
  */
-export function trackImgIn(): (dispatch: Dispatch) => Promise<void> {
+export function trackImgIn(trackAction: ITrackAction): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(trackImgInAction());
+        trackAction.type = TrackActionType.ImgIn;
+        dispatch(trackImgInAction(trackAction));
         return Promise.resolve();
     };
 }
@@ -51,9 +55,10 @@ export function trackImgIn(): (dispatch: Dispatch) => Promise<void> {
 /**
  * Tracks user leaves the image
  */
-export function trackImgOut(): (dispatch: Dispatch) => Promise<void> {
+export function trackImgOut(trackAction: ITrackAction): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(trackImgOutAction());
+        trackAction.type = TrackActionType.ImgOut;
+        dispatch(trackImgOutAction(trackAction));
         return Promise.resolve();
     };
 }
@@ -61,35 +66,36 @@ export function trackImgOut(): (dispatch: Dispatch) => Promise<void> {
 /**
  * Tracks user deletes the image
  */
-export function trackImgDelete(): (dispatch: Dispatch) => Promise<void> {
+export function trackImgDelete(trackAction: ITrackAction): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(trackImgDeleteAction());
+        trackAction.type = TrackActionType.ImgDelete;
+        dispatch(trackImgDeleteAction(trackAction));
         return Promise.resolve();
     };
 }
 
-export interface ITrackSignInAction extends Action<string> {
+export interface ITrackSignInAction extends IPayloadAction<string, ITrackAction> {
     type: ActionTypes.TRACK_SIGN_IN_SUCCESS;
 }
 
-export interface ITrackSignOutAction extends Action<string> {
+export interface ITrackSignOutAction extends IPayloadAction<string, ITrackAction> {
     type: ActionTypes.TRACK_SIGN_OUT_SUCCESS;
 }
 
-export interface ITrackImgInAction extends Action<string> {
+export interface ITrackImgInAction extends IPayloadAction<string, ITrackAction> {
     type: ActionTypes.TRACK_IMG_IN_SUCCESS;
 }
 
-export interface ITrackImgOutAction extends Action<string> {
+export interface ITrackImgOutAction extends IPayloadAction<string, ITrackAction> {
     type: ActionTypes.TRACK_IMG_OUT_SUCCESS;
 }
 
-export interface ITrackImgDeleteAction extends Action<string> {
+export interface ITrackImgDeleteAction extends IPayloadAction<string, ITrackAction> {
     type: ActionTypes.TRACK_IMG_DELETE_SUCCESS;
 }
 
-const trackSignInAction = createAction<ITrackSignInAction>(ActionTypes.TRACK_SIGN_IN_SUCCESS);
-const trackSignOutAction = createAction<ITrackSignOutAction>(ActionTypes.TRACK_SIGN_OUT_SUCCESS);
-const trackImgInAction = createAction<ITrackImgInAction>(ActionTypes.TRACK_IMG_IN_SUCCESS);
-const trackImgOutAction = createAction<ITrackImgOutAction>(ActionTypes.TRACK_IMG_OUT_SUCCESS);
-const trackImgDeleteAction = createAction<ITrackImgDeleteAction>(ActionTypes.TRACK_IMG_DELETE_SUCCESS);
+const trackSignInAction = createPayloadAction<ITrackSignInAction>(ActionTypes.TRACK_SIGN_IN_SUCCESS);
+const trackSignOutAction = createPayloadAction<ITrackSignOutAction>(ActionTypes.TRACK_SIGN_OUT_SUCCESS);
+const trackImgInAction = createPayloadAction<ITrackImgInAction>(ActionTypes.TRACK_IMG_IN_SUCCESS);
+const trackImgOutAction = createPayloadAction<ITrackImgOutAction>(ActionTypes.TRACK_IMG_OUT_SUCCESS);
+const trackImgDeleteAction = createPayloadAction<ITrackImgDeleteAction>(ActionTypes.TRACK_IMG_DELETE_SUCCESS);

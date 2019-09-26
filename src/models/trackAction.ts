@@ -1,7 +1,7 @@
 import { IRegion } from "./applicationState";
 
-export interface IAction {
-    type: ActionType;
+export interface ITrackAction {
+    type: TrackActionType;
     timestamp: number;
     userId: number;
     imageId: number;
@@ -13,25 +13,25 @@ export interface IAction {
  * @enum ImgIn - Enters on the image
  * @enum ImgOut - Leaves the image
  * @enum ImgDelete - Deletes the image
- * @enum Logout - Sign out from the account
- * @enum Login - Sign in to the account
+ * @enum SignOut - Sign out from the account
+ * @enum SignIn - Sign in to the account
  */
-export enum ActionType {
+export enum TrackActionType {
     ImgIn = "img_in",
     ImgOut = "img_out",
     ImgDelete = "img_delete",
-    Logout = "logout",
-    Login = "login",
+    SignOut = "logout",
+    SignIn = "login",
 }
 
-class Action implements IAction {
+class TrackAction implements ITrackAction {
     public timestamp = Date.now();
-    public type: ActionType;
+    public type: TrackActionType;
     public userId: number;
     public imageId: number;
     public regions: IRegion[];
 
-    constructor(type: ActionType, userId: number, imageId: number, regions: IRegion[]) {
+    constructor(type: TrackActionType, userId: number, imageId: number, regions: IRegion[]) {
         this.type = type;
         this.userId = userId;
         this.imageId = imageId;
