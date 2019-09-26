@@ -1,24 +1,11 @@
+import { IRegion } from "./applicationState";
+
 export interface IAction {
     type: ActionType;
     timestamp: number;
     user_id: number;
     image_id: number;
     regions: IRegion[];
-}
-
-export interface IRegion {
-    tags: string[];
-    points: object[];
-    type: string;
-    id: string;
-    boundingBox: IBoundingBox;
-}
-
-export interface IBoundingBox {
-    top: number;
-    width: number;
-    height: number;
-    left: number;
 }
 
 /**
