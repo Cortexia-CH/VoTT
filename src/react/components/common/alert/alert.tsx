@@ -52,7 +52,7 @@ export default class Alert extends React.Component<IAlertProps, IAlertState> {
                 message={this.props.message}
                 params={this.state.params}
                 show={this.props.show}
-                onButtonSelect={this.onCloseClick}
+                onCancel={this.onCloseClick}
             >
                 <Button
                     autoFocus={true}
