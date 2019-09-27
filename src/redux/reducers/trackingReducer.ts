@@ -5,7 +5,6 @@ import { ITrackingAction } from "../../models/trackingAction";
 export const reducer = (state: ITrackingAction[] = [], action: AnyAction): ITrackingAction[] => {
     switch (action.type) {
         case ActionTypes.TRACK_SIGN_IN_SUCCESS:
-            console.log("dupa");
             return state.concat(action.payload);
         case ActionTypes.TRACK_SIGN_OUT_SUCCESS:
             return state.concat(action.payload);

@@ -89,8 +89,7 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
                 },
             });
             await this.props.actions.signIn(this.state.auth);
-            const trackingAction = new TrackingAction(TrackingActionType.SignIn, userInfo.data.id);
-            await this.props.trackingActions.trackingSignIn(trackingAction);
+            await this.props.trackingActions.trackingSignIn(userInfo.data.id);
             history.push("/");
         } catch (error) {
             let errorMessage;

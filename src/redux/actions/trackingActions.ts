@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { createPayloadAction, IPayloadAction } from "./actionCreators";
 import { ActionTypes } from "./actionTypes";
-import { ITrackingAction, TrackingActionType } from "../../models/trackingAction";
+import { ITrackingAction, TrackingActionType, createTrackingAction } from "../../models/trackingAction";
 
 /**
  * Actions which manage tracking
@@ -12,7 +12,7 @@ import { ITrackingAction, TrackingActionType } from "../../models/trackingAction
  * @member trackingImgDelete - Tracks user deletes the image
  */
 export default interface ITrackingActions {
-    trackingSignIn(trackingAction: ITrackingAction): Promise<void>;
+    trackingSignIn(userId: number): Promise<void>;
     trackingSignOut(trackingAction: ITrackingAction): Promise<void>;
     trackingImgIn(trackingAction: ITrackingAction): Promise<void>;
     trackingImgOut(trackingAction: ITrackingAction): Promise<void>;
@@ -22,8 +22,9 @@ export default interface ITrackingActions {
 /**
  * Tracks user signs in to the application
  */
-export function trackingSignIn(trackingAction: ITrackingAction): (dispatch: Dispatch) => Promise<void> {
+export function trackingSignIn(userId: number): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
+        const trackingAction = createTrackingAction(TrackingActionType.SignIn, userId);
         dispatch(trackingSignInAction(trackingAction));
         return Promise.resolve();
     };
