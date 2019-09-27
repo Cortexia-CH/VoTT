@@ -25,7 +25,13 @@ import {
     IClearErrorAction,
 } from "./appErrorActions";
 import { ISignInAction, ISignOutAction } from "./authActions";
-import { ITrackSignInAction, ITrackSignOutAction, ITrackImgInAction, ITrackImgOutAction, ITrackImgDeleteAction } from "./trackActions";
+import {
+    ITrackingSignInAction,
+    ITrackingSignOutAction,
+    ITrackingImgInAction,
+    ITrackingImgOutAction,
+    ITrackingImgDeleteAction,
+} from "./trackingActions";
 
 /**
  * Data payload dispatched from the action and delivered to reducer
@@ -92,8 +98,8 @@ export type AnyAction = IOtherAction |
     IClearErrorAction |
     ISignInAction |
     ISignOutAction |
-    ITrackSignInAction |
-    ITrackSignOutAction |
-    ITrackImgInAction |
-    ITrackImgOutAction |
-    ITrackImgDeleteAction;
+    ITrackingSignInAction |
+    ITrackingSignOutAction |
+    ITrackingImgInAction |
+    ITrackingImgOutAction |
+    ITrackingImgDeleteAction;

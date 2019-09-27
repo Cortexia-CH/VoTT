@@ -4,15 +4,18 @@ import { SignInForm } from "./signInForm";
 import { Route, Redirect } from "react-router-dom";
 import ApiService, { ILoginRequestPayload } from "../../../../services/apiService";
 import IAuthActions, * as authActions from "../../../../redux/actions/authActions";
+import ITrackingActions, * as trackingActions from "../../../../redux/actions/trackingActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { IApplicationState } from "../../../../models/applicationState";
 import history from "../../../../history";
 import { toast } from "react-toastify";
+import { TrackingAction, TrackingActionType } from "../../../../models/trackingAction";
 
 export interface ISignInPageProps extends React.Props<SignInPage> {
     actions: IAuthActions;
     signIn: ISignIn;
+    trackingActions: ITrackingActions;
 }
 
 export interface ISignInPageState {
@@ -30,6 +33,7 @@ function mapStateToProps(state: IApplicationState) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators(authActions, dispatch),
+        trackingActions: bindActionCreators(trackingActions, dispatch),
     };
 }
 
@@ -49,7 +53,7 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
     public render() {
         return (
             <div className="app-sign-in-page-form">
-                <Route exact path="/login">
+                <Route exact path="/sign-in">
                     <div>
                         <SignInForm
                             signIn={this.state.signIn}
@@ -85,8 +89,9 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
                 },
             });
             await this.props.actions.signIn(this.state.auth);
+            const trackingAction = new TrackingAction(TrackingActionType.SignIn, userInfo.data.id);
+            await this.props.trackingActions.trackingSignIn(trackingAction);
             history.push("/");
-
         } catch (error) {
             let errorMessage;
             if (error.response) {
