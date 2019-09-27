@@ -52,6 +52,7 @@
         "react-vis": "^1.11.6",
         "reactstrap": "^6.5.0",
         "redux": "^4.0.1",
+        "redux-devtools-extension": "^2.13.8",
         "redux-thunk": "^2.3.0",
         "rimraf": "^2.6.2",
         "shortid": "^2.2.14",
