@@ -919,7 +919,7 @@ export default class MockFactory {
             actions: (projectActions as any) as IProjectActions,
             applicationActions: (applicationActions as any) as IApplicationActions,
             ...MockFactory.pageProps(projectId, "edit"),
-            auth: MockFactory.createTestAuth(),
+            auth: MockFactory.createTestAuth("token", "John Doe", false, 2),
             trackingActions: (trackingActions as any) as ITrackingActions,
         };
     }
@@ -938,6 +938,7 @@ export default class MockFactory {
             currentProject: testProjects[0],
             ...state,
             appError: null,
+            auth: MockFactory.createTestAuth(),
         };
     }
 
@@ -1043,11 +1044,12 @@ export default class MockFactory {
      * @param accessToken Access token which is used to auth the user
      */
     public static createTestAuth(
-        accessToken?: string, fullName?: string, rememberUser?: boolean): IAuth {
+        accessToken?: string, fullName?: string, rememberUser?: boolean, userId?: number): IAuth {
         return {
             accessToken,
             fullName,
             rememberUser,
+            userId,
         };
     }
 
@@ -1148,6 +1150,7 @@ export default class MockFactory {
             history: MockFactory.history(),
             location: MockFactory.location(),
             match: MockFactory.match(projectId, method),
+            auth: MockFactory.createTestAuth(),
         };
     }
 

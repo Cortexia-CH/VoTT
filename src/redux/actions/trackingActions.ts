@@ -97,8 +97,8 @@ export interface ITrackingImgDeleteAction extends IPayloadAction<string, ITracki
     type: ActionTypes.TRACK_IMG_DELETE_SUCCESS;
 }
 
-const trackingSignInAction = createPayloadAction<ITrackingSignInAction>(ActionTypes.TRACK_SIGN_IN_SUCCESS);
-const trackingSignOutAction = createPayloadAction<ITrackingSignOutAction>(ActionTypes.TRACK_SIGN_OUT_SUCCESS);
-const trackingImgInAction = createPayloadAction<ITrackingImgInAction>(ActionTypes.TRACK_IMG_IN_SUCCESS);
-const trackingImgOutAction = createPayloadAction<ITrackingImgOutAction>(ActionTypes.TRACK_IMG_OUT_SUCCESS);
-const trackingImgDeleteAction = createPayloadAction<ITrackingImgDeleteAction>(ActionTypes.TRACK_IMG_DELETE_SUCCESS);
+export const trackingSignInAction = createPayloadAction<ITrackingSignInAction>(ActionTypes.TRACK_SIGN_IN_SUCCESS);
+export const trackingSignOutAction = createPayloadAction<ITrackingSignOutAction>(ActionTypes.TRACK_SIGN_OUT_SUCCESS);
+export const trackingImgInAction = createPayloadAction<ITrackingImgInAction>(ActionTypes.TRACK_IMG_IN_SUCCESS);
+export const trackingImgOutAction = createPayloadAction<ITrackingImgOutAction>(ActionTypes.TRACK_IMG_OUT_SUCCESS);
+export const trackingImgDeleteAction = createPayloadAction<ITrackingImgDeleteAction>(ActionTypes.TRACK_IMG_DELETE_SUCCESS); // tslint:disable-line
