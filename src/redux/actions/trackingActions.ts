@@ -2,6 +2,7 @@ import { Dispatch } from "redux";
 import { createPayloadAction, IPayloadAction } from "./actionCreators";
 import { ActionTypes } from "./actionTypes";
 import { ITrackingAction, TrackingActionType, createTrackingAction } from "../../models/trackingAction";
+import { IRegion } from "../../models/applicationState";
 
 /**
  * Actions which manage tracking
@@ -13,10 +14,10 @@ import { ITrackingAction, TrackingActionType, createTrackingAction } from "../..
  */
 export default interface ITrackingActions {
     trackingSignIn(userId: number): Promise<void>;
-    trackingSignOut(trackingAction: ITrackingAction): Promise<void>;
-    trackingImgIn(trackingAction: ITrackingAction): Promise<void>;
-    trackingImgOut(trackingAction: ITrackingAction): Promise<void>;
-    trackingImgDelete(trackingAction: ITrackingAction): Promise<void>;
+    trackingSignOut(userId: number): Promise<void>;
+    trackingImgIn(userId: number, imageId: string, regions: IRegion[]): Promise<void>;
+    trackingImgOut(userId: number, imageId: string, regions: IRegion[]): Promise<void>;
+    trackingImgDelete(userId: number, imageId: string): Promise<void>;
 }
 
 /**
@@ -33,9 +34,9 @@ export function trackingSignIn(userId: number): (dispatch: Dispatch) => Promise<
 /**
  * Tracks user signs out from the application
  */
-export function trackingSignOut(trackingAction: ITrackingAction): (dispatch: Dispatch) => Promise<void> {
+export function trackingSignOut(userId: number): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        trackingAction.type = TrackingActionType.SignOut;
+        const trackingAction = createTrackingAction(TrackingActionType.SignOut, userId);
         dispatch(trackingSignOutAction(trackingAction));
         return Promise.resolve();
     };
@@ -44,9 +45,10 @@ export function trackingSignOut(trackingAction: ITrackingAction): (dispatch: Dis
 /**
  * Tracks user enters on the image
  */
-export function trackingImgIn(trackingAction: ITrackingAction): (dispatch: Dispatch) => Promise<void> {
+export function trackingImgIn(userId: number, imageId: string, regions: IRegion[])
+: (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        trackingAction.type = TrackingActionType.ImgIn;
+        const trackingAction = createTrackingAction(TrackingActionType.ImgIn, userId, imageId, regions);
         dispatch(trackingImgInAction(trackingAction));
         return Promise.resolve();
     };
@@ -55,9 +57,10 @@ export function trackingImgIn(trackingAction: ITrackingAction): (dispatch: Dispa
 /**
  * Tracks user leaves the image
  */
-export function trackingImgOut(trackingAction: ITrackingAction): (dispatch: Dispatch) => Promise<void> {
+export function trackingImgOut(userId: number, imageId: string, regions: IRegion[])
+: (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        trackingAction.type = TrackingActionType.ImgOut;
+        const trackingAction = createTrackingAction(TrackingActionType.ImgOut, userId, imageId, regions);
         dispatch(trackingImgOutAction(trackingAction));
         return Promise.resolve();
     };
@@ -66,9 +69,9 @@ export function trackingImgOut(trackingAction: ITrackingAction): (dispatch: Disp
 /**
  * Tracks user deletes the image
  */
-export function trackingImgDelete(trackingAction: ITrackingAction): (dispatch: Dispatch) => Promise<void> {
+export function trackingImgDelete(userId: number, imageId: string): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        trackingAction.type = TrackingActionType.ImgDelete;
+        const trackingAction = createTrackingAction(TrackingActionType.ImgDelete, userId, imageId);
         dispatch(trackingImgDeleteAction(trackingAction));
         return Promise.resolve();
     };

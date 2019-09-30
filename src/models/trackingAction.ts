@@ -4,7 +4,7 @@ export interface ITrackingAction {
     type: TrackingActionType;
     timestamp: number;
     userId: number;
-    imageId: number;
+    imageId: string;
     regions: IRegion[];
 }
 
@@ -28,10 +28,10 @@ export class TrackingAction implements ITrackingAction {
     public timestamp = Date.now();
     public type: TrackingActionType;
     public userId: number;
-    public imageId: number;
+    public imageId: string;
     public regions: IRegion[];
 
-    constructor(type: TrackingActionType, userId: number, imageId: number = null, regions: IRegion[] = []) {
+    constructor(type: TrackingActionType, userId: number, imageId: string = null, regions: IRegion[] = []) {
         this.type = type;
         this.userId = userId;
         this.imageId = imageId;
@@ -42,7 +42,7 @@ export class TrackingAction implements ITrackingAction {
 export const createTrackingAction = (
     type: TrackingActionType,
     userId: number,
-    imageId?: number,
+    imageId?: string,
     regions?: IRegion[] // tslint:disable-line
     ) => {
     return new TrackingAction(type, userId, imageId, regions);

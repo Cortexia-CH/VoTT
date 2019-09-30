@@ -34,6 +34,7 @@ import { IKeyboardBindingProps } from "../react/components/common/keyboardBindin
 import { KeyEventType } from "../react/components/common/keyboardManager/keyboardManager";
 import { IKeyboardRegistrations } from "../react/components/common/keyboardManager/keyboardRegistrationManager";
 import { IActiveLearningPageProps } from "../react/components/pages/activeLearning/activeLearningPage";
+import ITrackingActions, * as trackingActions from "../redux/actions/trackingActions";
 
 export default class MockFactory {
 
@@ -918,6 +919,8 @@ export default class MockFactory {
             actions: (projectActions as any) as IProjectActions,
             applicationActions: (applicationActions as any) as IApplicationActions,
             ...MockFactory.pageProps(projectId, "edit"),
+            auth: MockFactory.createTestAuth(),
+            trackingActions: (trackingActions as any) as ITrackingActions,
         };
     }
 

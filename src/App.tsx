@@ -62,7 +62,6 @@ export default class App extends React.Component<IAppProps> {
     }
 
     public render() {
-
         const platform = global && global.process ? global.process.platform : "web";
         if (!this.props.auth.rememberUser) {
             window.addEventListener("beforeunload", (e) => {

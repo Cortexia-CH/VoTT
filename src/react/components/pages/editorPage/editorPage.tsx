@@ -10,7 +10,7 @@ import { strings } from "../../../../common/strings";
 import {
     AssetState, AssetType, EditorMode, IApplicationState,
     IAppSettings, IAsset, IAssetMetadata, IProject, IRegion,
-    ISize, ITag, IAdditionalPageSettings, AppError, ErrorCode,
+    ISize, ITag, IAdditionalPageSettings, AppError, ErrorCode, IAuth,
 } from "../../../../models/applicationState";
 import { IToolbarItemRegistration, ToolbarItemFactory } from "../../../../providers/toolbar/toolbarItemFactory";
 import IApplicationActions, * as applicationActions from "../../../../redux/actions/applicationActions";
@@ -31,6 +31,7 @@ import Alert from "../../common/alert/alert";
 import Confirm from "../../common/confirm/confirm";
 import { ActiveLearningService } from "../../../../services/activeLearningService";
 import { toast } from "react-toastify";
+import ITrackingActions, * as trackingActions from "../../../../redux/actions/trackingActions";
 
 /**
  * Properties for Editor Page
@@ -45,6 +46,8 @@ export interface IEditorPageProps extends RouteComponentProps, React.Props<Edito
     appSettings: IAppSettings;
     actions: IProjectActions;
     applicationActions: IApplicationActions;
+    auth: IAuth;
+    trackingActions: ITrackingActions;
 }
 
 /**
@@ -85,6 +88,7 @@ function mapStateToProps(state: IApplicationState) {
         recentProjects: state.recentProjects,
         project: state.currentProject,
         appSettings: state.appSettings,
+        auth: state.auth,
     };
 }
 
@@ -92,6 +96,7 @@ function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators(projectActions, dispatch),
         applicationActions: bindActionCreators(applicationActions, dispatch),
+        trackingActions: bindActionCreators(trackingActions, dispatch),
     };
 }
 
@@ -483,7 +488,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             };
         }
 
-        this.setState({ childAssets, assets, isValid: true });
+        this.setState({ childAssets, assets, isValid: true, selectedAsset: assetMetadata });
     }
 
     /**
@@ -631,6 +636,16 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             return;
         }
 
+        /**
+         * Track image out
+         */
+        if (this.state.selectedAsset && this.state.selectedAsset.asset) {
+            await this.props.trackingActions.trackingImgOut(
+                this.props.auth.userId,
+                this.state.selectedAsset.asset.id,
+                this.state.selectedAsset.regions);
+        }
+
         const assetMetadata = await this.props.actions.loadAssetMetadata(this.props.project, asset);
 
         try {
@@ -647,6 +662,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         }, async () => {
             await this.onAssetMetadataChanged(assetMetadata);
         });
+
+        await this.props.trackingActions.trackingImgIn(
+            this.props.auth.userId,
+            assetMetadata.asset.id,
+            assetMetadata.regions);
     }
 
     private loadProjectAssets = async (): Promise<void> => {

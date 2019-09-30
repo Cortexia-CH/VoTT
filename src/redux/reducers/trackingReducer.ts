@@ -15,6 +15,6 @@ export const reducer = (state: ITrackingAction[] = [], action: AnyAction): ITrac
         case ActionTypes.TRACK_IMG_DELETE_SUCCESS:
             return state.concat(action.payload);
         default:
-            return [];
+            return state ? state : [];
     }
 };

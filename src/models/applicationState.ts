@@ -432,5 +432,6 @@ export interface ITFRecordMetadata {
 export interface IAuth {
     accessToken?: string;
     fullName?: string;
+    userId?: number;
     rememberUser?: boolean;
 }

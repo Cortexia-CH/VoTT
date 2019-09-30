@@ -86,6 +86,7 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
                     accessToken: token.data.access_token,
                     fullName: userInfo.data.full_name,
                     rememberUser,
+                    userId: userInfo.data.id,
                 },
             });
             await this.props.actions.signIn(this.state.auth);

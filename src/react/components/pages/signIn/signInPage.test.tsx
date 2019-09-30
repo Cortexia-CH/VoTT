@@ -12,6 +12,7 @@ import { IAuth } from "../../../../models/applicationState";
 import history from "../../../../history";
 import ApiService from "../../../../services/apiService";
 import IAuthActions, * as authActions from "../../../../redux/actions/authActions";
+import ITrackingActions, * as trackingActions from "../../../../redux/actions/trackingActions";
 
 describe("Sign In Page", () => {
     function createComponent(
@@ -85,7 +86,7 @@ describe("Sign In Page", () => {
                 password: "somePassword",
                 rememberUser: false,
             },
+            trackingActions: (trackingActions as any) as ITrackingActions,
         };
     }
-
 });
