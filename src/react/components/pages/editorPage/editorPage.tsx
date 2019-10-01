@@ -37,8 +37,11 @@ import ITrackingActions, * as trackingActions from "../../../../redux/actions/tr
  * Properties for Editor Page
  * @member project - Project being edited
  * @member recentProjects - Array of projects recently viewed/edited
+ * @member appSettings - Settings of the application
  * @member actions - Project actions
  * @member applicationActions - Application setting actions
+ * @member auth - Authentication of the user
+ * @member trackingActions - Tracking of user actions
  */
 export interface IEditorPageProps extends RouteComponentProps, React.Props<EditorPage> {
     project: IProject;
@@ -637,7 +640,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         }
 
         /**
-         * Track image out
+         * Track user leaves the image
          */
         if (this.state.selectedAsset && this.state.selectedAsset.asset) {
             await this.props.trackingActions.trackingImgOut(
@@ -663,6 +666,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             await this.onAssetMetadataChanged(assetMetadata);
         });
 
+        /**
+         * Track user enters on the image
+         */
         await this.props.trackingActions.trackingImgIn(
             this.props.auth.userId,
             assetMetadata.asset.id,

@@ -3,7 +3,7 @@ import {
     AssetState, AssetType, IApplicationState, IAppSettings, IAsset, IAssetMetadata,
     IConnection, IExportFormat, IProject, ITag, StorageType, ISecurityToken,
     EditorMode, IAppError, IProjectVideoSettings, ErrorCode,
-    IPoint, IRegion, RegionType, ModelPathType, IAuth, ISignIn,
+    IPoint, IRegion, RegionType, ModelPathType, IAuth,
 } from "../models/applicationState";
 import { IV1Project, IV1Region } from "../models/v1Models";
 import { ExportAssetState } from "../providers/export/exportProvider";
@@ -919,7 +919,7 @@ export default class MockFactory {
             actions: (projectActions as any) as IProjectActions,
             applicationActions: (applicationActions as any) as IApplicationActions,
             ...MockFactory.pageProps(projectId, "edit"),
-            auth: MockFactory.createTestAuth("token", "John Doe", false, 2),
+            auth: MockFactory.createTestAuth(),
             trackingActions: (trackingActions as any) as ITrackingActions,
         };
     }

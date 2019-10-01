@@ -10,7 +10,6 @@ import { connect } from "react-redux";
 import { IApplicationState } from "../../../../models/applicationState";
 import history from "../../../../history";
 import { toast } from "react-toastify";
-import { TrackingAction, TrackingActionType } from "../../../../models/trackingAction";
 
 export interface ISignInPageProps extends React.Props<SignInPage> {
     actions: IAuthActions;

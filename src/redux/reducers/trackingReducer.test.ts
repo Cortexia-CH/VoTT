@@ -1,51 +1,65 @@
-import MockFactory from "../../common/mockFactory";
 import { reducer } from "./trackingReducer";
-import { TrackingAction } from "../../models/trackingAction";
+import { createTrackingAction, TrackingActionType, ITrackingAction } from "../../models/trackingAction";
 import {
     trackingImgDeleteAction,
     trackingImgInAction,
-    ITrackingImgOutAction,
     trackingSignInAction,
-    trackingSignOutAction} from "../actions/trackingActions";
-import { anyOtherAction } from "../actions/actionCreators";
+    trackingSignOutAction,
+    trackingImgOutAction,
+} from "../actions/trackingActions";
 
 describe("Tracking Reducer", () => {
-    it("Saves tracking with new tracking object", () => {
-        const testTracking: TrackingAction = MockFactory.createTestTracking();
-        const state: TrackingAction = testTracking;
-        const newTracking: TrackingAction = MockFactory.createTestTracking("new_tracking");
+    beforeEach(() => {
+        Date.now = jest.fn();
+    });
+
+    it("Adds new tracking action by track sign in action", () => {
+        const testTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 2);
+        const newTracking: ITrackingAction = createTrackingAction(TrackingActionType.SignIn, 2);
+        const trackings: ITrackingAction[] = [testTracking];
         const action = trackingSignInAction(newTracking);
 
-        const result = reducer(state, action);
-        expect(result).not.toBe(state);
+        const result = reducer(trackings, action);
+        expect(result).toEqual([testTracking, newTracking]);
     });
 
-    it("Updates tracking with the same tracking object", () => {
-        const testTracking: ITracking = MockFactory.createTestTracking();
-        const state: ITracking = testTracking;
-        const updatedTracking: ITracking = { ...testTracking };
-        const action = signInAction(updatedTracking);
+    it("Adds new tracking action by track sign out action", () => {
+        const testTracking: ITrackingAction = createTrackingAction(TrackingActionType.SignIn, 2);
+        const newTracking: ITrackingAction = createTrackingAction(TrackingActionType.SignOut, 2);
+        const trackings: ITrackingAction[] = [testTracking];
+        const action = trackingSignOutAction(newTracking);
 
-        const result = reducer(state, action);
-        expect(result).not.toBe(state);
-        expect(result.accessToken).toEqual(testTracking.accessToken);
+        const result = reducer(trackings, action);
+        expect(result).toEqual([testTracking, newTracking]);
     });
 
-    it("Deletes tracking properties from tracking state by signing out", () => {
-        const testTracking: ITracking = MockFactory.createTestTracking();
-        const state: ITracking = testTracking;
-        const action = signOutAction();
+    it("Adds new tracking action by track img in action", () => {
+        const testTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgOut, 2);
+        const newTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 2);
+        const trackings: ITrackingAction[] = [testTracking];
+        const action = trackingImgInAction(newTracking);
 
-        const result = reducer(state, action);
-        expect(result.accessToken).toEqual(null);
-        expect(result.fullName).toEqual(null);
+        const result = reducer(trackings, action);
+        expect(result).toEqual([testTracking, newTracking]);
     });
 
-    it("Unknown action performs a noop", () => {
-        const state: ITracking = MockFactory.createTestTracking();
-        const action = anyOtherAction();
+    it("Adds new tracking action by track img out action", () => {
+        const testTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 2);
+        const newTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgOut, 2);
+        const trackings: ITrackingAction[] = [testTracking];
+        const action = trackingImgOutAction(newTracking);
 
-        const result = reducer(state, action);
-        expect(result).toBe(state);
+        const result = reducer(trackings, action);
+        expect(result).toEqual([testTracking, newTracking]);
+    });
+
+    it("Adds new tracking action by track img delete action", () => {
+        const testTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgDelete, 2);
+        const newTracking: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 2);
+        const trackings: ITrackingAction[] = [testTracking];
+        const action = trackingImgDeleteAction(newTracking);
+
+        const result = reducer(trackings, action);
+        expect(result).toEqual([testTracking, newTracking]);
     });
 });

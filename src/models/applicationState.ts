@@ -428,6 +428,9 @@ export interface ITFRecordMetadata {
  * @name - Auth
  * @description - Defines an auth parameters
  * @member accessToken - Unique authentication token
+ * @member fullName - Full name of the signed user
+ * @member userId - Id of the signed user
+ * @member rememberUser - If user sign in should be remembered
  */
 export interface IAuth {
     accessToken?: string;

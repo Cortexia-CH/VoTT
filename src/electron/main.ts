@@ -54,6 +54,7 @@ function createWindow() {
 
     const localFileSystem = new LocalFileSystem(mainWindow);
     ipcMainProxy.registerProxy("LocalFileSystem", localFileSystem);
+    // Adds React and Redux devtools to the electron application
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]);
 }
 
