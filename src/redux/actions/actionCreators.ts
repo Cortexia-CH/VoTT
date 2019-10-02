@@ -24,7 +24,7 @@ import {
     IShowAppErrorAction,
     IClearErrorAction,
 } from "./appErrorActions";
-import { ISignInAction, ISignOutAction, ISaveFullNameAction } from "./authActions";
+import { ISignInAction, ISignOutAction, ISaveUserInfoAction } from "./authActions";
 import {
     ITrackingSignInAction,
     ITrackingSignOutAction,
@@ -103,4 +103,4 @@ export type AnyAction = IOtherAction |
     ITrackingImgInAction |
     ITrackingImgOutAction |
     ITrackingImgDeleteAction |
-    ISaveFullNameAction;
+    ISaveUserInfoAction;

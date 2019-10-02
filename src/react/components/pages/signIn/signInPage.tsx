@@ -77,17 +77,17 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
     private async sendCredentials(rememberUser: boolean) {
         try {
             const token = await apiService.loginWithCredentials(this.state.loginRequestPayload);
-            const userInfo = await apiService.getCurrentUser();
             this.setState({
                 auth: {
                     accessToken: token.data.access_token,
                     fullName: null,
                     rememberUser,
-                    userId: userInfo.data.id,
+                    userId: null,
                 },
             });
             await this.props.actions.signIn(this.state.auth);
-            await this.props.actions.saveFullName(userInfo.data.full_name);
+            const userInfo = await apiService.getCurrentUser();
+            await this.props.actions.saveUserInfo({fullName: userInfo.data.full_name, userId: userInfo.data.id});
             await this.props.trackingActions.trackingSignIn(userInfo.data.id);
             history.push("/");
         } catch (error) {

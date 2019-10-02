@@ -3,15 +3,21 @@ import { IPayloadAction, createPayloadAction, createAction } from "./actionCreat
 import { IAuth } from "../../models/applicationState";
 import { Dispatch, Action } from "redux";
 
+export interface IUserInfo {
+    fullName: string;
+    userId: number;
+}
+
 /**
  * Actions which manage users auth
  * @member signIn - Allows to sign in to the application
  * @member signOut - Allows to sign out from the application
+ * @member saveUserInfo - Saves information about the user
  */
 export default interface IAuthActions {
     signIn(auth: IAuth): Promise<void>;
     signOut(): Promise<void>;
-    saveFullName(fullName: string): Promise<void>;
+    saveUserInfo(userInfo: IUserInfo): Promise<void>;
 }
 
 /**
@@ -35,11 +41,11 @@ export function signOut(): (dispatch: Dispatch) => Promise<void> {
 }
 
 /**
- * Save full name of the user
+ * Save user info
  */
-export function saveFullName(fullName: string): (dispatch: Dispatch) => Promise<void> {
+export function saveUserInfo(userInfo: IUserInfo): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        dispatch(saveFullNameAction(fullName));
+        dispatch(saveUserInfoAction(userInfo));
         return Promise.resolve();
     };
 }
@@ -59,10 +65,10 @@ export interface ISignOutAction extends Action<string> {
 }
 
 /**
- * Save full name action type
+ * Save user info action type
  */
-export interface ISaveFullNameAction extends IPayloadAction<string, string> {
-    type: ActionTypes.SAVE_FULL_NAME_SUCCESS;
+export interface ISaveUserInfoAction extends IPayloadAction<string, IUserInfo> {
+    type: ActionTypes.SAVE_USER_INFO_SUCCESS;
 }
 
 /**
@@ -74,6 +80,6 @@ export const signInAction = createPayloadAction<ISignInAction>(ActionTypes.SIGN_
  */
 export const signOutAction = createAction<ISignOutAction>(ActionTypes.SIGN_OUT_SUCCESS);
 /**
- * Instance of save full name action
+ * Instance of save user info action
  */
-export const saveFullNameAction = createPayloadAction<ISaveFullNameAction>(ActionTypes.SAVE_FULL_NAME_SUCCESS);
+export const saveUserInfoAction = createPayloadAction<ISaveUserInfoAction>(ActionTypes.SAVE_USER_INFO_SUCCESS);
