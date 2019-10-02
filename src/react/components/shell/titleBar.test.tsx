@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { IApplicationState, IAuth } from "../../../models/applicationState";
 import createReduxStore from "./../../../redux/store/store";
 import MockFactory from "../../../common/mockFactory";
+import IAuthActions, * as authActions from "../../../redux/actions/authActions";
 
 describe("TileBar Component", () => {
     let wrapper: ReactWrapper<ITitleBarProps, ITitleBarState>;
@@ -16,7 +17,17 @@ describe("TileBar Component", () => {
         title: "Test Title",
         icon: "fas fa-tags",
         fullName: "John Doe",
+        actions: (authActions as any) as IAuthActions,
+        auth: MockFactory.createTestAuth("accessToken"),
     };
+
+    const circleList = (<ul>
+        <li>
+            <a title="Profile" href="#/profile">
+                <i className="fas fa-user-circle"></i>
+            </a>
+        </li>
+    </ul>);
 
     let handlerMapping = {};
 
@@ -64,19 +75,24 @@ describe("TileBar Component", () => {
         },
     };
 
-    function createComponent(   store: Store<IApplicationState>,
-                                props?: ITitleBarProps): ReactWrapper<ITitleBarProps, ITitleBarState> {
+    function createComponent(props?: ITitleBarProps): ReactWrapper<ITitleBarProps, ITitleBarState> {
         props = props || defaultProps;
         return mount(
-            <Provider store={store} >
+            <TitleBar {...props}>
+                {circleList}
+            </TitleBar>,
+        );
+    }
+
+    function createProviderComponent(
+        store?: Store<IApplicationState, AnyAction>,
+        props?: ITitleBarProps,
+    ): ReactWrapper<ITitleBarProps, ITitleBarState> {
+        props = props || defaultProps;
+        return mount(
+            <Provider store={store}>
                 <TitleBar {...props}>
-                    <ul>
-                        <li>
-                            <a title="Profile" href="#/profile">
-                                <i className="fas fa-user-circle"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    {circleList}
                 </TitleBar>
             </Provider>,
         );
@@ -95,9 +111,22 @@ describe("TileBar Component", () => {
 
     beforeEach(() => {
         handlerMapping = {};
-        const fakeAuth = MockFactory.createTestAuth("access_token", "John Doe", false);
-        store = createStore(fakeAuth);
-        wrapper = createComponent(store);
+        wrapper = createComponent();
+    });
+
+    describe("Provider component", () => {
+        beforeAll(() => {
+            const fakeAuth = MockFactory.createTestAuth("access_token", "John Doe", false);
+            store = createStore(fakeAuth);
+            wrapper = createProviderComponent(store);
+        });
+
+        it("renders sign out", () => {
+            const signOut = wrapper.find(".title-bar-sign-out");
+
+            expect(signOut.exists()).toBe(true);
+            expect(signOut.text()).toEqual("Sign out");
+        });
     });
 
     describe("Web", () => {
@@ -109,13 +138,10 @@ describe("TileBar Component", () => {
         });
 
         it("renders ico, title, user full name and children", () => {
-            const signOut = wrapper.find(".title-bar-sign-out");
             const icon = wrapper.find(".title-bar-icon");
             const title = wrapper.find(".title-bar-main");
             const fullName = wrapper.find(".title-bar-user-full-name");
 
-            expect(signOut.exists()).toBe(true);
-            expect(signOut.text()).toEqual("Sign out");
             expect(icon.exists()).toBe(true);
             expect(icon.find(".fa-tags").exists()).toBe(true);
             expect(title.exists()).toBe(true);
@@ -126,8 +152,8 @@ describe("TileBar Component", () => {
         });
 
         it("does not render user full name", () => {
-            const props = {};
-            const newWrapper = createComponent(store, props);
+            const auth = MockFactory.createTestAuth("accessToken");
+            const newWrapper = createComponent({ auth });
             const fullName = newWrapper.find(".title-bar-user-full-name");
 
             expect(fullName.exists()).toBe(false);

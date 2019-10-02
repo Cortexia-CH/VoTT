@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosPromise } from "axios";
 import qs from "qs";
 import { Env } from "../common/environment";
 
@@ -7,7 +7,29 @@ export interface ILoginRequestPayload {
     password: string;
 }
 
-class ApiService {
+export interface IApiService {
+    loginWithCredentials(data: ILoginRequestPayload): AxiosPromise<IUserCredentials>;
+    testToken(): AxiosPromise<IUser>;
+    getCurrentUser(): AxiosPromise<IUser>;
+}
+
+interface IUserCredentials {
+    access_token: string;
+    token_type: string;
+}
+
+interface IUser {
+    email: string;
+    full_name: string;
+    is_active: boolean;
+    is_superuser: boolean;
+    city_id: number;
+    id: number;
+    created_at: string;
+    updated_at: string;
+  }
+
+export class ApiService implements IApiService {
     private client: AxiosInstance;
 
     constructor() {
@@ -32,17 +54,17 @@ class ApiService {
 
     }
 
-    public loginWithCredentials = (data: ILoginRequestPayload) => {
+    public loginWithCredentials = (data: ILoginRequestPayload): AxiosPromise<IUserCredentials> => {
         const url = "api/v1/login/access-token";
         return this.client.post(url, qs.stringify(data));
     }
 
-    public testToken = () => {
+    public testToken = (): AxiosPromise<IUser> => {
         const url = "api/v1/login/test-token";
         return this.client.post(url);
     }
 
-    public getCurrentUser = () => {
+    public getCurrentUser = (): AxiosPromise<IUser> => {
         const url = "api/v1/users/me";
         return this.client.get(url);
     }
