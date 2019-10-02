@@ -78,9 +78,9 @@ describe("TileBar Component", () => {
     function createComponent(props?: ITitleBarProps): ReactWrapper<ITitleBarProps, ITitleBarState> {
         props = props || defaultProps;
         return mount(
-                <TitleBar {...props}>
-                    {circleList}
-                </TitleBar>,
+            <TitleBar {...props}>
+                {circleList}
+            </TitleBar>,
         );
     }
 
@@ -153,7 +153,7 @@ describe("TileBar Component", () => {
 
         it("does not render user full name", () => {
             const auth = MockFactory.createTestAuth("accessToken");
-            const newWrapper = createComponent({auth});
+            const newWrapper = createComponent({ auth });
             const fullName = newWrapper.find(".title-bar-user-full-name");
 
             expect(fullName.exists()).toBe(false);
