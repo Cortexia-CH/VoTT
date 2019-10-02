@@ -38,7 +38,6 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-@connect(mapStateToProps, mapDispatchToProps)
 export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
     public state: ITitleBarState = {
         isElectron: false,
@@ -302,3 +301,5 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
         }
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(TitleBar);

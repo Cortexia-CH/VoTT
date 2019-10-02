@@ -11,7 +11,7 @@ import IAppErrorActions, * as appErrorActions from "./redux/actions/appErrorActi
 import { bindActionCreators } from "redux";
 import { ErrorHandler } from "./react/components/common/errorHandler/errorHandler";
 import { KeyboardManager } from "./react/components/common/keyboardManager/keyboardManager";
-import { TitleBar } from "./react/components/shell/titleBar";
+import TitleBar from "./react/components/shell/titleBar";
 import { StatusBar } from "./react/components/shell/statusBar";
 import { StatusBarMetrics } from "./react/components/shell/statusBarMetrics";
 import { HelpMenu } from "./react/components/shell/helpMenu";
