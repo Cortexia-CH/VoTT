@@ -655,12 +655,14 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     }
 
     private selectAsset = async (asset: IAsset): Promise<void> => {
+        const { selectedAsset, isValid } = this.state;
+        const { auth, trackingActions, actions, project } = this.props;
         // Nothing to do if we are already on the same asset.
-        if (this.state.selectedAsset && this.state.selectedAsset.asset.id === asset.id) {
+        if (selectedAsset && selectedAsset.asset.id === asset.id) {
             return;
         }
 
-        if (!this.state.isValid) {
+        if (!isValid) {
             this.setState({ showInvalidRegionWarning: true });
             return;
         }
@@ -668,14 +670,14 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         /**
          * Track user leaves the image
          */
-        if (this.state.selectedAsset && this.state.selectedAsset.asset) {
-            await this.props.trackingActions.trackingImgOut(
-                this.props.auth.userId,
-                this.state.selectedAsset.asset.id,
-                this.state.selectedAsset.regions);
+        if (selectedAsset && selectedAsset.asset) {
+            await trackingActions.trackingImgOut(
+                auth.userId,
+                selectedAsset.asset.id,
+                selectedAsset.regions);
         }
 
-        const assetMetadata = await this.props.actions.loadAssetMetadata(this.props.project, asset);
+        const assetMetadata = await actions.loadAssetMetadata(project, asset);
 
         try {
             if (!assetMetadata.asset.size) {
@@ -695,8 +697,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         /**
          * Track user enters on the image
          */
-        await this.props.trackingActions.trackingImgIn(
-            this.props.auth.userId,
+        await trackingActions.trackingImgIn(
+            auth.userId,
             assetMetadata.asset.id,
             assetMetadata.regions);
     }
