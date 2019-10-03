@@ -21,7 +21,7 @@ describe("Auth Redux Actions", () => {
         store = createMockStore<IApplicationState>(middleware)(mockState);
     });
 
-    it("Sign in action forwards call to IpcRenderer proxy and dispatches redux action", async () => {
+    it("Sign in action dispatches redux action", async () => {
         const authObject = MockFactory.createTestAuth("access_token", "John Doe");
         await authActions.signIn(authObject)(store.dispatch);
         const actions = store.getActions();
@@ -33,7 +33,7 @@ describe("Auth Redux Actions", () => {
         });
     });
 
-    it("Sign out action forwards call to IpcRenderer proxy and dispatches redux action", async () => {
+    it("Sign out action dispatches redux action", async () => {
         await authActions.signOut()(store.dispatch);
         const actions = store.getActions();
 

@@ -9,12 +9,14 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import history from "../../../history";
 import { toast } from "react-toastify";
+import ITrackingActions, * as trackingActions from "../../../redux/actions/trackingActions";
 
 export interface ITitleBarProps extends React.Props<TitleBar> {
     icon?: string | JSX.Element;
     title?: string;
     fullName?: string;
     actions?: IAuthActions;
+    trackingActions?: ITrackingActions;
     auth?: IAuth;
 }
 
@@ -35,6 +37,7 @@ function mapStateToProps(state: IApplicationState) {
 function mapDispatchToProps(dispatch) {
     return {
         actions: bindActionCreators(authActions, dispatch),
+        trackingActions: bindActionCreators(trackingActions, dispatch),
     };
 }
 
@@ -295,6 +298,7 @@ export class TitleBar extends React.Component<ITitleBarProps, ITitleBarState> {
     private onClickSignOut = async () => {
         try {
             await this.props.actions.signOut();
+            await this.props.trackingActions.trackingSignOut(this.props.auth.userId);
             history.push("/sign-in");
         } catch (error) {
             toast.error("Sorry, we could not log you out.", { position: toast.POSITION.TOP_CENTER} );
