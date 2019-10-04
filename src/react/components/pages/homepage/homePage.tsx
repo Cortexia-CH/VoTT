@@ -44,8 +44,8 @@ function mapStateToProps(state: IApplicationState) {
         recentProjects: state.recentProjects,
         connections: state.connections,
         appSettings: state.appSettings,
-        project: state.currentProject
-    };
+        project: state.currentProject,
+    }
 }
 
 function mapDispatchToProps(dispatch) {
