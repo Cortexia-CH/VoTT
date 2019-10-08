@@ -110,4 +110,4 @@ export const trackingImgInAction = createPayloadAction<ITrackingImgInAction>(Act
 export const trackingImgOutAction = createPayloadAction<ITrackingImgOutAction>(ActionTypes.TRACK_IMG_OUT_SUCCESS);
 export const trackingImgDeleteAction = createPayloadAction<ITrackingImgDeleteAction>(
     ActionTypes.TRACK_IMG_DELETE_SUCCESS
-); // tslint:disable-line
+);

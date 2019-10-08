@@ -65,7 +65,7 @@ describe("Tracking Redux Actions", () => {
     });
 
     it("Img out tracking action dispatches redux action", async () => {
-        await trackingActions.trackingImgOut(1, "id", [])(store.dispatch);
+        await trackingActions.trackingImgOut(1, "id", [], false)(store.dispatch);
         const trackingObject: ITrackingAction = createTrackingAction(
             TrackingActionType.ImgOut,
             1,

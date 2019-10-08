@@ -6,6 +6,7 @@ export interface ITrackingAction {
     userId: number;
     imageId: string;
     regions: IRegion[];
+    isModified: boolean;
 }
 
 /**
@@ -30,12 +31,14 @@ export class TrackingAction implements ITrackingAction {
     public userId: number;
     public imageId: string;
     public regions: IRegion[];
+    public isModified: boolean;
 
-    constructor(type: TrackingActionType, userId: number, imageId: string = null, regions: IRegion[] = []) {
+    constructor(type: TrackingActionType, userId: number, imageId: string = null, regions: IRegion[] = [], isModified: boolean = false) {
         this.type = type;
         this.userId = userId;
         this.imageId = imageId;
         this.regions = regions;
+        this.isModified = isModified;
     }
 }
 
@@ -43,7 +46,8 @@ export const createTrackingAction = (
     type: TrackingActionType,
     userId: number,
     imageId?: string,
-    regions?: IRegion[] // tslint:disable-line
+    regions?: IRegion[],
+    isModified?: boolean // tslint:disable-line
     ) => {
-    return new TrackingAction(type, userId, imageId, regions);
+    return new TrackingAction(type, userId, imageId, regions, isModified);
 };
