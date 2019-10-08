@@ -97,7 +97,9 @@ export interface IEditorPageState {
     isValid: boolean;
     /** Whether the show invalid region warning alert should display */
     showInvalidRegionWarning: boolean;
+    /** Magnifier modal status */
     magnifierModalIsOpen: boolean;
+    /** Base metadata of selected asset */
     selectedAssetBase?: IAssetMetadata;
 }
 
@@ -559,7 +561,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             };
         }
 
-        this.setState({ childAssets, assets, isValid: true });
+        this.setState({ childAssets, assets, isValid: true, selectedAsset: assetMetadata });
     };
 
     /**
@@ -712,9 +714,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             this.setState({ showInvalidRegionWarning: true });
             return;
         }
-
-        const assetService = new AssetService(project);
-        const newAssetMetadata = await assetService.getAssetMetadata(asset);
+   
         /**
          * Track user leaves the image
          */
@@ -738,6 +738,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             console.warn("Error computing asset size");
         }
 
+        const assetService = new AssetService(project);
+        const newAssetMetadata = await assetService.getAssetMetadata(asset);
         this.setState(
             {
                 selectedAsset: assetMetadata,
