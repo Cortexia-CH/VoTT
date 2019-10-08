@@ -3,6 +3,7 @@ import { createPayloadAction, IPayloadAction } from "./actionCreators";
 import { ActionTypes } from "./actionTypes";
 import { ITrackingAction, TrackingActionType, createTrackingAction } from "../../models/trackingAction";
 import { IRegion } from "../../models/applicationState";
+import apiService from "../../services/apiService";
 
 /**
  * Actions which manage tracking
@@ -26,6 +27,7 @@ export default interface ITrackingActions {
 export function trackingSignIn(userId: number): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.SignIn, userId);
+        apiService.createAction(trackingAction);
         dispatch(trackingSignInAction(trackingAction));
         return Promise.resolve();
     };
@@ -37,6 +39,7 @@ export function trackingSignIn(userId: number): (dispatch: Dispatch) => Promise<
 export function trackingSignOut(userId: number): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.SignOut, userId);
+        apiService.createAction(trackingAction);
         dispatch(trackingSignOutAction(trackingAction));
         return Promise.resolve();
     };
@@ -52,6 +55,7 @@ export function trackingImgIn(
 ): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.ImgIn, userId, imageId, regions);
+        apiService.createAction(trackingAction);
         dispatch(trackingImgInAction(trackingAction));
         return Promise.resolve();
     };
@@ -68,6 +72,7 @@ export function trackingImgOut(
 ): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.ImgOut, userId, imageId, regions, isModified);
+        apiService.createAction(trackingAction);
         dispatch(trackingImgOutAction(trackingAction));
         return Promise.resolve();
     };
@@ -79,6 +84,7 @@ export function trackingImgOut(
 export function trackingImgDelete(userId: number, imageId: string): (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.ImgDelete, userId, imageId);
+        apiService.createAction(trackingAction);
         dispatch(trackingImgDeleteAction(trackingAction));
         return Promise.resolve();
     };

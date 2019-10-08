@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosPromise } from "axios";
 import qs from "qs";
 import { Env } from "../common/environment";
+import { ITrackingAction } from "../models/trackingAction";
+import { Api } from "./ApiEnum";
 
 export interface ILoginRequestPayload {
     username: string;
@@ -55,19 +57,27 @@ export class ApiService implements IApiService {
     }
 
     public loginWithCredentials = (data: ILoginRequestPayload): AxiosPromise<IUserCredentials> => {
-        const url = "api/v1/login/access-token";
-        return this.client.post(url, qs.stringify(data));
+        return this.client.post(Api.LoginAccessToken, qs.stringify(data));
     }
 
     public testToken = (): AxiosPromise<IUser> => {
-        const url = "api/v1/login/test-token";
-        return this.client.post(url);
+        return this.client.post(Api.LoginTestToken);
     }
 
     public getCurrentUser = (): AxiosPromise<IUser> => {
-        const url = "api/v1/users/me";
-        return this.client.get(url);
+        return this.client.get(Api.UsersMe);
     }
+
+    public createAction = (action: ITrackingAction) => {
+        return this.client.post(Api.Actions, {
+            type: action.type,
+            timestamp: action.timestamp,
+            regions: action.regions,
+            is_modified: action.isModified,
+            user_id: action.userId,
+            image_id: action.imageId
+        });
+    };
 }
 
 const apiService = new ApiService();
