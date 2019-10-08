@@ -22,7 +22,7 @@ export enum TrackingActionType {
     ImgOut = "img_out",
     ImgDelete = "img_delete",
     SignOut = "logout",
-    SignIn = "login",
+    SignIn = "login"
 }
 
 export class TrackingAction implements ITrackingAction {
@@ -33,7 +33,13 @@ export class TrackingAction implements ITrackingAction {
     public regions: IRegion[];
     public isModified: boolean;
 
-    constructor(type: TrackingActionType, userId: number, imageId: string = null, regions: IRegion[] = [], isModified: boolean = false) {
+    constructor(
+        type: TrackingActionType,
+        userId: number,
+        imageId: string = null,
+        regions: IRegion[] = [],
+        isModified: boolean = false
+    ) {
         this.type = type;
         this.userId = userId;
         this.imageId = imageId;
@@ -48,6 +54,6 @@ export const createTrackingAction = (
     imageId?: string,
     regions?: IRegion[],
     isModified?: boolean // tslint:disable-line
-    ) => {
+) => {
     return new TrackingAction(type, userId, imageId, regions, isModified);
 };
