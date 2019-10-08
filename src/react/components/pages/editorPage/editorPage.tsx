@@ -714,7 +714,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             this.setState({ showInvalidRegionWarning: true });
             return;
         }
-   
+
         /**
          * Track user leaves the image
          */
