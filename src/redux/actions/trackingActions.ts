@@ -16,7 +16,7 @@ export default interface ITrackingActions {
     trackingSignIn(userId: number): Promise<void>;
     trackingSignOut(userId: number): Promise<void>;
     trackingImgIn(userId: number, imageId: string, regions: IRegion[]): Promise<void>;
-    trackingImgOut(userId: number, imageId: string, regions: IRegion[]): Promise<void>;
+    trackingImgOut(userId: number, imageId: string, regions: IRegion[], isModified: boolean): Promise<void>;
     trackingImgDelete(userId: number, imageId: string): Promise<void>;
 }
 
@@ -57,10 +57,10 @@ export function trackingImgIn(userId: number, imageId: string, regions: IRegion[
 /**
  * Tracks user leaves the image
  */
-export function trackingImgOut(userId: number, imageId: string, regions: IRegion[])
+export function trackingImgOut(userId: number, imageId: string, regions: IRegion[], isModified: boolean)
 : (dispatch: Dispatch) => Promise<void> {
     return (dispatch: Dispatch) => {
-        const trackingAction = createTrackingAction(TrackingActionType.ImgOut, userId, imageId, regions);
+        const trackingAction = createTrackingAction(TrackingActionType.ImgOut, userId, imageId, regions, isModified);
         dispatch(trackingImgOutAction(trackingAction));
         return Promise.resolve();
     };
