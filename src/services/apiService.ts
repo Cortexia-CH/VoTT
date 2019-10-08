@@ -29,7 +29,7 @@ interface IUser {
     id: number;
     created_at: string;
     updated_at: string;
-  }
+}
 
 export class ApiService implements IApiService {
     private client: AxiosInstance;
@@ -39,34 +39,33 @@ export class ApiService implements IApiService {
             baseURL: Env.getApiUrl(),
             timeout: 10 * 1000,
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
         });
 
         this.client.interceptors.request.use(
-            (config) => {
+            config => {
                 const token = JSON.parse(localStorage.getItem("auth")).accessToken;
                 if (token) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
                 return config;
             },
-            (error) => Promise.reject(error),
+            error => Promise.reject(error)
         );
-
     }
 
     public loginWithCredentials = (data: ILoginRequestPayload): AxiosPromise<IUserCredentials> => {
         return this.client.post(Api.LoginAccessToken, qs.stringify(data));
-    }
+    };
 
     public testToken = (): AxiosPromise<IUser> => {
         return this.client.post(Api.LoginTestToken);
-    }
+    };
 
     public getCurrentUser = (): AxiosPromise<IUser> => {
         return this.client.get(Api.UsersMe);
-    }
+    };
 
     public createAction = (action: ITrackingAction) => {
         return this.client.post(Api.Actions, {
