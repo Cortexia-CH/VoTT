@@ -3,6 +3,8 @@ import qs from "qs";
 import { Env } from "../common/environment";
 import { ITrackingAction } from "../models/trackingAction";
 import { Api } from "./ApiEnum";
+import { mapTrackingActionToApiBody } from "./ApiMapper";
+import { IRegion } from "../models/applicationState";
 
 export interface ILoginRequestPayload {
     username: string;
@@ -13,11 +15,25 @@ export interface IApiService {
     loginWithCredentials(data: ILoginRequestPayload): AxiosPromise<IUserCredentials>;
     testToken(): AxiosPromise<IUser>;
     getCurrentUser(): AxiosPromise<IUser>;
+    createAction(action: ITrackingAction): AxiosPromise<IActionResponse>;
 }
 
 interface IUserCredentials {
     access_token: string;
     token_type: string;
+}
+
+export interface IActionRequest {
+    type: string;
+    timestamp: string;
+    regions: IRegion[];
+    is_modified: boolean;
+    user_id: number;
+    image_id: number;
+}
+
+interface IActionResponse extends IActionRequest {
+    id: number;
 }
 
 interface IUser {
@@ -67,15 +83,8 @@ export class ApiService implements IApiService {
         return this.client.get(Api.UsersMe);
     };
 
-    public createAction = (action: ITrackingAction) => {
-        return this.client.post(Api.Actions, {
-            type: action.type,
-            timestamp: action.timestamp,
-            regions: action.regions,
-            is_modified: action.isModified,
-            user_id: action.userId,
-            image_id: action.imageId
-        });
+    public createAction = (action: ITrackingAction): AxiosPromise<IActionResponse> => {
+        return this.client.post(Api.Actions, mapTrackingActionToApiBody(action));
     };
 }
 
