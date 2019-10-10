@@ -13,6 +13,7 @@ import { strings } from "./common/strings";
 import { HostProcessType } from "./common/hostProcess";
 import { AzureCustomVisionProvider } from "./providers/export/azureCustomVision";
 import { CntkExportProvider } from "./providers/export/cntk";
+import { CortexiaApi } from "./providers/storage/cortexiaApi";
 
 /**
  * Registers storage, asset and export providers, as well as all toolbar items
@@ -30,6 +31,11 @@ export default function registerProviders() {
         displayName: strings.connections.providers.azureBlob.title,
         factory: (options) => new AzureBlobStorage(options),
     });
+    StorageProviderFactory.register({
+        name: "cortexiaApi",
+        displayName: strings.connections.providers.cortexiaApi.title,
+        factory: () => new CortexiaApi(),
+    });
 
     // Asset Providers
     AssetProviderFactory.register({
@@ -42,6 +48,11 @@ export default function registerProviders() {
         name: "azureBlobStorage",
         displayName: strings.connections.providers.azureBlob.title,
         factory: (options) => new AzureBlobStorage(options),
+    });
+    AssetProviderFactory.register({
+        name: "cortexiaApi",
+        displayName: strings.connections.providers.cortexiaApi.title,
+        factory: () => new CortexiaApi(),
     });
     AssetProviderFactory.register({
         name: "bingImageSearch",

@@ -212,6 +212,9 @@ export const english: IAppStrings = {
                 selectFolder: "Select Folder",
                 chooseFolder: "Choose Folder",
             },
+            cortexiaApi: {
+                title: "Cortexia Api",
+            },
         },
     },
     editorPage: {

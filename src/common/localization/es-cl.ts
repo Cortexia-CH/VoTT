@@ -214,6 +214,9 @@ export const spanish: IAppStrings = {
                 selectFolder: "Seleccionar la carpeta",
                 chooseFolder: "Elijir la carpeta",
             },
+            cortexiaApi: {
+                title: "Cortexia Api"
+            }
         },
     },
     editorPage: {
