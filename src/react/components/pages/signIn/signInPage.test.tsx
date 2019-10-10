@@ -13,6 +13,7 @@ import history from "../../../../history";
 import ApiService from "../../../../services/apiService";
 import IAuthActions, * as authActions from "../../../../redux/actions/authActions";
 import ITrackingActions, * as trackingActions from "../../../../redux/actions/trackingActions";
+jest.mock("../../../../services/apiService");
 
 describe("Sign In Page", () => {
     function createComponent(

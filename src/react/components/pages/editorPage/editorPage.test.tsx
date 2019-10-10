@@ -34,6 +34,7 @@ import { TagInput } from "../../common/tagInput/tagInput";
 import { EditorToolbar } from "./editorToolbar";
 import { ToolbarItem } from "../../toolbar/toolbarItem";
 import { ActiveLearningService } from "../../../../services/activeLearningService";
+jest.mock("../../../../services/apiService");
 
 function createComponent(store, props: IEditorPageProps): ReactWrapper<IEditorPageProps, IEditorPageState, EditorPage> {
     return mount(
