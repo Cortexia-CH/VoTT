@@ -24,17 +24,17 @@ export default function registerProviders() {
         name: "localFileSystemProxy",
         displayName: strings.connections.providers.local.title,
         platformSupport: HostProcessType.Electron,
-        factory: (options) => new LocalFileSystemProxy(options),
+        factory: options => new LocalFileSystemProxy(options)
     });
     StorageProviderFactory.register({
         name: "azureBlobStorage",
         displayName: strings.connections.providers.azureBlob.title,
-        factory: (options) => new AzureBlobStorage(options),
+        factory: options => new AzureBlobStorage(options)
     });
     StorageProviderFactory.register({
         name: "cortexiaApi",
         displayName: strings.connections.providers.cortexiaApi.title,
-        factory: () => new CortexiaApi(),
+        factory: () => new CortexiaApi()
     });
 
     // Asset Providers
@@ -42,54 +42,54 @@ export default function registerProviders() {
         name: "localFileSystemProxy",
         displayName: strings.connections.providers.local.title,
         platformSupport: HostProcessType.Electron,
-        factory: (options) => new LocalFileSystemProxy(options),
+        factory: options => new LocalFileSystemProxy(options)
     });
     AssetProviderFactory.register({
         name: "azureBlobStorage",
         displayName: strings.connections.providers.azureBlob.title,
-        factory: (options) => new AzureBlobStorage(options),
+        factory: options => new AzureBlobStorage(options)
     });
     AssetProviderFactory.register({
         name: "cortexiaApi",
         displayName: strings.connections.providers.cortexiaApi.title,
-        factory: () => new CortexiaApi(),
+        factory: () => new CortexiaApi()
     });
     AssetProviderFactory.register({
         name: "bingImageSearch",
         displayName: strings.connections.providers.bing.title,
-        factory: (options) => new BingImageSearch(options),
+        factory: options => new BingImageSearch(options)
     });
 
     // Export Providers
     ExportProviderFactory.register({
         name: "vottJson",
         displayName: strings.export.providers.vottJson.displayName,
-        factory: (project, options) => new VottJsonExportProvider(project, options),
+        factory: (project, options) => new VottJsonExportProvider(project, options)
     });
     ExportProviderFactory.register({
         name: "pascalVOC",
         displayName: strings.export.providers.pascalVoc.displayName,
-        factory: (project, options) => new PascalVOCExportProvider(project, options),
+        factory: (project, options) => new PascalVOCExportProvider(project, options)
     });
     ExportProviderFactory.register({
         name: "tensorFlowRecords",
         displayName: strings.export.providers.tfRecords.displayName,
-        factory: (project, options) => new TFRecordsExportProvider(project, options),
+        factory: (project, options) => new TFRecordsExportProvider(project, options)
     });
     ExportProviderFactory.register({
         name: "azureCustomVision",
         displayName: strings.export.providers.azureCV.displayName,
-        factory: (project, options) => new AzureCustomVisionProvider(project, options),
+        factory: (project, options) => new AzureCustomVisionProvider(project, options)
     });
     ExportProviderFactory.register({
         name: "cntk",
         displayName: strings.export.providers.cntk.displayName,
-        factory: (project, options) => new CntkExportProvider(project, options),
+        factory: (project, options) => new CntkExportProvider(project, options)
     });
     ExportProviderFactory.register({
         name: "csv",
         displayName: strings.export.providers.csv.displayName,
-        factory: (project, options) => new CsvExportProvider(project, options),
+        factory: (project, options) => new CsvExportProvider(project, options)
     });
 
     registerToolbar();

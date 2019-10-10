@@ -8,8 +8,6 @@ export class CortexiaApi implements IStorageProvider {
      */
     public storageType: StorageType = StorageType.Cloud;
 
- 
-
     readText(filePath: string): Promise<string> {
         return Promise.resolve("asd");
     }
