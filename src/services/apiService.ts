@@ -49,7 +49,7 @@ interface IUser {
 
 export interface IImage {
     path: string;
-    size: ISize,
+    size: ISize;
     predicted: boolean;
     type: number;
     state: number;
@@ -100,7 +100,7 @@ export class ApiService implements IApiService {
 
     public getUserImages = (): AxiosPromise<IImage[]> => {
         return this.client.get(Api.ImagesMe);
-    }
+    };
 }
 
 const apiService = new ApiService();

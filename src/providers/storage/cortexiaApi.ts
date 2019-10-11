@@ -13,10 +13,10 @@ export class CortexiaApi implements IStorageProvider {
 
     public readText(filePath: string): Promise<string> {
         // const downloadResponse = await blockBlobURL.download(Aborter.none, 0);
-        console.log("readText",filePath);
-        return Promise.resolve("readText")
+        console.log("readText", filePath);
+        return Promise.resolve("readText");
     }
-    
+
     public readBinary(filePath: string): Promise<Buffer> {
         console.log("readBinary");
         return Promise.resolve(Buffer.from(""));
@@ -50,7 +50,7 @@ export class CortexiaApi implements IStorageProvider {
         console.log("createContainer");
         return Promise.resolve();
     }
-    
+
     public deleteContainer(folderPath: string): Promise<void> {
         console.log("deleteContainer");
         return Promise.resolve();
