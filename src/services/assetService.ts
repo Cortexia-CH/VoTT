@@ -26,7 +26,7 @@ export class AssetService {
      * @param filePath - filepath of asset
      * @param fileName - name of asset
      */
-    public static createAssetFromFilePath(filePath: string, fileName?: string): IAsset {
+    public static createAssetFromFilePath(filePath: string, fileName?: string, id?: number): IAsset {
         Guard.empty(filePath);
 
         const normalizedPath = filePath.toLowerCase();
@@ -54,7 +54,7 @@ export class AssetService {
         const assetType = this.getAssetType(assetFormat);
 
         return {
-            id: md5Hash,
+            id: id || md5Hash,
             format: assetFormat,
             state: AssetState.NotVisited,
             type: assetType,

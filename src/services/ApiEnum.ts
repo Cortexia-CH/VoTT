@@ -2,5 +2,6 @@ export enum Api {
     Actions = "/api/v1/actions/",
     UsersMe = "api/v1/users/me",
     LoginTestToken = "api/v1/login/test-token",
-    LoginAccessToken = "api/v1/login/access-token"
+    LoginAccessToken = "api/v1/login/access-token",
+    ImagesMe = "/api/v1/images/me",
 }

@@ -16,9 +16,9 @@ import apiService from "../../services/apiService";
 export default interface ITrackingActions {
     trackingSignIn(userId: number): Promise<void>;
     trackingSignOut(userId: number): Promise<void>;
-    trackingImgIn(userId: number, imageId: string, regions: IRegion[]): Promise<void>;
-    trackingImgOut(userId: number, imageId: string, regions: IRegion[], isModified: boolean): Promise<void>;
-    trackingImgDelete(userId: number, imageId: string): Promise<void>;
+    trackingImgIn(userId: number, imageId: number, regions: IRegion[]): Promise<void>;
+    trackingImgOut(userId: number, imageId: number, regions: IRegion[], isModified: boolean): Promise<void>;
+    trackingImgDelete(userId: number, imageId: number): Promise<void>;
 }
 
 /**
@@ -50,7 +50,7 @@ export function trackingSignOut(userId: number): (dispatch: Dispatch) => Promise
  */
 export function trackingImgIn(
     userId: number,
-    imageId: string,
+    imageId: number,
     regions: IRegion[]
 ): (dispatch: Dispatch) => Promise<void> {
     return async (dispatch: Dispatch) => {
@@ -66,7 +66,7 @@ export function trackingImgIn(
  */
 export function trackingImgOut(
     userId: number,
-    imageId: string,
+    imageId: number,
     regions: IRegion[],
     isModified: boolean
 ): (dispatch: Dispatch) => Promise<void> {
@@ -81,7 +81,7 @@ export function trackingImgOut(
 /**
  * Tracks user deletes the image
  */
-export function trackingImgDelete(userId: number, imageId: string): (dispatch: Dispatch) => Promise<void> {
+export function trackingImgDelete(userId: number, imageId: number): (dispatch: Dispatch) => Promise<void> {
     return async (dispatch: Dispatch) => {
         const trackingAction = createTrackingAction(TrackingActionType.ImgDelete, userId, imageId);
         await apiService.createAction(trackingAction);
