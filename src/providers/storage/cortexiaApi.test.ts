@@ -12,47 +12,47 @@ describe("Cortexia Api", () => {
 
     it("reads text from asset metadata received by api", async () => {
         const responseObject = {
-            path: 'path',
+            path: "path",
             id: 0,
             last_action: {
-                regions: {},
-            },
+                regions: {}
+            }
         };
         const apiResponeMock = [{ ...responseObject }, { ...responseObject, id: 1 }, { ...responseObject, id: 2 }];
         AssetService.createAssetFromFilePath = jest.fn(() => {
             return {
-                type: AssetType.Image,
+                type: AssetType.Image
             };
         });
         jest.spyOn(ApiService, "getImageWithLastAction").mockImplementationOnce(() =>
             Promise.resolve({
-                data: apiResponeMock,
+                data: apiResponeMock
             })
         );
         const provider: CortexiaApi = new CortexiaApi();
         const content = await provider.readText("1");
         const stringifiedAssetMetadata = JSON.stringify({
             regions: apiResponeMock[1].last_action.regions,
-            asset: AssetService.createAssetFromFilePath(''),
-            version: appInfo.version,
+            asset: AssetService.createAssetFromFilePath(""),
+            version: appInfo.version
         });
         expect(content).toEqual(stringifiedAssetMetadata);
     });
 
     describe("getAssets", () => {
         const userImage = {
-            path: 'path',
+            path: "path",
             size: {},
             predicted: false,
             type: 1,
             state: 1,
             is_deleted: true,
             tagger_id: 1,
-            id: 1,
+            id: 1
         };
 
         it("does not return assets with wrong file type", async () => {
-            const assetsMock = [userImage, {...userImage, id: 2}];
+            const assetsMock = [userImage, { ...userImage, id: 2 }];
             AssetService.createAssetFromFilePath = jest.fn((url, fileName, id) => {
                 return {
                     type: id !== 1 ? AssetType.Image : AssetType.Unknown,
@@ -63,13 +63,15 @@ describe("Cortexia Api", () => {
             });
             jest.spyOn(ApiService, "getUserImages").mockImplementationOnce(() =>
                 Promise.resolve({
-                    data: assetsMock,
+                    data: assetsMock
                 })
             );
             const provider: CortexiaApi = new CortexiaApi();
             const content = await provider.getAssets();
             const imageAsset = assetsMock[1];
-            const assetsTypeImage = [AssetService.createAssetFromFilePath(imageAsset.path, imageAsset.path, imageAsset.id)];
+            const assetsTypeImage = [
+                AssetService.createAssetFromFilePath(imageAsset.path, imageAsset.path, imageAsset.id)
+            ];
             expect(content).toEqual(assetsTypeImage);
         });
     });
