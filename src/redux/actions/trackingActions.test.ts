@@ -47,8 +47,8 @@ describe("Tracking Redux Actions", () => {
     });
 
     it("Img in tracking action dispatches redux action", async () => {
-        await trackingActions.trackingImgIn(1, '1', [])(store.dispatch);
-        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 1, '1');
+        await trackingActions.trackingImgIn(1, "1", [])(store.dispatch);
+        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgIn, 1, "1");
         const actions = store.getActions();
 
         expect(actions.length).toEqual(1);
@@ -59,8 +59,8 @@ describe("Tracking Redux Actions", () => {
     });
 
     it("Img out tracking action dispatches redux action", async () => {
-        await trackingActions.trackingImgOut(1, '1', [], false)(store.dispatch);
-        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgOut, 1, '1');
+        await trackingActions.trackingImgOut(1, "1", [], false)(store.dispatch);
+        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgOut, 1, "1");
         const actions = store.getActions();
 
         expect(actions.length).toEqual(1);
@@ -71,8 +71,8 @@ describe("Tracking Redux Actions", () => {
     });
 
     it("Img delete tracking action dispatches redux action", async () => {
-        await trackingActions.trackingImgDelete(1, '1')(store.dispatch);
-        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgDelete, 1, '1');
+        await trackingActions.trackingImgDelete(1, "1")(store.dispatch);
+        const trackingObject: ITrackingAction = createTrackingAction(TrackingActionType.ImgDelete, 1, "1");
         const actions = store.getActions();
 
         expect(actions.length).toEqual(1);

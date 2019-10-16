@@ -108,7 +108,7 @@ export class ApiService implements IApiService {
 
     public getImageWithLastAction = (): AxiosPromise<IImageWithAction[]> => {
         return this.client.get(Api.ImagesWithLastAction);
-    }
+    };
 }
 
 const apiService = new ApiService();

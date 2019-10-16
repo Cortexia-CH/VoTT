@@ -3,7 +3,7 @@ import { mapTrackingActionToApiBody } from "./ApiMapper";
 
 describe("Api Mapper", () => {
     it("maps tracking action to api body", () => {
-        const trackingAction = createTrackingAction(TrackingActionType.ImgIn, 3, '3', [], true);
+        const trackingAction = createTrackingAction(TrackingActionType.ImgIn, 3, "3", [], true);
         const mappedAction = mapTrackingActionToApiBody(trackingAction);
         expect(mappedAction).toEqual({
             type: trackingAction.type,

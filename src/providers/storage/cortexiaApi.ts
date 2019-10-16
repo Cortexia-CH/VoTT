@@ -1,6 +1,6 @@
 import { IStorageProvider } from "./storageProviderFactory";
 import { StorageType, IAsset, AssetType, IAssetMetadata, IRegion } from "../../models/applicationState";
-import { AssetService, } from "../../services/assetService";
+import { AssetService } from "../../services/assetService";
 import apiService, { IImage, IImageWithAction } from "../../services/apiService";
 
 export class CortexiaApi implements IStorageProvider {
@@ -12,7 +12,7 @@ export class CortexiaApi implements IStorageProvider {
 
     /**
      * @description - Gets images with the provider and returns stringified asset metadata.
-     * @param filePath 
+     * @param filePath
      */
     public async readText(filePath: string): Promise<any> {
         const imagesWithLastAction = await apiService.getImageWithLastAction();
@@ -28,7 +28,7 @@ export class CortexiaApi implements IStorageProvider {
 
     /**
      * @description - It reads buffer from the stringified asset metadata
-     * @param filePath 
+     * @param filePath
      */
     public async readBinary(filePath: string): Promise<Buffer> {
         const text = await this.readText(filePath);
@@ -47,7 +47,7 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param filePath 
+     * @param filePath
      * @param contents
      */
     public async writeText(filePath: string, contents: string): Promise<void> {
@@ -57,7 +57,7 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param filePath 
+     * @param filePath
      * @param contents
      */
     public writeBinary(filePath: string, contents: Buffer): Promise<void> {
@@ -67,8 +67,8 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param folderPath 
-     * @param ext 
+     * @param folderPath
+     * @param ext
      */
     public listFiles(folderPath?: string, ext?: string): Promise<string[]> {
         return Promise.resolve(["Not used"]);
@@ -77,7 +77,7 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param folderPath 
+     * @param folderPath
      */
     public listContainers(folderPath?: string): Promise<string[]> {
         return Promise.resolve(["Not used"]);
@@ -86,7 +86,7 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param folderPath 
+     * @param folderPath
      */
     public createContainer(folderPath: string): Promise<void> {
         return Promise.resolve();
@@ -95,7 +95,7 @@ export class CortexiaApi implements IStorageProvider {
     /**
      * @description - Function is not implemented, because currently is not needed in the provider.
      * Function is required by IStorageProvider interface.
-     * @param folderPath 
+     * @param folderPath
      */
     public deleteContainer(folderPath: string): Promise<void> {
         return Promise.resolve();
@@ -137,6 +137,6 @@ export class CortexiaApi implements IStorageProvider {
             regions,
             asset,
             version: "2.1.0"
-        }
+        };
     }
 }
