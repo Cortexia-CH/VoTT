@@ -2,6 +2,7 @@ import { IStorageProvider } from "./storageProviderFactory";
 import { StorageType, IAsset, AssetType, IAssetMetadata, IRegion } from "../../models/applicationState";
 import { AssetService } from "../../services/assetService";
 import apiService, { IImage, IImageWithAction } from "../../services/apiService";
+import { appInfo } from "../../common/appInfo";
 
 export class CortexiaApi implements IStorageProvider {
     /**
@@ -136,7 +137,7 @@ export class CortexiaApi implements IStorageProvider {
         return {
             regions,
             asset,
-            version: "2.1.0"
+            version: appInfo.version
         };
     }
 }
