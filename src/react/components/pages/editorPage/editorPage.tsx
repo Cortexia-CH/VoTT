@@ -722,7 +722,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             const isModified = JSON.stringify(selectedAssetBase.regions) !== JSON.stringify(selectedAsset.regions);
             await trackingActions.trackingImgOut(
                 auth.userId,
-                parseInt(selectedAsset.asset.id, 10),
+                selectedAsset.asset.id,
                 selectedAsset.regions,
                 isModified
             );
@@ -753,7 +753,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         /**
          * Track user enters on the image
          */
-        await trackingActions.trackingImgIn(auth.userId, parseInt(newAssetMetadata.asset.id), newAssetMetadata.regions);
+        await trackingActions.trackingImgIn(auth.userId, newAssetMetadata.asset.id, newAssetMetadata.regions);
     };
 
     private loadProjectAssets = async (): Promise<void> => {

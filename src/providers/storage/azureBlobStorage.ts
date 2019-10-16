@@ -63,7 +63,7 @@ export class AzureBlobStorage implements IStorageProvider {
     public async readText(blobName: string): Promise<string> {
         const blockBlobURL = this.getBlockBlobURL(blobName);
         const downloadResponse = await blockBlobURL.download(Aborter.none, 0);
-
+        
         return await this.bodyToString(downloadResponse);
     }
 

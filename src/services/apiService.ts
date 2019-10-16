@@ -58,6 +58,10 @@ export interface IImage {
     id: number;
 }
 
+export interface IImageWithAction extends IImage {
+    last_action: IActionRequest;
+}
+
 export class ApiService implements IApiService {
     private client: AxiosInstance;
 
@@ -101,6 +105,10 @@ export class ApiService implements IApiService {
     public getUserImages = (): AxiosPromise<IImage[]> => {
         return this.client.get(Api.ImagesMe);
     };
+
+    public getImageWithLastAction = (): AxiosPromise<IImageWithAction[]> => {
+        return this.client.get(Api.ImagesWithLastAction);
+    }
 }
 
 const apiService = new ApiService();

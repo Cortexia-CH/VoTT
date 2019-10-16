@@ -148,7 +148,7 @@ export function loadAssetMetadata(project: IProject, asset: IAsset): (dispatch: 
         const assetService = new AssetService(project);
         const assetMetadata = await assetService.getAssetMetadata(asset);
         dispatch(loadAssetMetadataAction(assetMetadata));
-
+        
         return { ...assetMetadata };
     };
 }

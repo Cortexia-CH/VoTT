@@ -27,7 +27,7 @@ export const reducer = (state: IProject = null, action: AnyAction): IProject => 
             if (!state) {
                 return state;
             }
-
+            
             return {
                 ...state,
                 lastVisitedAssetId: action.payload.asset.id,
