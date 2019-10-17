@@ -15,7 +15,7 @@ export class CortexiaApi implements IStorageProvider {
      * @description - Gets images with the provider and returns stringified asset metadata.
      * @param filePath
      */
-    public async readText(filePath: string): Promise<any> {
+    public async readText(filePath: string): Promise<string> {
         const imagesWithLastAction = await apiService.getImageWithLastAction();
         const lastAssetId = parseInt(filePath, 10);
         const imagesActionList = imagesWithLastAction.data.filter((item: IImageWithAction) => {

@@ -19,11 +19,7 @@ describe("Cortexia Api", () => {
             }
         };
         const apiResponeMock = [{ ...responseObject }, { ...responseObject, id: 1 }, { ...responseObject, id: 2 }];
-        AssetService.createAssetFromFilePath = jest.fn(() => {
-            return {
-                type: AssetType.Image
-            };
-        });
+        AssetService.createAssetFromFilePath = jest.fn(() => ({ type: AssetType.Image }));
         jest.spyOn(ApiService, "getImageWithLastAction").mockImplementationOnce(() =>
             Promise.resolve({
                 data: apiResponeMock
@@ -53,14 +49,12 @@ describe("Cortexia Api", () => {
 
         it("does not return assets with wrong file type", async () => {
             const assetsMock = [userImage, { ...userImage, id: 2 }];
-            AssetService.createAssetFromFilePath = jest.fn((url, fileName, id) => {
-                return {
-                    type: id !== 1 ? AssetType.Image : AssetType.Unknown,
-                    id,
-                    path: url,
-                    name: fileName
-                };
-            });
+            AssetService.createAssetFromFilePath = jest.fn((url, fileName, id) => ({
+                type: id !== 1 ? AssetType.Image : AssetType.Unknown,
+                id,
+                path: url,
+                name: fileName
+            }));
             jest.spyOn(ApiService, "getUserImages").mockImplementationOnce(() =>
                 Promise.resolve({
                     data: assetsMock
