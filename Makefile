@@ -22,14 +22,17 @@ init-githook:
 	cd .git/hooks/ && ln -s ../../versions.py
 
 vars: check-env
-	@echo 'Sensible defaults values (for local dev)'
-	@echo '  DEV_VOTT_PORT=${DEV_VOTT_PORT}'
-	@echo '  DOCKER_TAG=${DOCKER_TAG}'
-	@echo '  PUBLIC_URL=${PUBLIC_URL}'
-	@echo ''
-	@echo 'For deployment purpose'
+	@echo 'Within docker-compose'
 	@echo '  SUBDOMAIN=${SUBDOMAIN}'
 	@echo '  DOMAIN=${DOMAIN}'
+	@echo '  PUBLIC_URL=${SUBDOMAIN}.${DOMAIN}'
+	@echo '  REACT_APP_API_URL=${REACT_APP_API_URL}'
+	@echo '  NODE_ENV=${NODE_ENV}'
+	@echo '  DEV_VOTT_PORT=${DEV_VOTT_PORT}'
+	@echo '  CORTEXIA_VERSION=${CORTEXIA_VERSION}'
+	@echo ''
+	@echo 'For deployment purpose'
+	@echo '  DOCKER_TAG=${DOCKER_TAG}'
 	@echo '  STACK_NAME=${STACK_NAME}'
 	@echo '  TRAEFIK_PUBLIC_NETWORK=${TRAEFIK_PUBLIC_NETWORK}'
 	@echo '  TRAEFIK_PUBLIC_TAG=${TRAEFIK_PUBLIC_TAG}'
@@ -75,9 +78,27 @@ create-release: check-release
 	git push
 
 
-# deployment
+# deployment to prod
 
-push-prod: login
+config-prod:
+	DOCKER_TAG=prod  \
+		SUBDOMAIN=vott \
+		DOMAIN=cortexia.io \
+		REACT_APP_API_URL=https://backend.cortexia.io \
+		STACK_NAME=vott \
+		DEV_VOTT_PORT=3000 \
+		TRAEFIK_PUBLIC_TAG=traefik-public \
+		TRAEFIK_PUBLIC_NETWORK=traefik-public \
+		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+		CORTEXIA_VERSION=$(VERSION) \
+		ENVIRONMENT=prod \
+		NODE_ENV=production \
+		docker-compose \
+			-f docker-compose.deploy.yml \
+			-f docker-compose.deploy.networks.yml \
+		config > docker-stack.yml
+
+push-prod: login config-prod
 	@# confirm push to production
 	@python update_release.py confirm --prod
 
@@ -86,75 +107,78 @@ push-prod: login
 	git push --tags --force
 
 	# build and push docker image
-	DOCKER_TAG=prod PUBLIC_URL=vott.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build \
-			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
-			--build-arg ENVIRONMENT=prod
-	DOCKER_TAG=prod docker-compose -f docker-compose.deploy.yml push
+	docker-compose -f docker-stack.yml build
+	docker-compose -f docker-stack.yml push
 
-deploy-prod:
-	DOCKER_TAG=prod  \
-		SUBDOMAIN=vott \
-		STACK_NAME=vott \
-		DOMAIN=${DOMAIN} \
-		TRAEFIK_PUBLIC_TAG=${TRAEFIK_PUBLIC_TAG} \
+deploy-prod: config-prod
+	docker-auto-labels docker-stack.yml
+	docker stack deploy -c docker-stack.yml --with-registry-auth vott
+
+
+# deployment to qa
+
+config-qa:
+	DOCKER_TAG=qa  \
+		SUBDOMAIN=vott-qa \
+		DOMAIN=cortexia.io \
+		REACT_APP_API_URL=https://backend-qa.cortexia.io \
+		DEV_VOTT_PORT=3000 \
+		STACK_NAME=vott-qa \
+		TRAEFIK_PUBLIC_TAG=traefik-public \
+		TRAEFIK_PUBLIC_NETWORK=traefik-public \
+		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+		CORTEXIA_VERSION=$(VERSION) \
+		ENVIRONMENT=dev \
+		NODE_ENV=production \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
 		config > docker-stack.yml
 
-	docker-auto-labels docker-stack.yml
-	docker stack deploy -c docker-stack.yml --with-registry-auth vott
-
-push-qa: login
+push-qa: login config-qa
 	# update tags
 	git tag -f qa
 	git push --tags --force
 
 	# build docker image
-	DOCKER_TAG=qa PUBLIC_URL=vott-qa.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build \
-			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
-			--build-arg ENVIRONMENT=dev
-	DOCKER_TAG=qa docker-compose -f docker-compose.deploy.yml push
+	docker-compose -f docker-stack.yml build
+	DOCKER_TAG=qa docker-compose -f docker-stack.yml push
 
-deploy-qa:
-	DOCKER_TAG=qa \
-		SUBDOMAIN=vott-qa \
-		STACK_NAME=vott-qa \
-		DOMAIN=${DOMAIN} \
-		TRAEFIK_PUBLIC_TAG=${TRAEFIK_PUBLIC_TAG} \
+deploy-qa: config-qa
+	docker-auto-labels docker-stack.yml
+	docker stack deploy -c docker-stack.yml --with-registry-auth vott-qa
+
+
+# deployment to dev
+
+config-dev:
+	DOCKER_TAG=latest  \
+		SUBDOMAIN=vott-dev \
+		DOMAIN=cortexia.io \
+		REACT_APP_API_URL=https://mocks.cortexia.io \
+		DEV_VOTT_PORT=3000 \
+		STACK_NAME=vott-dev \
+		TRAEFIK_PUBLIC_TAG=traefik-public \
+		TRAEFIK_PUBLIC_NETWORK=traefik-public \
+		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+		CORTEXIA_VERSION=$(VERSION) \
+		ENVIRONMENT=dev \
+		NODE_ENV=development \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
 		config > docker-stack.yml
 
-	docker-auto-labels docker-stack.yml
-	docker stack deploy -c docker-stack.yml --with-registry-auth vott-qa
-
-push-dev: login
+push-dev: login config-dev
 	# update tags
 	git tag -f latest
 	git push --tags --force
 
 	# build docker image
-	DOCKER_TAG=latest PUBLIC_URL=vott-dev.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build \
-			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
-			--build-arg ENVIRONMENT=dev
-	DOCKER_TAG=latest docker-compose -f docker-compose.deploy.yml push
+	docker-compose -f docker-stack.yml build
+	DOCKER_TAG=latest docker-compose -f docker-stack.yml push
 
-deploy-dev:
-	DOCKER_TAG=latest \
-		SUBDOMAIN=vott-dev \
-		STACK_NAME=vott-dev \
-		DOMAIN=${DOMAIN} \
-		TRAEFIK_PUBLIC_TAG=${TRAEFIK_PUBLIC_TAG} \
-		docker-compose \
-			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
-		config > docker-stack.yml
-
+deploy-dev: config-dev
 	docker-auto-labels docker-stack.yml
 	docker stack deploy -c docker-stack.yml --with-registry-auth vott-dev
 
