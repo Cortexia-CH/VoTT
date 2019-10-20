@@ -87,7 +87,9 @@ push-prod: login
 
 	# build and push docker image
 	DOCKER_TAG=prod PUBLIC_URL=vott.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build --build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION)
+		docker-compose -f docker-compose.deploy.yml build \
+			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+			--build-arg ENVIRONMENT=prod
 	DOCKER_TAG=prod docker-compose -f docker-compose.deploy.yml push
 
 deploy-prod:
@@ -111,7 +113,9 @@ push-qa: login
 
 	# build docker image
 	DOCKER_TAG=qa PUBLIC_URL=vott-qa.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build --build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION)
+		docker-compose -f docker-compose.deploy.yml build \
+			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+			--build-arg ENVIRONMENT=dev
 	DOCKER_TAG=qa docker-compose -f docker-compose.deploy.yml push
 
 deploy-qa:
@@ -135,7 +139,9 @@ push-dev: login
 
 	# build docker image
 	DOCKER_TAG=latest PUBLIC_URL=vott-dev.${DOMAIN} \
-		docker-compose -f docker-compose.deploy.yml build --build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION)
+		docker-compose -f docker-compose.deploy.yml build \
+			--build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
+			--build-arg ENVIRONMENT=dev
 	DOCKER_TAG=latest docker-compose -f docker-compose.deploy.yml push
 
 deploy-dev:

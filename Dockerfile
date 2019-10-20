@@ -6,8 +6,10 @@ WORKDIR /tmp
 RUN npm install -g serve
 
 RUN npm ci \
-    && npm run build \
-    && npm run webpack:prod
+    && npm run build
+
+ARG ENVIRONMENT=prod
+RUN npm run webpack:$ENVIRONMENT
 
 RUN mv /tmp/build /app
 WORKDIR /app
