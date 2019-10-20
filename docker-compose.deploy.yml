@@ -11,13 +11,12 @@ services:
       - PUBLIC_URL=https://${SUBDOMAIN}.${DOMAIN}
       - REACT_APP_API_URL=${REACT_APP_API_URL}
       - NODE_ENV=${NODE_ENV}
-      - DEV_VOTT_PORT=${DEV_VOTT_PORT}
       - CORTEXIA_VERSION=${CORTEXIA_VERSION}
     deploy:
       labels:
         - traefik.frontend.rule=Host:${SUBDOMAIN}.${DOMAIN}
         - traefik.enable=true
-        - traefik.port=${DEV_VOTT_PORT}
+        - traefik.port=5000
         - traefik.tags=${TRAEFIK_PUBLIC_TAG}
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
         # Traefik service that listens to HTTP

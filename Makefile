@@ -22,20 +22,9 @@ init-githook:
 	cd .git/hooks/ && ln -s ../../versions.py
 
 vars: check-env
-	@echo 'Within docker-compose'
-	@echo '  SUBDOMAIN=${SUBDOMAIN}'
-	@echo '  DOMAIN=${DOMAIN}'
 	@echo '  PUBLIC_URL=${SUBDOMAIN}.${DOMAIN}'
-	@echo '  REACT_APP_API_URL=${REACT_APP_API_URL}'
-	@echo '  NODE_ENV=${NODE_ENV}'
-	@echo '  DEV_VOTT_PORT=${DEV_VOTT_PORT}'
-	@echo '  CORTEXIA_VERSION=${CORTEXIA_VERSION}'
-	@echo ''
-	@echo 'For deployment purpose'
-	@echo '  DOCKER_TAG=${DOCKER_TAG}'
-	@echo '  STACK_NAME=${STACK_NAME}'
-	@echo '  TRAEFIK_PUBLIC_NETWORK=${TRAEFIK_PUBLIC_NETWORK}'
-	@echo '  TRAEFIK_PUBLIC_TAG=${TRAEFIK_PUBLIC_TAG}'
+	@echo '  REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY)'
+	@echo '  REACT_APP_API_URL=$(REACT_APP_API_URL)'
 
 
 # version management
@@ -84,9 +73,9 @@ config-prod:
 	DOCKER_TAG=prod  \
 		SUBDOMAIN=vott \
 		DOMAIN=cortexia.io \
+		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
 		REACT_APP_API_URL=https://backend.cortexia.io \
 		STACK_NAME=vott \
-		DEV_VOTT_PORT=3000 \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
 		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
@@ -121,8 +110,8 @@ config-qa:
 	DOCKER_TAG=qa  \
 		SUBDOMAIN=vott-qa \
 		DOMAIN=cortexia.io \
+		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
 		REACT_APP_API_URL=https://backend-qa.cortexia.io \
-		DEV_VOTT_PORT=3000 \
 		STACK_NAME=vott-qa \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
@@ -155,8 +144,8 @@ config-dev:
 	DOCKER_TAG=latest  \
 		SUBDOMAIN=vott-dev \
 		DOMAIN=cortexia.io \
+		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
 		REACT_APP_API_URL=https://mocks.cortexia.io \
-		DEV_VOTT_PORT=3000 \
 		STACK_NAME=vott-dev \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
