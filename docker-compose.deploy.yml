@@ -6,6 +6,7 @@ services:
       args:
         - BUILDTIME_CORTEXIA_VERSION=${BUILDTIME_CORTEXIA_VERSION}
         - ENVIRONMENT=${ENVIRONMENT}
+        - NODE_ENV=${NODE_ENV}
     image: cortexia/vott:${DOCKER_TAG}
     environment:
       - PUBLIC_URL=https://${SUBDOMAIN}.${DOMAIN}

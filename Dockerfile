@@ -8,6 +8,12 @@ RUN npm install -g serve
 RUN npm ci \
     && npm run build
 
+ARG REACT_APP_INSTRUMENTATION_KEY=app-key
+ARG REACT_APP_API_URL=https://backend.cortexia.io
+ARG NODE_ENV=production
+RUN echo "REACT_APP_INSTRUMENTATION_KEY=$REACT_APP_INSTRUMENTATION_KEY" > .env.$NODE_ENV /app/ \
+    && echo "REACT_APP_API_URL=$REACT_APP_API_URL" >> .env.$NODE_ENV
+
 ARG ENVIRONMENT=prod
 RUN npm run webpack:$ENVIRONMENT
 
@@ -16,5 +22,7 @@ WORKDIR /app
 
 ARG BUILDTIME_CORTEXIA_VERSION=0.0.0
 ENV CORTEXIA_VERSION=$BUILDTIME_CORTEXIA_VERSION
+
+EXPOSE 5000
 
 CMD serve -s .
