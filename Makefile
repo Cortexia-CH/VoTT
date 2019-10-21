@@ -78,7 +78,6 @@ config-prod:
 		STACK_NAME=vott \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
 		CORTEXIA_VERSION=$(VERSION) \
 		ENVIRONMENT=prod \
 		NODE_ENV=production \
@@ -115,10 +114,9 @@ config-qa:
 		STACK_NAME=vott-qa \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
 		CORTEXIA_VERSION=$(VERSION) \
 		ENVIRONMENT=dev \
-		NODE_ENV=production \
+		NODE_ENV=development \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
@@ -149,7 +147,6 @@ config-dev:
 		STACK_NAME=vott-dev \
 		TRAEFIK_PUBLIC_TAG=traefik-public \
 		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		BUILDTIME_CORTEXIA_VERSION=$(VERSION) \
 		CORTEXIA_VERSION=$(VERSION) \
 		ENVIRONMENT=dev \
 		NODE_ENV=development \
@@ -184,10 +181,10 @@ ps:
 
 pull: check-env
 	rm -rf build node_modules
-	docker-compose -f docker-compose.dev.yml build --build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION) --pull
+	docker-compose -f docker-compose.dev.yml build --build-arg CORTEXIA_VERSION=$(VERSION) --pull
 
 build: check-env
-	docker-compose -f docker-compose.dev.yml build --build-arg BUILDTIME_CORTEXIA_VERSION=$(VERSION)
+	docker-compose -f docker-compose.dev.yml build --build-arg CORTEXIA_VERSION=$(VERSION)
 
 up: check-env
 	docker-compose -f docker-compose.dev.yml up -d
