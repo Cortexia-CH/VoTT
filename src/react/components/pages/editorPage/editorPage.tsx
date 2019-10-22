@@ -821,12 +821,13 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             assets.splice(indexAssetToRemove, 1);
             if (assets.length) {
                 const previousIndex = indexAssetToRemove - 1;
-                const assetToSelect = assets[previousIndex] !== undefined ? assets[previousIndex] : assets[indexAssetToRemove];
+                const assetToSelect =
+                    assets[previousIndex] !== undefined ? assets[previousIndex] : assets[indexAssetToRemove];
                 this.selectAsset(assetToSelect);
             }
             this.setState({
                 assets
-            })
+            });
         } catch (error) {
             toast.error(strings.editorPage.deletePictureError);
         } finally {

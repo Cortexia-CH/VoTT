@@ -462,11 +462,10 @@ describe("Editor Page Component", () => {
         // attempt to click on delete image from toolbar
         wrapper.find(`.${ToolbarItemName.DeletePicture}`).simulate("click");
         await waitForSelectedAsset(wrapper);
-        
+
         // asset-2 is selected, because previous asset wasn't existing
         expect(editorPage.state().selectedAsset.asset.id).toBe("asset-2");
     });
-
 
     it("deletes the asset and changes it to previous one when user clicks on delete icon in toolbar", async () => {
         // create test project and asset
@@ -480,7 +479,7 @@ describe("Editor Page Component", () => {
         const wrapper = createComponent(store, props);
         const editorPage = wrapper.find(EditorPage).childAt(0) as ReactWrapper<IEditorPageProps, IEditorPageState>;
         await waitForSelectedAsset(wrapper);
-        
+
         // Move to Asset 2
         await MockFactory.flushUi(() => wrapper.find(`.${ToolbarItemName.NextAsset}`).simulate("click"));
         expect(editorPage.state().selectedAsset.asset.id).toBe("asset-2");
@@ -488,7 +487,7 @@ describe("Editor Page Component", () => {
         // attempt to click on delete image from toolbar
         wrapper.find(`.${ToolbarItemName.DeletePicture}`).simulate("click");
         await waitForSelectedAsset(wrapper);
-        
+
         // asset-1 is selected, because previous asset was existing
         expect(editorPage.state().selectedAsset.asset.id).toBe("asset-1");
     });
