@@ -823,7 +823,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             if (newAssets.length) {
                 const previousIndex = indexAssetToRemove - 1;
                 const assetToSelect =
-                newAssets[previousIndex] !== undefined ? newAssets[previousIndex] : newAssets[indexAssetToRemove];
+                    newAssets[previousIndex] !== undefined ? newAssets[previousIndex] : newAssets[indexAssetToRemove];
                 this.selectAsset(assetToSelect);
             }
             this.setState({
