@@ -813,20 +813,21 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         try {
             const { auth, trackingActions } = this.props;
             const { selectedAsset, assets } = this.state;
-            const indexAssetToRemove = assets.findIndex((asset: IAsset) => {
+            const newAssets = [...assets];
+            const indexAssetToRemove = newAssets.findIndex((asset: IAsset) => {
                 return asset.id === selectedAsset.asset.id;
             });
 
             await trackingActions.trackingImgDelete(auth.userId, selectedAsset.asset.id);
-            assets.splice(indexAssetToRemove, 1);
-            if (assets.length) {
+            newAssets.splice(indexAssetToRemove, 1);
+            if (newAssets.length) {
                 const previousIndex = indexAssetToRemove - 1;
                 const assetToSelect =
-                    assets[previousIndex] !== undefined ? assets[previousIndex] : assets[indexAssetToRemove];
+                newAssets[previousIndex] !== undefined ? newAssets[previousIndex] : newAssets[indexAssetToRemove];
                 this.selectAsset(assetToSelect);
             }
             this.setState({
-                assets
+                assets: newAssets
             });
         } catch (error) {
             toast.error(strings.editorPage.deletePictureError);

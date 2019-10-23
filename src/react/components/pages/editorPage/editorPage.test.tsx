@@ -462,7 +462,7 @@ describe("Editor Page Component", () => {
         // attempt to click on delete image from toolbar
         wrapper.find(`.${ToolbarItemName.DeletePicture}`).simulate("click");
         await waitForSelectedAsset(wrapper);
-
+      
         // asset-2 is selected, because previous asset wasn't existing
         expect(editorPage.state().selectedAsset.asset.id).toBe("asset-2");
     });
