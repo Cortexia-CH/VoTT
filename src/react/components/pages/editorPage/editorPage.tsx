@@ -163,7 +163,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             const project = this.props.recentProjects.find(project => project.id === projectId);
             await this.props.actions.loadProject(project);
         }
-
         this.activeLearningService = new ActiveLearningService(this.props.project.activeLearningSettings);
     }
 
