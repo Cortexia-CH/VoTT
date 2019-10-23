@@ -145,7 +145,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         thumbnailSize: this.props.appSettings.thumbnailSize || { width: 175, height: 155 },
         isValid: true,
         showInvalidRegionWarning: false,
-        magnifierModalIsOpen: false,
+        magnifierModalIsOpen: false
     };
 
     private activeLearningService: ActiveLearningService = null;
@@ -167,7 +167,12 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         this.activeLearningService = new ActiveLearningService(this.props.project.activeLearningSettings);
         window.onbeforeunload = () => {
             const { selectedAsset } = this.state;
-            this.props.trackingActions.trackingImgOut(this.props.auth.userId, selectedAsset.asset.id, selectedAsset.regions, this.isAssetModified());
+            this.props.trackingActions.trackingImgOut(
+                this.props.auth.userId,
+                selectedAsset.asset.id,
+                selectedAsset.regions,
+                this.isAssetModified()
+            );
         };
     }
 
@@ -765,8 +770,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
 
     private isAssetModified = (): boolean => {
         const { selectedAssetBase, selectedAsset } = this.state;
-        return JSON.stringify(selectedAssetBase.regions) !== JSON.stringify(selectedAsset.regions)
-    }
+        return JSON.stringify(selectedAssetBase.regions) !== JSON.stringify(selectedAsset.regions);
+    };
 
     private loadProjectAssets = async (): Promise<void> => {
         if (this.loadingProjectAssets || this.state.assets.length > 0) {
