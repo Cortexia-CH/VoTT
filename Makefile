@@ -14,28 +14,20 @@ include .env
 export
 endif
 
-init:
-	cp .env.sample .env
-
 init-githook:
 	cp update_release.py .git/hooks/pre-commit
 	cd .git/hooks/ && ln -s ../../versions.py
 
-vars: check-env
-	@echo '  PUBLIC_URL=${SUBDOMAIN}.${DOMAIN}'
-	@echo '  REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY)'
-	@echo '  REACT_APP_API_URL=$(REACT_APP_API_URL)'
-
 
 # version management
 
-version: check-env
+version:
 	@echo $(shell node -pe "require('./package.json').version")-$(VERSION)
 
 version-up:
 	@python update_release.py
 
-check-release: check-env
+check-release:
 	# make sure we are in $(BRANCH)
 	@python update_release.py check --branch=$(BRANCH)
 
@@ -67,20 +59,28 @@ create-release: check-release
 	git push
 
 
+# docker shortcuts for maintenance purpose
+
+login:
+	docker login
+
+ps:
+	docker ps --format 'table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}'
+
 # deployment to prod
 
-config-prod:
-	DOCKER_TAG=prod  \
-		SUBDOMAIN=vott \
-		DOMAIN=cortexia.io \
+check-prod: check-env
+ifeq ($(wildcard .env.production),)
+	@echo ".env.production file is missing. Create it first"
+	@exit 1
+else
+include .env.production
+export
+endif
+
+config-prod: check-prod
+	CORTEXIA_VERSION=$(VERSION) \
 		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		REACT_APP_API_URL=https://backend.cortexia.io \
-		STACK_NAME=vott \
-		TRAEFIK_PUBLIC_TAG=traefik-public \
-		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		CORTEXIA_VERSION=$(VERSION) \
-		ENVIRONMENT=prod \
-		NODE_ENV=production \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
@@ -105,18 +105,18 @@ deploy-prod: config-prod
 
 # deployment to qa
 
-config-qa:
-	DOCKER_TAG=qa  \
-		SUBDOMAIN=vott-qa \
-		DOMAIN=cortexia.io \
+check-qa: check-env
+ifeq ($(wildcard .env.qa),)
+	@echo ".env.qa file is missing. Create it first"
+	@exit 1
+else
+include .env.qa
+export
+endif
+
+config-qa: check-qa
+	CORTEXIA_VERSION=$(VERSION) \
 		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		REACT_APP_API_URL=https://backend-qa.cortexia.io \
-		STACK_NAME=vott-qa \
-		TRAEFIK_PUBLIC_TAG=traefik-public \
-		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		CORTEXIA_VERSION=$(VERSION) \
-		ENVIRONMENT=dev \
-		NODE_ENV=development \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
@@ -138,18 +138,18 @@ deploy-qa: config-qa
 
 # deployment to dev
 
-config-dev:
-	DOCKER_TAG=latest  \
-		SUBDOMAIN=vott-dev \
-		DOMAIN=cortexia.io \
+check-dev: check-env
+ifeq ($(wildcard .env.development),)
+	@echo ".env.development file is missing. Create it first"
+	@exit 1
+else
+include .env.development
+export
+endif
+
+config-dev: check-dev
+	CORTEXIA_VERSION=$(VERSION) \
 		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		REACT_APP_API_URL=https://mocks.cortexia.io \
-		STACK_NAME=vott-dev \
-		TRAEFIK_PUBLIC_TAG=traefik-public \
-		TRAEFIK_PUBLIC_NETWORK=traefik-public \
-		CORTEXIA_VERSION=$(VERSION) \
-		ENVIRONMENT=dev \
-		NODE_ENV=development \
 		docker-compose \
 			-f docker-compose.deploy.yml \
 			-f docker-compose.deploy.networks.yml \
@@ -168,25 +168,54 @@ deploy-dev: config-dev
 	docker-auto-labels docker-stack.yml
 	docker stack deploy -c docker-stack.yml --with-registry-auth vott-dev
 
-# docker shortcuts for maintenance purpose
 
-login:
-	docker login
+# 'localhost' deployment
 
-ps:
-	docker ps --format 'table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}'
+VOTT_DOMAIN?=vott.localhost
+
+check-local: check-env
+ifeq ($(wildcard .env.local),)
+	@echo ".env.local file is missing. Create it first"
+	@exit 1
+else
+include .env.local
+export
+endif
+
+config-local: check-local
+	CORTEXIA_VERSION=$(VERSION) \
+		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
+		docker-compose \
+			-f docker-compose.deploy.yml \
+			-f docker-compose.deploy.networks.yml \
+		config > docker-stack.yml
+
+	docker-compose -f docker-stack.yml build
+
+kill-local:
+	docker kill vott-local || true
+
+deploy-local: config-local kill-local
+	docker run -d --name vott-local --rm \
+		--network=prod-stack_traefik-public \
+		--label "traefik.enable=true" \
+		--label "traefik.docker.network=traefik-public" \
+		--label "traefik.http.routers.vott.entrypoints=websecure" \
+		--label "traefik.http.routers.vott.tls.certresolver=cloudflare" \
+		--label "traefik.http.routers.vott.rule=Host(\`$(SUBDOMAIN).$(DOMAIN)\`)" \
+	cortexia/vott:latest
 
 
 # docker shortcuts for development purpose
 
-pull: check-env
+pull:
 	rm -rf build node_modules
 	docker-compose -f docker-compose.dev.yml build --build-arg CORTEXIA_VERSION=$(VERSION) --pull
 
-build: check-env
+build:
 	docker-compose -f docker-compose.dev.yml build --build-arg CORTEXIA_VERSION=$(VERSION)
 
-up: check-env
+up:
 	docker-compose -f docker-compose.dev.yml up -d
 
 down:
