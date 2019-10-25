@@ -67,6 +67,19 @@ login:
 ps:
 	docker ps --format 'table {{.Image}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}'
 
+config:
+	CORTEXIA_VERSION=$(VERSION) \
+		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
+		docker-compose \
+			-f docker-compose.deploy.yml \
+			-f docker-compose.deploy.networks.yml \
+		config > docker-stack.yml
+
+push:
+	# build and push docker image
+	docker-compose -f docker-stack.yml build
+	docker-compose -f docker-stack.yml push
+
 # deployment to prod
 
 check-prod: check-env
@@ -78,25 +91,16 @@ include .env.production
 export
 endif
 
-config-prod: check-prod
-	CORTEXIA_VERSION=$(VERSION) \
-		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		docker-compose \
-			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
-		config > docker-stack.yml
+config-prod: check-prod config
 
 push-prod: login config-prod
-	@# confirm push to production
+	# confirm push to production
 	@python update_release.py confirm --prod
-
 	# update tags
 	git tag -f prod
 	git push --tags --force
-
-	# build and push docker image
-	docker-compose -f docker-stack.yml build
-	docker-compose -f docker-stack.yml push
+	# push to dockerhub
+	make push
 
 deploy-prod: config-prod
 	docker-auto-labels docker-stack.yml
@@ -114,22 +118,14 @@ include .env.qa
 export
 endif
 
-config-qa: check-qa
-	CORTEXIA_VERSION=$(VERSION) \
-		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		docker-compose \
-			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
-		config > docker-stack.yml
+config-qa: check-qa config
 
 push-qa: login config-qa
 	# update tags
 	git tag -f qa
 	git push --tags --force
-
-	# build docker image
-	docker-compose -f docker-stack.yml build
-	DOCKER_TAG=qa docker-compose -f docker-stack.yml push
+	# push to dockerhub
+	make push
 
 deploy-qa: config-qa
 	docker-auto-labels docker-stack.yml
@@ -147,22 +143,14 @@ include .env.development
 export
 endif
 
-config-dev: check-dev
-	CORTEXIA_VERSION=$(VERSION) \
-		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		docker-compose \
-			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
-		config > docker-stack.yml
+config-dev: check-dev config
 
 push-dev: login config-dev
 	# update tags
 	git tag -f latest
 	git push --tags --force
-
-	# build docker image
-	docker-compose -f docker-stack.yml build
-	DOCKER_TAG=latest docker-compose -f docker-stack.yml push
+	# push to dockerhub
+	make push
 
 deploy-dev: config-dev
 	docker-auto-labels docker-stack.yml
@@ -182,15 +170,7 @@ include .env.local
 export
 endif
 
-config-local: check-local
-	CORTEXIA_VERSION=$(VERSION) \
-		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
-		docker-compose \
-			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
-		config > docker-stack.yml
-
-	docker-compose -f docker-stack.yml build
+config-local: check-local config
 
 kill-local:
 	docker kill vott-local || true

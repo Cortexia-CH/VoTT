@@ -10,14 +10,11 @@ services:
         - REACT_APP_INSTRUMENTATION_KEY=${REACT_APP_INSTRUMENTATION_KEY}
         - NODE_ENV=${NODE_ENV}
     image: cortexia/vott:${DOCKER_TAG}
-    environment:
-      - PUBLIC_URL=https://${SUBDOMAIN}.${DOMAIN}
-      - CORTEXIA_VERSION=${CORTEXIA_VERSION}
     deploy:
       labels:
         - traefik.frontend.rule=Host:${SUBDOMAIN}.${DOMAIN}
         - traefik.enable=true
-        - traefik.port=3000
+        - traefik.port=5000
         - traefik.tags=${TRAEFIK_PUBLIC_TAG}
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
         # Traefik service that listens to HTTP
