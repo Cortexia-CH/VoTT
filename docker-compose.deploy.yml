@@ -1,10 +1,15 @@
 version: "3.3"
 services:
   vott:
-    build: .
+    build:
+      context: .
+      args:
+        - CORTEXIA_VERSION=${CORTEXIA_VERSION}
+        - ENVIRONMENT=${ENVIRONMENT}
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+        - REACT_APP_INSTRUMENTATION_KEY=${REACT_APP_INSTRUMENTATION_KEY}
+        - NODE_ENV=${NODE_ENV}
     image: cortexia/vott:${DOCKER_TAG}
-    env_file:
-     - ./.env
     deploy:
       labels:
         - traefik.frontend.rule=Host:${SUBDOMAIN}.${DOMAIN}
