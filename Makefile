@@ -72,7 +72,7 @@ config:
 		REACT_APP_INSTRUMENTATION_KEY=$(REACT_APP_INSTRUMENTATION_KEY) \
 		docker-compose \
 			-f docker-compose.deploy.yml \
-			-f docker-compose.deploy.networks.yml \
+			-f docker-compose.networks.yml \
 		config > docker-stack.yml
 
 push:
@@ -177,9 +177,9 @@ kill-local:
 
 deploy-local: config-local kill-local
 	docker run -d --name vott-local --rm \
-		--network=prod-stack_traefik-public \
+		--network=$(TRAEFIK_PUBLIC_NETWORK) \
 		--label "traefik.enable=true" \
-		--label "traefik.docker.network=traefik-public" \
+		--label "traefik.docker.network=$(TRAEFIK_PUBLIC_NETWORK)" \
 		--label "traefik.http.routers.vott.entrypoints=websecure" \
 		--label "traefik.http.routers.vott.tls.certresolver=cloudflare" \
 		--label "traefik.http.routers.vott.rule=Host(\`$(SUBDOMAIN).$(DOMAIN)\`)" \
