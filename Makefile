@@ -198,10 +198,10 @@ build:
 up:
 	docker-compose -f docker-compose.dev.yml up -d
 
-down:
+down: kill-local
 	docker-compose -f docker-compose.dev.yml down
 
-stop:
+stop: kill-local
 	docker-compose -f docker-compose.dev.yml stop
 
 logs:
