@@ -9,7 +9,9 @@ BRANCH?=master
 
 check-env:
 ifeq ($(wildcard .env),)
-	@echo ".env file is missing. Create it first"
+	cp .sample.env .env
+	@echo "Generated \033[32m.env\033[0m"
+	@echo "  \033[31m>> Check its default values\033[0m"
 	@exit 1
 else
 include .env
