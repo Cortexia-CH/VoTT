@@ -13,13 +13,9 @@ services:
     image: cortexia/vott:${DOCKER_TAG}
     deploy:
       labels:
-        - traefik.frontend.rule=Host:${SUBDOMAIN}.${DOMAIN}
-        - traefik.enable=true
-        - traefik.port=5000
-        - traefik.tags=${TRAEFIK_PUBLIC_TAG}
-        - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK}
-        # Traefik service that listens to HTTP
-        - traefik.redirectorservice.frontend.entryPoints=http
-        - traefik.redirectorservice.frontend.redirect.entryPoint=https
-        # Traefik service that listens to HTTPS
-        - traefik.webservice.frontend.entryPoints=https
+        - "traefik.enable=true"
+        - "traefik.docker.network=$(TRAEFIK_PUBLIC_NETWORK)"
+        - "traefik.http.routers.vott.entrypoints=websecure"
+        - "traefik.http.routers.vott.tls.certresolver=cloudflare"
+        - "traefik.http.routers.vott.rule=Host(\`$(SUBDOMAIN).$(DOMAIN)\`)"
+
