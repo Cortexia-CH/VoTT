@@ -2,6 +2,8 @@
 # Default values, can be overridden either on the command line of make
 # or in .env
 
+.PHONY: config
+
 VERSION:=$(shell python update_release.py -v)
 BRANCH?=master
 
