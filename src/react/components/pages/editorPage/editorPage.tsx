@@ -164,6 +164,15 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             await this.props.actions.loadProject(project);
         }
         this.activeLearningService = new ActiveLearningService(this.props.project.activeLearningSettings);
+        window.onbeforeunload = () => {
+            const { selectedAsset } = this.state;
+            this.props.trackingActions.trackingImgOut(
+                this.props.auth.userId,
+                selectedAsset.asset.id,
+                selectedAsset.regions,
+                this.isAssetModified()
+            );
+        };
     }
 
     public async componentDidUpdate(prevProps: Readonly<IEditorPageProps>) {
@@ -722,12 +731,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
          * Track user leaves the image
          */
         if (selectedAsset && selectedAsset.asset) {
-            const isModified = JSON.stringify(selectedAssetBase.regions) !== JSON.stringify(selectedAsset.regions);
             await trackingActions.trackingImgOut(
                 auth.userId,
                 selectedAsset.asset.id,
                 selectedAsset.regions,
-                isModified
+                this.isAssetModified()
             );
         }
 
@@ -757,6 +765,29 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
          * Track user enters on the image
          */
         await trackingActions.trackingImgIn(auth.userId, newAssetMetadata.asset.id, newAssetMetadata.regions);
+    };
+
+    private isAssetModified = (): boolean => {
+        const { selectedAssetBase, selectedAsset } = this.state;
+        const modifiedAssets = selectedAsset.regions.filter((region: IRegion, index: number) => {
+            const oldAssetRegion = selectedAssetBase.regions[index];
+            if (!oldAssetRegion) {
+                return true;
+            }
+            const oldBoundingBox = oldAssetRegion.boundingBox;
+            const newBoundingBox = region.boundingBox;
+            return (
+                region.id !== oldAssetRegion.id ||
+                JSON.stringify(region.points) !== JSON.stringify(oldAssetRegion.points) ||
+                JSON.stringify(region.tags) !== JSON.stringify(oldAssetRegion.tags) ||
+                region.type !== oldAssetRegion.type ||
+                newBoundingBox.height !== oldBoundingBox.height ||
+                newBoundingBox.left !== oldBoundingBox.left ||
+                newBoundingBox.top !== oldBoundingBox.top ||
+                newBoundingBox.width !== oldBoundingBox.width
+            );
+        });
+        return selectedAssetBase.regions.length !== selectedAsset.regions.length || !!modifiedAssets.length;
     };
 
     private loadProjectAssets = async (): Promise<void> => {
