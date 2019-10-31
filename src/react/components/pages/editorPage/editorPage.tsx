@@ -788,8 +788,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 newBoundingBox.width !== oldBoundingBox.width
             );
         });
-        return selectedAssetBase.regions.length !== selectedAsset.regions.length
-            || !!modifiedAssets.length;
+        return selectedAssetBase.regions.length !== selectedAsset.regions.length || !!modifiedAssets.length;
     };
 
     private loadProjectAssets = async (): Promise<void> => {
