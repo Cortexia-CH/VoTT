@@ -774,14 +774,16 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             const oldAssetRegion = selectedAssetBase.regions[index];
             const oldBoundingBox = oldAssetRegion.boundingBox;
             const newBoundingBox = region.boundingBox;
-            return region.id !== oldAssetRegion.id
-                || JSON.stringify(region.points) !== JSON.stringify(oldAssetRegion.points)
-                || JSON.stringify(region.tags) !== JSON.stringify(oldAssetRegion.tags)
-                || region.type !== oldAssetRegion.type
-                || newBoundingBox.height !== oldBoundingBox.height
-                || newBoundingBox.left !== oldBoundingBox.left
-                || newBoundingBox.top !== oldBoundingBox.top
-                || newBoundingBox.width !== oldBoundingBox.width;
+            return (
+                region.id !== oldAssetRegion.id ||
+                JSON.stringify(region.points) !== JSON.stringify(oldAssetRegion.points) ||
+                JSON.stringify(region.tags) !== JSON.stringify(oldAssetRegion.tags) ||
+                region.type !== oldAssetRegion.type ||
+                newBoundingBox.height !== oldBoundingBox.height ||
+                newBoundingBox.left !== oldBoundingBox.left ||
+                newBoundingBox.top !== oldBoundingBox.top ||
+                newBoundingBox.width !== oldBoundingBox.width
+            );
         });
         return !!isModified.length;
     };
