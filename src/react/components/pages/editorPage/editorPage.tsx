@@ -772,6 +772,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         const { selectedAssetBase, selectedAsset } = this.state;
         const modifiedAssets = selectedAsset.regions.filter((region: IRegion, index: number) => {
             const oldAssetRegion = selectedAssetBase.regions[index];
+            if (!oldAssetRegion) {
+                return true;
+            }
             const oldBoundingBox = oldAssetRegion.boundingBox;
             const newBoundingBox = region.boundingBox;
             return (
@@ -785,7 +788,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 newBoundingBox.width !== oldBoundingBox.width
             );
         });
-        return !!modifiedAssets.length;
+        return selectedAssetBase.regions.length !== selectedAsset.regions.length
+            || !!modifiedAssets.length;
     };
 
     private loadProjectAssets = async (): Promise<void> => {
