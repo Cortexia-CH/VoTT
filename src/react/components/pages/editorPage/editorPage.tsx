@@ -770,7 +770,20 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
 
     private isAssetModified = (): boolean => {
         const { selectedAssetBase, selectedAsset } = this.state;
-        return JSON.stringify(selectedAssetBase.regions) !== JSON.stringify(selectedAsset.regions);
+        const isModified = selectedAsset.regions.filter((region: IRegion, index: number) => {
+            const oldAssetRegion = selectedAssetBase.regions[index];
+            const oldBoundingBox = oldAssetRegion.boundingBox;
+            const newBoundingBox = region.boundingBox;
+            return region.id !== oldAssetRegion.id
+                || JSON.stringify(region.points) !== JSON.stringify(oldAssetRegion.points)
+                || JSON.stringify(region.tags) !== JSON.stringify(oldAssetRegion.tags)
+                || region.type !== oldAssetRegion.type
+                || newBoundingBox.height !== oldBoundingBox.height
+                || newBoundingBox.left !== oldBoundingBox.left
+                || newBoundingBox.top !== oldBoundingBox.top
+                || newBoundingBox.width !== oldBoundingBox.width;
+        });
+        return !!isModified.length;
     };
 
     private loadProjectAssets = async (): Promise<void> => {
