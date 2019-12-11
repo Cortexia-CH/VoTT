@@ -437,7 +437,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         await this.loadProjectAssets(true).then(() => {
             this.forceUpdate();
         });
-    }
+    };
 
     /**
      * Removes tag from assets and projects and saves files

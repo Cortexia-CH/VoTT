@@ -289,8 +289,8 @@ export interface IAppStrings {
             reload: {
                 title: string;
                 confirmation: string;
-            }
-        }
+            };
+        };
         deletePictureError: string;
     };
     export: {
