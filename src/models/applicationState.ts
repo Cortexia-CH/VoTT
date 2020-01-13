@@ -431,10 +431,12 @@ export interface ITFRecordMetadata {
  * @member fullName - Full name of the signed user
  * @member userId - Id of the signed user
  * @member rememberUser - If user sign in should be remembered
+ * @member isAdmin - If user is super user then the flag is true
  */
 export interface IAuth {
     accessToken?: string;
     fullName?: string;
     userId?: number;
     rememberUser?: boolean;
+    isAdmin?: boolean;
 }

@@ -34,6 +34,7 @@ describe("Auth Reducer", () => {
         const result = reducer(state, action);
         expect(result.accessToken).toEqual(null);
         expect(result.fullName).toEqual(null);
+        expect(result.isAdmin).toEqual(null);
     });
 
     it("Unknown action performs a noop", () => {

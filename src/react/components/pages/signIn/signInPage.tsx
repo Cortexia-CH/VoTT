@@ -83,11 +83,12 @@ export default class SignInPage extends React.Component<ISignInPageProps, ISignI
                     fullName: null,
                     rememberUser,
                     userId: null,
+                    isAdmin: false
                 },
             });
             await this.props.actions.signIn(this.state.auth);
             const userInfo = await apiService.getCurrentUser();
-            await this.props.actions.saveUserInfo({fullName: userInfo.data.full_name, userId: userInfo.data.id});
+            await this.props.actions.saveUserInfo({fullName: userInfo.data.full_name, userId: userInfo.data.id, isAdmin: userInfo.data.is_superuser});
             await this.props.trackingActions.trackingSignIn(userInfo.data.id);
             history.push("/");
         } catch (error) {

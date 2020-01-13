@@ -1044,12 +1044,13 @@ export default class MockFactory {
      * @param accessToken Access token which is used to auth the user
      */
     public static createTestAuth(
-        accessToken?: string, fullName?: string, rememberUser?: boolean, userId?: number): IAuth {
+        accessToken?: string, fullName?: string, rememberUser?: boolean, userId?: number, isAdmin = false): IAuth {
         return {
             accessToken,
             fullName,
             rememberUser,
             userId,
+            isAdmin
         };
     }
 

@@ -68,8 +68,9 @@ export default class App extends React.Component<IAppProps, IAppState> {
     }
 
     public render() {
+        const {auth} = this.props;
         const platform = global && global.process ? global.process.platform : "web";
-        if (this.props.auth.rememberUser === false) {
+        if (auth.rememberUser === false) {
             window.addEventListener("beforeunload", async (e) => {
                 event.preventDefault();
                 await this.props.authActions.signOut();
@@ -89,12 +90,12 @@ export default class App extends React.Component<IAppProps, IAppState> {
                             <div className={`app-shell platform-${platform}`}>
                                 <TitleBar icon="fas fa-tags"
                                     title={this.props.currentProject ? this.props.currentProject.name : ""}
-                                    fullName={!!this.props.auth.accessToken ? this.props.auth.fullName : ""}>
+                                    fullName={!!auth.accessToken ? auth.fullName : ""}>
                                     <div className="app-help-menu-icon"><HelpMenu /></div>
                                 </TitleBar>
                                 <div className="app-main">
                                     {
-                                        !!this.props.auth.accessToken &&
+                                        (!!auth.accessToken && auth.isAdmin) &&
                                         <Sidebar project={this.props.currentProject} />
                                     }
                                     <MainContentRouter />
