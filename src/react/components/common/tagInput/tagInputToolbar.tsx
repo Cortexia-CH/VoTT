@@ -25,14 +25,15 @@ export default class TagInputToolbar extends React.Component<ITagInputToolbarPro
     public render() {
         return (
             <div className="tag-input-toolbar">
-                {
-                    this.getToolbarItems().map((itemConfig) =>
-                        <div key={itemConfig.displayName} className={`tag-input-toolbar-item ${itemConfig.className}`}
-                            onClick={(e) => this.onToolbarItemClick(e, itemConfig)}>
-                            <i className={`tag-input-toolbar-icon fas ${itemConfig.icon}`} />
-                        </div>,
-                    )
-                }
+                {this.getToolbarItems().map(itemConfig => (
+                    <div
+                        key={itemConfig.displayName}
+                        className={`tag-input-toolbar-item ${itemConfig.className}`}
+                        onClick={e => this.onToolbarItemClick(e, itemConfig)}
+                    >
+                        <i className={`tag-input-toolbar-icon fas ${itemConfig.icon}`} />
+                    </div>
+                ))}
             </div>
         );
     }
@@ -40,7 +41,7 @@ export default class TagInputToolbar extends React.Component<ITagInputToolbarPro
     private onToolbarItemClick = (e: SyntheticEvent, itemConfig: ITagInputToolbarItemProps): void => {
         e.stopPropagation();
         itemConfig.handler();
-    }
+    };
 
     private getToolbarItems = (): ITagInputToolbarItemProps[] => {
         return [
@@ -48,32 +49,32 @@ export default class TagInputToolbar extends React.Component<ITagInputToolbarPro
                 displayName: strings.tags.toolbar.search,
                 className: "search",
                 icon: "fa-search",
-                handler: this.handleSearch,
+                handler: this.handleSearch
             },
             {
                 displayName: strings.tags.toolbar.moveUp,
                 className: "up",
                 icon: "fa-arrow-circle-up",
-                handler: this.handleArrowUp,
+                handler: this.handleArrowUp
             },
             {
                 displayName: strings.tags.toolbar.moveDown,
                 className: "down",
                 icon: "fa-arrow-circle-down",
-                handler: this.handleArrowDown,
-            },
+                handler: this.handleArrowDown
+            }
         ];
-    }
+    };
 
     private handleSearch = () => {
         this.props.onSearchTags();
-    }
+    };
 
     private handleArrowUp = () => {
         this.props.onReorder(this.props.selectedTag, -1);
-    }
+    };
 
     private handleArrowDown = () => {
         this.props.onReorder(this.props.selectedTag, 1);
-    }
+    };
 }
