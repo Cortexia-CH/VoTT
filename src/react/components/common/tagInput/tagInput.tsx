@@ -82,14 +82,10 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
                     <span className="condensed-list-title tag-input-title">Tags</span>
                     <TagInputToolbar
                         selectedTag={this.state.selectedTag}
-                        onAddTags={() => this.setState({ addTags: !this.state.addTags })}
                         onSearchTags={() => this.setState({
                             searchTags: !this.state.searchTags,
                             searchQuery: "",
                         })}
-                        onEditTag={this.onEditTag}
-                        onLockTag={this.onLockTag}
-                        onDelete={this.deleteTag}
                         onReorder={this.onReOrder}
                     />
                 </h6>
