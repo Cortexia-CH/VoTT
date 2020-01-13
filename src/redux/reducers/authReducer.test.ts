@@ -1,7 +1,7 @@
 import MockFactory from "../../common/mockFactory";
 import { reducer } from "./authReducer";
 import { IAuth } from "../../models/applicationState";
-import {signInAction, signOutAction} from "../actions/authActions";
+import { signInAction, signOutAction } from "../actions/authActions";
 import { anyOtherAction } from "../actions/actionCreators";
 
 describe("Auth Reducer", () => {
