@@ -66,7 +66,7 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
     public componentDidMount() {
         this.startupProject();
     }
-    
+
     public render() {
         return (
             <div className="app-homepage">
@@ -84,9 +84,7 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
                 <Confirm
                     title="Delete Project"
                     ref={this.deleteConfirm as any}
-                    message={(project: IProject) =>
-                        `${strings.homePage.deleteProject.confirmation} ${project.name}?`
-                    }
+                    message={(project: IProject) => `${strings.homePage.deleteProject.confirmation} ${project.name}?`}
                     confirmButtonColor="danger"
                     onConfirm={this.deleteProject}
                 />
@@ -104,27 +102,29 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
     }
 
     private startupProject = async () => {
-        let project = this.props.recentProjects.filter(item => item.name === 'Cortexia')[0];
+        let project = this.props.recentProjects.filter(item => item.name === "Cortexia")[0];
         if (!project) {
-            const connectionName = 'cortexiaApi';
+            const connectionName = "cortexiaApi";
             const cortexiaConnection = this.props.connections.filter(item => item.name === connectionName)[0];
-            const connection = cortexiaConnection ? cortexiaConnection : {
-                providerType: connectionName,
-                providerOptions: [],
-                name: connectionName,
-                id: connectionName
-            };
+            const connection = cortexiaConnection
+                ? cortexiaConnection
+                : {
+                      providerType: connectionName,
+                      providerOptions: [],
+                      name: connectionName,
+                      id: connectionName
+                  };
             await this.props.connectionActions.saveConnection(connection);
-            
+
             project = {
-                name: 'project',
-                id: 'Cortexia',
-                version: 'Version',
-                securityToken: 'security token',
+                name: "project",
+                id: "Cortexia",
+                version: "Version",
+                securityToken: "security token",
                 tags: [],
                 sourceConnection: connection,
                 targetConnection: connection,
-                exportFormat: { providerType: 'vottJson', providerOptions: { encrypted: '' } },
+                exportFormat: { providerType: "vottJson", providerOptions: { encrypted: "" } },
                 videoSettings: { frameExtractionRate: 15 },
                 activeLearningSettings: {
                     autoDetect: false,
@@ -132,8 +132,8 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
                     modelPathType: ModelPathType.Coco
                 },
                 autoSave: true,
-                assets: {},
-            }
+                assets: {}
+            };
 
             await this.props.applicationActions.ensureSecurityToken(project);
             await this.props.actions.saveProject(project);

@@ -13,7 +13,6 @@ import CondensedList from "../../common/condensedList/condensedList";
 import HomePage, { IHomePageProps } from "./homePage";
 import IConnectionActions, * as connectionActions from "../../../../redux/actions/connectionActions";
 
-
 jest.mock("../../../../services/projectService");
 import ProjectService from "../../../../services/projectService";
 
@@ -27,8 +26,8 @@ describe("Homepage Component", () => {
     let saveConnectionSpy: jest.SpyInstance = null;
     const recentProjects = MockFactory.createTestProjects(2);
     const storageProviderMock = {
-        writeText: jest.fn((project) => Promise.resolve(project)),
-        deleteFile: jest.fn(() => Promise.resolve()),
+        writeText: jest.fn(project => Promise.resolve(project)),
+        deleteFile: jest.fn(() => Promise.resolve())
     };
     StorageProviderFactory.create = jest.fn(() => storageProviderMock);
 
@@ -38,7 +37,7 @@ describe("Homepage Component", () => {
                 <Router>
                     <HomePage {...props} />
                 </Router>
-            </Provider>,
+            </Provider>
         );
     }
 
@@ -50,7 +49,7 @@ describe("Homepage Component", () => {
 
     beforeEach(() => {
         const projectServiceMock = ProjectService as jest.Mocked<typeof ProjectService>;
-        projectServiceMock.prototype.load = jest.fn((project) => Promise.resolve(project));
+        projectServiceMock.prototype.load = jest.fn(project => Promise.resolve(project));
         projectServiceMock.prototype.delete = jest.fn(() => Promise.resolve());
 
         store = createStore(recentProjects);
@@ -73,7 +72,7 @@ describe("Homepage Component", () => {
             id: "cortexiaApi",
             name: "cortexiaApi",
             providerOptions: [],
-            providerType: "cortexiaApi",
+            providerType: "cortexiaApi"
         });
     });
 
@@ -93,25 +92,25 @@ describe("Homepage Component", () => {
                 goForward: jest.fn(),
                 block: jest.fn(),
                 listen: jest.fn(),
-                createHref: jest.fn(),
+                createHref: jest.fn()
             },
             location: {
                 hash: null,
                 pathname: null,
                 search: null,
-                state: null,
+                state: null
             },
             actions: (projectActions as any) as IProjectActions,
             applicationActions: (applicationActions as any) as IApplicationActions,
             appSettings: {
                 devToolsEnabled: false,
-                securityTokens: [],
+                securityTokens: []
             },
             match: {
                 params: {},
                 isExact: true,
                 path: `https://localhost:3000/`,
-                url: `https://localhost:3000/`,
+                url: `https://localhost:3000/`
             },
             connectionActions: (connectionActions as any) as IConnectionActions
         };
@@ -124,7 +123,7 @@ describe("Homepage Component", () => {
             connections: [],
             recentProjects,
             appError: null,
-            auth: null,
+            auth: null
         };
 
         return createReduxStore(initialState);
