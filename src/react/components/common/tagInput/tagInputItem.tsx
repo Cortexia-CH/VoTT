@@ -3,7 +3,7 @@ import { ITag } from "../../../../models/applicationState";
 
 export enum TagEditMode {
     Color = "color",
-    Name = "name",
+    Name = "name"
 }
 
 export interface ITagClickProps {
@@ -47,31 +47,22 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
     public state: ITagInputItemState = {
         isBeingEdited: false,
         isLocked: false,
-        tagEditMode: null,
+        tagEditMode: null
     };
 
     public render() {
         const style: any = {
-            background: this.props.tag.color,
+            background: this.props.tag.color
         };
         return (
             <div className={"tag-item-block"}>
-                {
-                    this.props.tag &&
+                {this.props.tag && (
                     <li className={this.getItemClassName()} style={style}>
-                        <div
-                            className={`tag-color`}>
-                        </div>
-                        <div
-                            className={"tag-content"}>
-                            {this.getTagContent()}
-                        </div>
-                        {
-                            this.state.isLocked &&
-                            <div></div>
-                        }
+                        <div className={`tag-color`}></div>
+                        <div className={"tag-content"}>{this.getTagContent()}</div>
+                        {this.state.isLocked && <div></div>}
                     </li>
-                }
+                )}
             </div>
         );
     }
@@ -79,13 +70,13 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
     public componentDidUpdate(prevProps: ITagInputItemProps) {
         if (prevProps.isBeingEdited !== this.props.isBeingEdited) {
             this.setState({
-                isBeingEdited: this.props.isBeingEdited,
+                isBeingEdited: this.props.isBeingEdited
             });
         }
 
         if (prevProps.isLocked !== this.props.isLocked) {
             this.setState({
-                isLocked: this.props.isLocked,
+                isLocked: this.props.isLocked
             });
         }
     }
@@ -99,7 +90,7 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
             classNames.push("tag-item-applied");
         }
         return classNames.join(" ");
-    }
+    };
 
     private getTagContent = () => {
         const displayIndex = this.getDisplayIndex();
@@ -110,17 +101,11 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
                         {this.props.tag.name}
                     </span>
                 </div>
-                <div className="tag-lock-icon">
-                    {this.props.isLocked &&
-                        <i className="fas fa-lock" />
-                    }
-                </div>
-                <div className={"tag-index"}>
-                    {(displayIndex !== null) && <span>[{displayIndex}]</span>}
-                </div>
+                <div className="tag-lock-icon">{this.props.isLocked && <i className="fas fa-lock" />}</div>
+                <div className={"tag-index"}>{displayIndex !== null && <span>[{displayIndex}]</span>}</div>
             </div>
         );
-    }
+    };
 
     private getContentClassName = () => {
         const classNames = ["tag-name-text px-2"];
@@ -128,11 +113,11 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
             classNames.push(" tag-color-edit");
         }
         return classNames.join(" ");
-    }
+    };
 
     private getDisplayIndex = () => {
         const index = this.props.index;
-        const displayIndex = (index === 9) ? 0 : index + 1;
-        return (displayIndex < 10) ? displayIndex : null;
-    }
+        const displayIndex = index === 9 ? 0 : index + 1;
+        return displayIndex < 10 ? displayIndex : null;
+    };
 }

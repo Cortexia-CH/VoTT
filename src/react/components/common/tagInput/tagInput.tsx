@@ -135,13 +135,13 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
     }
 
     public buildTags = (litters: ILitter[]): ITag[] => {
-        return litters.map((item) => {
+        return litters.map(item => {
             return {
                 name: strings.wasteTypes[item.id],
                 color: item.color
-            }
-        })
-    }
+            };
+        });
+    };
 
     public componentWillUnmount() {
         document.body.removeChild(this.portalDiv);

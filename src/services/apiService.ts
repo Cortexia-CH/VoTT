@@ -117,7 +117,7 @@ export class ApiService implements IApiService {
 
     public getLitters = (data: number[] = []): AxiosPromise<ILitter[]> => {
         return this.client.post(Api.Litters, data);
-    }
+    };
 }
 
 const apiService = new ApiService();
