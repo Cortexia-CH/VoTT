@@ -38,8 +38,6 @@ import EditorSideBar from "./editorSideBar";
 import Alert from "../../common/alert/alert";
 import registerMixins from "../../../../registerMixins";
 import { TagInput } from "../../common/tagInput/tagInput";
-import { EditorToolbar } from "./editorToolbar";
-import { ToolbarItem } from "../../toolbar/toolbarItem";
 import { ActiveLearningService } from "../../../../services/activeLearningService";
 jest.mock("../../../../services/apiService");
 
@@ -924,30 +922,6 @@ describe("Editor Page Component", () => {
                 .props()
                 .onCanvasRendered(document.createElement("canvas"));
             expect(activeLearningMock.prototype.predictRegions).toBeCalled();
-        });
-
-        it("predicts regions when toolbar item is selected", async () => {
-            await beforeActiveLearningTest();
-
-            const toolbarItem = {
-                props: {
-                    name: ToolbarItemName.ActiveLearning
-                }
-            };
-
-            const selectedAsset = editorPage.state().selectedAsset;
-            wrapper
-                .find(EditorToolbar)
-                .props()
-                .onToolbarItemSelected(toolbarItem as ToolbarItem);
-
-            await MockFactory.flushUi();
-
-            expect(activeLearningMock.prototype.predictRegions).toBeCalledWith(expect.anything(), selectedAsset);
-            expect(assetServiceMock.prototype.save).toBeCalledWith({
-                ...selectedAsset,
-                predicted: true
-            });
         });
     });
 });

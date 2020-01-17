@@ -10,6 +10,7 @@ import TagInputItem, { ITagInputItemProps, ITagClickProps } from "./tagInputItem
 import TagInputToolbar from "./tagInputToolbar";
 import { toast } from "react-toastify";
 import { strings } from "../../../../common/strings";
+import apiService, { ILitter } from "../../../../services/apiService";
 // tslint:disable-next-line:no-var-requires
 const tagColors = require("../../common/tagColors.json");
 
@@ -123,11 +124,23 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
         );
     }
 
-    public componentDidMount() {
+    public async componentDidMount() {
         document.body.appendChild(this.portalDiv);
+        const litters = await apiService.getLitters();
+        const tags = this.buildTags(litters.data);
         this.setState({
-            portalElement: ReactDOM.findDOMNode(this.portalDiv) as Element
+            portalElement: ReactDOM.findDOMNode(this.portalDiv) as Element,
+            tags
         });
+    }
+
+    public buildTags = (litters: ILitter[]): ITag[] => {
+        return litters.map((item) => {
+            return {
+                name: strings.wasteTypes[item.id],
+                color: item.color
+            }
+        })
     }
 
     public componentWillUnmount() {
