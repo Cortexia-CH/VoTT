@@ -125,7 +125,10 @@ function mapDispatchToProps(dispatch) {
  * @name - Editor Page
  * @description - Page for adding/editing/removing tags to assets
  */
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(
+    mapStateToProps,
+    mapDispatchToProps
+)
 export default class EditorPage extends React.Component<IEditorPageProps, IEditorPageState> {
     public state: IEditorPageState = {
         selectedTag: null,
