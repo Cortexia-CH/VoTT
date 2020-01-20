@@ -734,38 +734,6 @@ describe("Editor Page Component", () => {
             expect(projectTags).toHaveLength(updatedTags.length);
             expect(projectTags[projectTags.length - 1].name).toEqual(newTag.name);
         });
-
-        it("Remove a tag", async () => {
-            const project = MockFactory.createTestProject("test", 5);
-            const store = createReduxStore({
-                ...MockFactory.initialState(),
-                currentProject: project
-            });
-
-            const wrapper = createComponent(store, MockFactory.editorPageProps());
-            await waitForSelectedAsset(wrapper);
-
-            const tagToDelete = project.tags[project.tags.length - 1];
-            wrapper
-                .find(TagInput)
-                .props()
-                .onTagDeleted(tagToDelete.name);
-
-            // Accept the modal delete warning
-            wrapper.update();
-            wrapper
-                .find(".modal-footer button")
-                .first()
-                .simulate("click");
-
-            await MockFactory.flushUi();
-            wrapper.update();
-
-            const editorPage = wrapper.find(EditorPage).childAt(0) as ReactWrapper<IEditorPageProps>;
-            const projectTags = editorPage.props().project.tags;
-
-            expect(projectTags).toHaveLength(project.tags.length - 1);
-        });
     });
 
     describe("Resizing editor page", () => {

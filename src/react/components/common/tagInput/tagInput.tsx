@@ -32,8 +32,6 @@ export interface ITagInputProps {
     onCtrlTagClick?: (tag: ITag) => void;
     /** Function to call when tag is renamed */
     onTagRenamed?: (tagName: string, newTagName: string) => void;
-    /** Function to call when tag is deleted */
-    onTagDeleted?: (tagName: string) => void;
     /** Always show tag input box */
     showTagInputBox?: boolean;
     /** Always show tag search box */

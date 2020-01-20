@@ -302,7 +302,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                 onTagClick={this.onTagClicked}
                                 onCtrlTagClick={this.onCtrlTagClicked}
                                 onTagRenamed={this.confirmTagRenamed}
-                                onTagDeleted={this.confirmTagDeleted}
                             />
                         </div>
                         <Confirm
@@ -431,13 +430,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 this.setState({ selectedAsset });
             }
         }
-    };
-
-    /**
-     * Open Confirm dialog for tag deletion
-     */
-    private confirmTagDeleted = (tagName: string): void => {
-        this.deleteTagConfirm.current.open(tagName);
     };
 
     private onReloadedImages = async () => {
