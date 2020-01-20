@@ -39,6 +39,7 @@ import Alert from "../../common/alert/alert";
 import registerMixins from "../../../../registerMixins";
 import { TagInput } from "../../common/tagInput/tagInput";
 import { ActiveLearningService } from "../../../../services/activeLearningService";
+import ApiService from "../../../../services/apiService";
 jest.mock("../../../../services/apiService");
 
 function createComponent(store, props: IEditorPageProps): ReactWrapper<IEditorPageProps, IEditorPageState, EditorPage> {
@@ -124,6 +125,14 @@ describe("Editor Page Component", () => {
                 getAssets: jest.fn(() => Promise.resolve(testAssets))
             };
         });
+
+        jest.spyOn(ApiService, 'getLitters').mockImplementation(() =>
+            Promise.resolve({
+                data: [
+                    MockFactory.createTestLitter()
+                ]
+            })
+        )
     });
 
     it("Sets project state from redux store", () => {
@@ -758,52 +767,6 @@ describe("Editor Page Component", () => {
             const projectTags = editorPage.props().project.tags;
 
             expect(projectTags).toHaveLength(project.tags.length - 1);
-        });
-
-        it("Adds tag to locked tags when CmdOrCtrl clicked", async () => {
-            const project = MockFactory.createTestProject();
-            const store = createReduxStore({
-                ...MockFactory.initialState(),
-                currentProject: project
-            });
-
-            const wrapper = createComponent(store, MockFactory.editorPageProps());
-            await waitForSelectedAsset(wrapper);
-
-            wrapper.update();
-            wrapper
-                .find("span.tag-name-text")
-                .first()
-                .simulate("click", { target: { innerText: project.tags[0].name }, ctrlKey: true });
-            const newEditorPage = wrapper.find(EditorPage).childAt(0);
-            expect(newEditorPage.state().lockedTags).toEqual([project.tags[0].name]);
-        });
-
-        it("Removes tag from locked tags when ctrl clicked", async () => {
-            const project = MockFactory.createTestProject();
-            const store = createReduxStore({
-                ...MockFactory.initialState(),
-                currentProject: project
-            });
-
-            const wrapper = createComponent(store, MockFactory.editorPageProps());
-            await waitForSelectedAsset(wrapper);
-
-            wrapper.update();
-            wrapper
-                .find("span.tag-name-text")
-                .first()
-                .simulate("click", { target: { innerText: project.tags[0].name }, ctrlKey: true });
-            let editorPage = wrapper.find(EditorPage).childAt(0);
-            expect(editorPage.state().lockedTags).toEqual([project.tags[0].name]);
-
-            wrapper.update();
-            wrapper
-                .find("span.tag-name-text")
-                .first()
-                .simulate("click", { target: { innerText: project.tags[0].name }, ctrlKey: true });
-            editorPage = wrapper.find(EditorPage).childAt(0);
-            expect(editorPage.state().lockedTags).toEqual([]);
         });
     });
 

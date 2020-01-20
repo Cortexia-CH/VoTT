@@ -1,7 +1,6 @@
-import React, { KeyboardEvent, RefObject } from "react";
+import React, { KeyboardEvent } from "react";
 import ReactDOM from "react-dom";
 import Align from "rc-align";
-import { randomIntInRange } from "../../../../common/utils";
 import { IRegion, ITag } from "../../../../models/applicationState";
 import { ColorPicker } from "../colorPicker";
 import "./tagInput.scss";
@@ -107,18 +106,6 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
                     )}
                     {this.getColorPickerPortal()}
                     <div className="tag-input-items">{this.renderTagItems()}</div>
-                    {this.state.addTags && (
-                        <div className="tag-input-text-input-row new-tag-input">
-                            <input
-                                className="tag-input-box"
-                                type="text"
-                                onKeyDown={this.onAddTagKeyDown}
-                                placeholder="Add new tag"
-                                autoFocus={true}
-                            />
-                            <i className="tag-input-row-icon fas fa-tag" />
-                        </div>
-                    )}
                 </div>
             </div>
         );
@@ -164,33 +151,6 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
     private getTagNode = (tag: ITag): Element => {
         const itemRef = tag ? this.tagItemRefs.get(tag.name) : null;
         return (itemRef ? ReactDOM.findDOMNode(itemRef) : defaultDOMNode()) as Element;
-    };
-
-    private onEditTag = (tag: ITag) => {
-        const { editingTag } = this.state;
-        const newEditingTag = editingTag && editingTag.name === tag.name ? null : tag;
-        this.setState({
-            editingTag: newEditingTag,
-            editingTagNode: this.getTagNode(newEditingTag)
-        });
-        if (this.state.clickedColor) {
-            this.setState({
-                showColorPicker: !this.state.showColorPicker
-            });
-        }
-    };
-
-    private onLockTag = (tag: ITag) => {
-        if (!tag) {
-            return;
-        }
-        let lockedTags = [...this.props.lockedTags];
-        if (lockedTags.find(t => t === tag.name)) {
-            lockedTags = lockedTags.filter(t => t !== tag.name);
-        } else {
-            lockedTags.push(tag.name);
-        }
-        this.props.onLockedTagsChange(lockedTags);
     };
 
     private onReOrder = (tag: ITag, displacement: number) => {
@@ -405,92 +365,11 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
         }
     };
 
-    private deleteTag = (tag: ITag) => {
-        if (!tag) {
-            return;
-        }
-        if (this.props.onTagDeleted) {
-            this.props.onTagDeleted(tag.name);
-            return;
-        }
-
-        const index = this.state.tags.indexOf(tag);
-        const tags = this.state.tags.filter(t => t.name !== tag.name);
-
-        this.setState(
-            {
-                tags,
-                selectedTag: this.getNewSelectedTag(tags, index)
-            },
-            () => this.props.onChange(tags)
-        );
-
-        if (this.props.lockedTags.find(l => l === tag.name)) {
-            this.props.onLockedTagsChange(this.props.lockedTags.filter(lockedTag => lockedTag !== tag.name));
-        }
-    };
-
-    private getNewSelectedTag = (tags: ITag[], previouIndex: number): ITag => {
-        return tags.length ? tags[Math.min(tags.length - 1, previouIndex)] : null;
-    };
-
     private onSearchKeyDown = (event: KeyboardEvent): void => {
         if (event.key === "Escape") {
             this.setState({
                 searchTags: false
             });
-        }
-    };
-
-    private onAddTagKeyDown = event => {
-        if (event.key === "Enter") {
-            // validate and add
-            const newTag: ITag = {
-                name: event.target.value,
-                color: this.getNextColor()
-            };
-            if (newTag.name.length && !this.state.tags.find(t => t.name === newTag.name)) {
-                this.addTag(newTag);
-                event.target.value = "";
-            } else if (!newTag.name.length) {
-                toast.warn(strings.tags.warnings.emptyName);
-            } else {
-                toast.warn(strings.tags.warnings.existingName);
-            }
-        }
-        if (event.key === "Escape") {
-            this.setState({
-                addTags: false
-            });
-        }
-    };
-
-    private getNextColor = () => {
-        const tags = this.state.tags;
-        if (tags.length > 0) {
-            const lastColor = tags[tags.length - 1].color;
-            const lastIndex = tagColors.findIndex(color => color === lastColor);
-            let newIndex;
-            if (lastIndex > -1) {
-                newIndex = (lastIndex + 1) % tagColors.length;
-            } else {
-                newIndex = randomIntInRange(0, tagColors.length - 1);
-            }
-            return tagColors[newIndex];
-        } else {
-            return tagColors[0];
-        }
-    };
-
-    private addTag = (tag: ITag) => {
-        if (!this.state.tags.find(t => t.name === tag.name)) {
-            const tags = [...this.state.tags, tag];
-            this.setState(
-                {
-                    tags
-                },
-                () => this.props.onChange(tags)
-            );
         }
     };
 }
