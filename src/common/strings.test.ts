@@ -1,6 +1,6 @@
 import { strings, addLocValues, IAppStrings, interpolate, interpolateJson } from "./strings";
-import { english } from "./localization/en-us";
-import { spanish } from "./localization/es-cl";
+import en from "./localization/en.json";
+import es from "./localization/es.json";
 
 const languages = ["en", "es"];
 
@@ -8,8 +8,8 @@ describe("Localization tests", () => {
 
     function getLanguageJson(language: string): IAppStrings {
         return {
-            en: english,
-            es: spanish,
+            en,
+            es,
         }[language];
     }
 

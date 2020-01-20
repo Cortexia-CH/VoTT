@@ -1,6 +1,6 @@
 import LocalizedStrings, { LocalizedStringsMethods } from "react-localization";
-import { english } from "./localization/en-us";
-import { spanish } from "./localization/es-cl";
+import en from "./localization/en.json";
+import es from "./localization/es.json";
 
 /**
  * Interface for all required strings in application
@@ -527,8 +527,8 @@ interface IErrorMetadata {
 interface IStrings extends LocalizedStringsMethods, IAppStrings {}
 
 export const strings: IStrings = new LocalizedStrings({
-    en: english,
-    es: spanish
+    en,
+    es
 });
 
 /**
