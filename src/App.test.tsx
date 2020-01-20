@@ -18,14 +18,14 @@ describe("App Component", () => {
         return mount(
             <Provider store={store}>
                 <App {...props} />
-            </Provider>,
+            </Provider>
         );
     }
 
     function createProps() {
         return {
             trackingActions: (trackingActions as any) as ITrackingActions
-        }
+        };
     }
 
     it("renders without crashing", () => {
@@ -43,8 +43,8 @@ describe("App Component", () => {
         const props = createProps();
         const trackingSignOutAction = jest.spyOn(props.trackingActions, "trackingSignOut");
         createComponent(props);
-        spyOn(window, 'addEventListener');
-        window.dispatchEvent(new Event('beforeunload'));
+        spyOn(window, "addEventListener");
+        window.dispatchEvent(new Event("beforeunload"));
         expect(trackingSignOutAction).toHaveBeenCalled();
     });
 });
