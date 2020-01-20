@@ -3,10 +3,9 @@ import TagInputItem, { ITagInputItemProps } from "./tagInputItem";
 import MockFactory from "../../../../common/mockFactory";
 import { mount } from "enzyme";
 import ApiService from "../../../../services/apiService";
-jest.mock('../../../../services/apiService');
+jest.mock("../../../../services/apiService");
 
 describe("Tag Input Item", () => {
-
     function createProps(): ITagInputItemProps {
         return {
             tag: MockFactory.createTestTag(),
@@ -16,27 +15,23 @@ describe("Tag Input Item", () => {
             isSelected: false,
             appliedToSelectedRegions: false,
             onClick: jest.fn(),
-            onChange: jest.fn(),
+            onChange: jest.fn()
         };
     }
 
     beforeEach(() => {
-        jest.spyOn(ApiService, 'getLitters').mockImplementation(() =>
+        jest.spyOn(ApiService, "getLitters").mockImplementation(() =>
             Promise.resolve({
-                data: [
-                    MockFactory.createTestLitter()
-                ]
+                data: [MockFactory.createTestLitter()]
             })
-        )
+        );
     });
 
     function createComponent(props?: ITagInputItemProps) {
         if (!props) {
             props = createProps();
         }
-        return mount(
-            <TagInputItem {...props} />,
-        );
+        return mount(<TagInputItem {...props} />);
     }
 
     it("Renders correctly", () => {

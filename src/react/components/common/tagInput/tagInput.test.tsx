@@ -5,7 +5,7 @@ import MockFactory from "../../../../common/mockFactory";
 import { ITag } from "../../../../models/applicationState";
 import TagInputItem, { ITagInputItemProps } from "./tagInputItem";
 import ApiService from "../../../../services/apiService";
-jest.mock('../../../../services/apiService');
+jest.mock("../../../../services/apiService");
 
 describe("Tag Input Component", () => {
     function createComponent(props?: ITagInputProps): ReactWrapper<ITagInputProps, ITagInputState> {
@@ -25,11 +25,11 @@ describe("Tag Input Component", () => {
     }
 
     beforeEach(() => {
-        jest.spyOn(ApiService, 'getLitters').mockImplementation(() =>
+        jest.spyOn(ApiService, "getLitters").mockImplementation(() =>
             Promise.resolve({
                 data: MockFactory.createTestLitters()
             })
-        )
+        );
     });
 
     it("Renders correctly", () => {
@@ -38,7 +38,6 @@ describe("Tag Input Component", () => {
         expect(wrapper.exists(".tag-input-toolbar")).toBe(true);
         expect(wrapper.find(".tag-item-block").length).toBe(tags.length);
     });
-
 
     describe("Toolbar", () => {
         it("Tag search box can be shown on click of search button", () => {
@@ -75,7 +74,7 @@ describe("Tag Input Component", () => {
             .simulate("click");
         expect(wrapper.state().tags.indexOf(firstTag)).toEqual(0);
     });
-  
+
     it("Searches for a tag", () => {
         const props: ITagInputProps = {
             ...createProps(),

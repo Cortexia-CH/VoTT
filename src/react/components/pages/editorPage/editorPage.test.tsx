@@ -126,13 +126,11 @@ describe("Editor Page Component", () => {
             };
         });
 
-        jest.spyOn(ApiService, 'getLitters').mockImplementation(() =>
+        jest.spyOn(ApiService, "getLitters").mockImplementation(() =>
             Promise.resolve({
-                data: [
-                    MockFactory.createTestLitter()
-                ]
+                data: [MockFactory.createTestLitter()]
             })
-        )
+        );
     });
 
     it("Sets project state from redux store", () => {
