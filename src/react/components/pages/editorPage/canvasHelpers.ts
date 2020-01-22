@@ -148,7 +148,7 @@ export default class CanvasHelpers {
             .map(tag => {
                 const projectTag = projectTags.find(projectTag => projectTag.name === tag.name);
                 console.log(projectTag);
-                return projectTag ? new Tag(projectTag.name.replace('(', '').replace(')', ''), projectTag.color) : null;
+                return projectTag ? new Tag(projectTag.name.replace("(", "").replace(")", ""), projectTag.color) : null;
             })
             .filter(tag => tag !== null);
 
