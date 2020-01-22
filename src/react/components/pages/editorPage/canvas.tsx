@@ -15,13 +15,14 @@ import { strings } from "../../../../common/strings";
 import { SelectionMode } from "vott-ct/lib/js/CanvasTools/Interface/ISelectorSettings";
 import { Rect } from "vott-ct/lib/js/CanvasTools/Core/Rect";
 import { createContentBoundingBox } from "../../../../common/layout";
+import { ITag } from "vott-ct/lib/js/CanvasTools/Interface/ITag";
 
 export interface ICanvasProps extends React.Props<Canvas> {
     selectedAsset: IAssetMetadata;
     editorMode: EditorMode;
     selectionMode: SelectionMode;
     project: IProject;
-    lockedTags: string[];
+    lockedTags: ITag[];
     children?: ReactElement<AssetPreview>;
     onAssetMetadataChanged?: (assetMetadata: IAssetMetadata) => void;
     onSelectedRegionsChanged?: (regions: IRegion[]) => void;
@@ -142,7 +143,7 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
      * Toggles tag on all selected regions
      * @param selectedTag Tag name
      */
-    public applyTag = (tag: string) => {
+    public applyTag = (tag: ITag) => {
         const selectedRegions = this.getSelectedRegions();
         const lockedTags = this.props.lockedTags;
         const lockedTagsEmpty = !lockedTags || !lockedTags.length;
@@ -150,11 +151,11 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
         if ((!tag && lockedTagsEmpty) || regionsEmpty) {
             return;
         }
-        let transformer: (tags: string[], tag: string) => string[];
+        let transformer: (tags: ITag[], tag: ITag) => ITag[];
         if (lockedTagsEmpty) {
             // Tag selected while region(s) selected
             transformer = CanvasHelpers.toggleTag;
-        } else if (lockedTags.find((t) => t === tag)) {
+        } else if (lockedTags.find((t) => t.name === tag.name)) {
             // Tag added to locked tags while region(s) selected
             transformer = CanvasHelpers.addIfMissing;
         } else {
@@ -393,14 +394,13 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
         if (selectedRegionsData) {
             this.template = new Rect(selectedRegionsData.width, selectedRegionsData.height);
         }
-
         if (this.props.lockedTags && this.props.lockedTags.length) {
             for (const selectedRegion of selectedRegions) {
                 selectedRegion.tags = CanvasHelpers.addAllIfMissing(selectedRegion.tags, this.props.lockedTags);
             }
             this.updateRegions(selectedRegions);
         }
-    }
+     }
 
     private renderChildren = () => {
         return React.cloneElement(this.props.children, {

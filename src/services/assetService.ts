@@ -10,7 +10,8 @@ import {
     AssetState,
     IRegion,
     RegionType,
-    ITFRecordMetadata
+    ITFRecordMetadata,
+    ITag
 } from "../models/applicationState";
 import { AssetProviderFactory, IAssetProvider } from "../providers/storage/assetProviderFactory";
 import { StorageProviderFactory, IStorageProvider } from "../providers/storage/storageProviderFactory";
@@ -235,7 +236,7 @@ export class AssetService {
      */
     private async getUpdatedAssets(
         tagName: string,
-        transformer: (tags: string[]) => string[]
+        transformer: (tags: ITag[]) => ITag[]
     ): Promise<IAssetMetadata[]> {
         // Loop over assets and update if necessary
         const updates = await _.values(this.project.assets).mapAsync(async asset => {
@@ -258,12 +259,12 @@ export class AssetService {
     private updateTagInAssetMetadata(
         assetMetadata: IAssetMetadata,
         tagName: string,
-        transformer: (tags: string[]) => string[]
+        transformer: (tags: ITag[]) => ITag[]
     ): boolean {
         let foundTag = false;
 
         for (const region of assetMetadata.regions) {
-            if (region.tags.find(t => t === tagName)) {
+            if (region.tags.find(t => t.name === tagName)) {
                 foundTag = true;
                 region.tags = transformer(region.tags);
             }
@@ -286,7 +287,7 @@ export class AssetService {
             regions.push({
                 id: shortid.generate(),
                 type: RegionType.Rectangle,
-                tags: [objectArray.textArray[index]],
+                tags: [{name: objectArray.textArray[index], color: '#00ff44'}],
                 boundingBox: {
                     left: objectArray.xminArray[index] * objectArray.width,
                     top: objectArray.yminArray[index] * objectArray.height,

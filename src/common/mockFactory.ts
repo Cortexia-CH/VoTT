@@ -781,7 +781,7 @@ export default class MockFactory {
      * @param id The id to assign to the region
      * @param tags the tags used in this region
      */
-    public static createTestRegion(id = null, tags: string[] = []): IRegion {
+    public static createTestRegion(id = null, tags: ITag[] = []): IRegion {
         const origin = {
             x: randomIntInRange(0, 1024),
             y: randomIntInRange(0, 768)

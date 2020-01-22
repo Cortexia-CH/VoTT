@@ -3,7 +3,7 @@ import { ExportProvider, ExportAssetState, IExportResults } from "./exportProvid
 import Guard from "../../common/guard";
 import {
     IProject, IExportFormat, IAssetMetadata,
-    IBoundingBox, ISize, IExportProviderOptions,
+    IBoundingBox, ISize, IExportProviderOptions, ITag,
 } from "../../models/applicationState";
 import {
     AzureCustomVisionService, IAzureCustomVisionServiceOptions, IAzureCustomVisionProject,
@@ -184,8 +184,8 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
         // Generate the regions for Azure Custom Vision
         assetMetadata.regions.forEach((region) => {
             if (region.boundingBox) {
-                region.tags.forEach((tagName) => {
-                    const customVisionTag = tags[tagName];
+                region.tags.forEach((tag: ITag) => {
+                    const customVisionTag = tags[tag.name];
                     if (customVisionTag) {
                         const boundingBox = this.getBoundingBoxValue(assetMetadata.asset.size, region.boundingBox);
                         const newRegion: IAzureCustomVisionRegion = {

@@ -1,5 +1,5 @@
 import { ExportAssetState } from "../providers/export/exportProvider";
-import { IPoint } from "./applicationState";
+import { IPoint, ITag } from "./applicationState";
 /**
  * @name - V1 Project
  * @description - Defines the structure of a version 1 Project
@@ -50,6 +50,6 @@ export interface IV1Region {
     UID: string;
     id: number;
     type: string;
-    tags: string[];
+    tags: ITag[];
     name: number;
 }

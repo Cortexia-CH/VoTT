@@ -21,9 +21,9 @@ export interface ITagInputProps {
     /** Currently selected regions in canvas */
     selectedRegions?: IRegion[];
     /** Tags that are currently locked for editing experience */
-    lockedTags?: string[];
+    lockedTags?: ITag[];
     /** Updates to locked tags */
-    onLockedTagsChange?: (locked: string[]) => void;
+    onLockedTagsChange?: (locked: ITag[]) => void;
     /** Place holder for input text box */
     placeHolder?: string;
     /** Function to call on clicking individual tag */
@@ -287,7 +287,7 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
                 ({
                     tag,
                     index: tags.findIndex(t => t.name === tag.name),
-                    isLocked: this.props.lockedTags && this.props.lockedTags.findIndex(t => t === tag.name) > -1,
+                    isLocked: this.props.lockedTags && this.props.lockedTags.findIndex(t => t.name === tag.name) > -1,
                     isBeingEdited: this.state.editingTag && this.state.editingTag.name === tag.name,
                     isSelected: this.state.selectedTag && this.state.selectedTag.name === tag.name,
                     appliedToSelectedRegions: selectedRegionTagSet.has(tag.name),
@@ -302,7 +302,7 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
         if (this.props.selectedRegions) {
             for (const region of this.props.selectedRegions) {
                 for (const tag of region.tags) {
-                    result.add(tag);
+                    result.add(tag.name);
                 }
             }
         }

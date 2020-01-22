@@ -117,9 +117,9 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
     private getAssetTagArray(element: IAssetMetadata): IObjectInfo[] {
         const tagObjects = [];
         element.regions.forEach((region) => {
-            region.tags.forEach((tagName) => {
+            region.tags.forEach((tag: ITag) => {
                 const objectInfo: IObjectInfo = {
-                    name: tagName,
+                    name: tag.name,
                     xmin: region.boundingBox.left,
                     ymin: region.boundingBox.top,
                     xmax: region.boundingBox.left + region.boundingBox.width,
@@ -244,7 +244,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
                 assetMetadata.regions.forEach((region) => {
                     tags.forEach((tag) => {
                         let tagInstances = tagUsage.get(tag.name) || 0;
-                        if (region.tags.filter((tagName) => tagName === tag.name).length > 0) {
+                        if (region.tags.filter((secondTag: ITag) => secondTag.name === tag.name).length > 0) {
                             appliedTags.add(tag.name);
                             tagUsage.set(tag.name, tagInstances += 1);
                         }

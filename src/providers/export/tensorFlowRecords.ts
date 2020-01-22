@@ -1,7 +1,7 @@
 import _ from "lodash";
 import CryptoJS from "crypto-js";
 import { ExportProvider } from "./exportProvider";
-import { IProject, IAssetMetadata, IExportProviderOptions } from "../../models/applicationState";
+import { IProject, IAssetMetadata, IExportProviderOptions, ITag } from "../../models/applicationState";
 import Guard from "../../common/guard";
 import HtmlFileReader from "../../common/htmlFileReader";
 import { itemTemplate } from "./pascalVOC/pascalVOCTemplates";
@@ -146,11 +146,11 @@ export class TFRecordsExportProvider extends ExportProvider {
     private updateAssetTagArrays(element: IAssetMetadata, imageInfo: IImageInfo) {
         element.regions.filter((region) => region.boundingBox)
             .forEach((region) => {
-                region.tags.forEach((tagName) => {
+                region.tags.forEach((tag: ITag) => {
                     const index = this.project.tags
-                        .findIndex((projectTag) => projectTag.name === tagName);
+                        .findIndex((projectTag) => projectTag.name === tag.name);
 
-                    imageInfo.text.push(tagName);
+                    imageInfo.text.push(tag.name);
                     imageInfo.label.push(index);
                     imageInfo.xmin.push(region.boundingBox.left / imageInfo.width);
                     imageInfo.ymin.push(region.boundingBox.top / imageInfo.height);

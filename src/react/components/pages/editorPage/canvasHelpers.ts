@@ -21,14 +21,14 @@ export default class CanvasHelpers {
      * @param tags Array of tags
      * @param tag Tag to toggle
      */
-    public static toggleTag(tags: string[], tag: string): string[] {
-        const tagIndex = tags.findIndex((existingTag) => existingTag === tag);
+    public static toggleTag(tags: ITag[], tag: ITag): ITag[] {
+        const tagIndex = tags.findIndex((existingTag) => existingTag.name === tag.name);
         if (tagIndex === -1) {
             // Tag isn't found within region tags, add it
             return [...tags, tag];
         } else {
             // Tag is within region tags, remove it
-            return tags.filter((t) => t !== tag);
+            return tags.filter((t) => t.name !== tag.name);
         }
     }
 
@@ -37,8 +37,8 @@ export default class CanvasHelpers {
      * @param tags Existing tags array
      * @param tag Tag to be added if missing
      */
-    public static addIfMissing(tags: string[], tag: string): string[] {
-        if (!tags.find((t) => t === tag)) {
+    public static addIfMissing(tags: ITag[], tag: ITag): ITag[] {
+        if (!tags.find((t) => t.name === tag.name)) {
             return [...tags, tag];
         }
         return tags;
@@ -49,7 +49,7 @@ export default class CanvasHelpers {
      * @param tags Existing tags array
      * @param newTags Tags to be added if not contained
      */
-    public static addAllIfMissing(tags: string[], newTags: string[]): string[] {
+    public static addAllIfMissing(tags: ITag[], newTags: ITag[]): ITag[] {
         let result = [...tags];
         for (const newTag of newTags) {
             result = CanvasHelpers.addIfMissing(result, newTag);
@@ -62,8 +62,8 @@ export default class CanvasHelpers {
      * @param tags Existing tags array
      * @param tag Tag to be removed if contained in `tags`
      */
-    public static removeIfContained(tags: string[], tag: string): string[] {
-        return tags.filter((t) => t !== tag);
+    public static removeIfContained(tags: ITag[], tag: ITag): ITag[] {
+        return tags.filter((t) => t.name !== tag.name);
     }
 
     /**
@@ -138,11 +138,13 @@ export default class CanvasHelpers {
         Guard.null(region);
 
         const tags = region.tags
-            .map((tagName) => {
-                const projectTag = projectTags.find((projectTag) => projectTag.name === tagName);
+            .map((tag) => {
+                const projectTag = projectTags.find((projectTag) => projectTag.name === tag.name);
                 return projectTag ? new Tag(projectTag.name, projectTag.color) : null;
             })
             .filter((tag) => tag !== null);
+
+            console.log(new TagsDescriptor(tags));
 
         return new TagsDescriptor(tags);
     }

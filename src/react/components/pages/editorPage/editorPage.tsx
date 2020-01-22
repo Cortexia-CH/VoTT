@@ -88,7 +88,7 @@ export interface IEditorPageState {
     /** Most recently selected tag */
     selectedTag: string;
     /** Tags locked for region labeling */
-    lockedTags: string[];
+    lockedTags: ITag[];
     /** Size of the asset thumbnails to display in the side bar */
     thumbnailSize: ISize;
     /**
@@ -408,7 +408,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 selectedTag: tag.name,
                 lockedTags: []
             },
-            () => this.canvas.current.applyTag(tag.name)
+            () => this.canvas.current.applyTag(tag)
         );
     };
 
@@ -455,13 +455,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     };
 
     private onCtrlTagClicked = (tag: ITag): void => {
-        const locked = this.state.lockedTags;
         this.setState(
             {
                 selectedTag: tag.name,
-                lockedTags: CanvasHelpers.toggleTag(locked, tag.name)
             },
-            () => this.canvas.current.applyTag(tag.name)
+            () => this.canvas.current.applyTag(tag)
         );
     };
 
@@ -611,7 +609,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         await this.props.actions.saveProject(project);
     };
 
-    private onLockedTagsChanged = (lockedTags: string[]) => {
+    private onLockedTagsChanged = (lockedTags: ITag[]) => {
         this.setState({ lockedTags });
     };
 
