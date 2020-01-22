@@ -49,7 +49,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
     public async export(): Promise<void> {
         const allAssets = await this.getAssetsForExport();
         const exportObject: any = { ...this.project };
-        exportObject.assets = _.keyBy(allAssets, (assetMetadata) => assetMetadata.asset.id);
+        exportObject.assets = _.keyBy(allAssets, assetMetadata => assetMetadata.asset.id);
 
         // Create Export Folder
         const exportFolderName = `${this.project.name.replace(/\s/g, "-")}-PascalVOC-export`;
@@ -66,7 +66,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
             allAssets,
             this.project.tags,
             testSplit,
-            this.options.exportUnassigned,
+            this.options.exportUnassigned
         );
     }
 
@@ -75,7 +75,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
         const jpegImagesFolderName = `${exportFolderName}/JPEGImages`;
         await this.storageProvider.createContainer(jpegImagesFolderName);
 
-        await allAssets.mapAsync(async (assetMetadata) => {
+        await allAssets.mapAsync(async assetMetadata => {
             await this.exportSingleImage(jpegImagesFolderName, assetMetadata);
         });
     }
@@ -95,14 +95,16 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
             const imageInfo: IImageInfo = {
                 width: assetMetadata.asset.size ? assetMetadata.asset.size.width : 0,
                 height: assetMetadata.asset.size ? assetMetadata.asset.size.height : 0,
-                objects: tagObjects,
+                objects: tagObjects
             };
 
             this.imagesInfo.set(assetMetadata.asset.name, imageInfo);
 
-            if (!assetMetadata.asset.size ||
+            if (
+                !assetMetadata.asset.size ||
                 assetMetadata.asset.size.width === 0 ||
-                assetMetadata.asset.size.height === 0) {
+                assetMetadata.asset.size.height === 0
+            ) {
                 await this.updateImageSizeInfo(arrayBuffer, imageFileName, assetMetadata.asset.name);
             }
         } catch (err) {
@@ -116,14 +118,14 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
 
     private getAssetTagArray(element: IAssetMetadata): IObjectInfo[] {
         const tagObjects = [];
-        element.regions.forEach((region) => {
+        element.regions.forEach(region => {
             region.tags.forEach((tag: ITag) => {
                 const objectInfo: IObjectInfo = {
                     name: tag.name,
                     xmin: region.boundingBox.left,
                     ymin: region.boundingBox.top,
                     xmax: region.boundingBox.left + region.boundingBox.width,
-                    ymax: region.boundingBox.top + region.boundingBox.height,
+                    ymax: region.boundingBox.top + region.boundingBox.height
                 };
 
                 tagObjects.push(objectInfo);
@@ -135,8 +137,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
 
     private async updateImageSizeInfo(imageBuffer: ArrayBuffer, imageFileName: string, assetName: string) {
         // Get Base64
-        const image64 = btoa(new Uint8Array(imageBuffer).
-            reduce((data, byte) => data + String.fromCharCode(byte), ""));
+        const image64 = btoa(new Uint8Array(imageBuffer).reduce((data, byte) => data + String.fromCharCode(byte), ""));
 
         if (image64.length < 10) {
             // Ignore the error at the moment
@@ -162,10 +163,10 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
             const pbtxtFileName = `${exportFolderName}/pascal_label_map.pbtxt`;
 
             let id = 1;
-            const items = project.tags.map((element) => {
+            const items = project.tags.map(element => {
                 const params = {
                     id: (id++).toString(),
-                    tag: element.name,
+                    tag: element.name
                 };
 
                 return interpolate(itemTemplate, params);
@@ -184,16 +185,15 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
             // Save Annotations
             await this.imagesInfo.forEachAsync(async (imageInfo, imageName) => {
                 const imageFilePath = `${annotationsFolderName}/${imageName}`;
-                const assetFilePath = `${imageFilePath.substr(0, imageFilePath.lastIndexOf("."))
-                    || imageFilePath}.xml`;
+                const assetFilePath = `${imageFilePath.substr(0, imageFilePath.lastIndexOf(".")) || imageFilePath}.xml`;
 
-                const objectsXML = imageInfo.objects.map((o) => {
+                const objectsXML = imageInfo.objects.map(o => {
                     const params = {
                         name: o.name,
                         xmin: o.xmin.toString(),
                         ymin: o.ymin.toString(),
                         xmax: o.xmax.toString(),
-                        ymax: o.ymax.toString(),
+                        ymax: o.ymax.toString()
                     };
 
                     return interpolate(objectTemplate, params);
@@ -204,7 +204,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
                     filePath: imageFilePath,
                     width: imageInfo.width.toString(),
                     height: imageInfo.height.toString(),
-                    objects: objectsXML.join(""),
+                    objects: objectsXML.join("")
                 };
 
                 // Save Annotation File
@@ -220,7 +220,8 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
         allAssets: IAssetMetadata[],
         tags: ITag[],
         testSplit: number,
-        exportUnassignedTags: boolean) {
+        exportUnassignedTags: boolean
+    ) {
         if (!tags) {
             return;
         }
@@ -236,17 +237,17 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
         const tagUsage = new Map<string, number>();
 
         // Generate tag usage per asset
-        allAssets.forEach((assetMetadata) => {
+        allAssets.forEach(assetMetadata => {
             const appliedTags = new Set<string>();
             assetUsage.set(assetMetadata.asset.name, appliedTags);
 
             if (assetMetadata.regions.length > 0) {
-                assetMetadata.regions.forEach((region) => {
-                    tags.forEach((tag) => {
+                assetMetadata.regions.forEach(region => {
+                    tags.forEach(tag => {
                         let tagInstances = tagUsage.get(tag.name) || 0;
                         if (region.tags.filter((secondTag: ITag) => secondTag.name === tag.name).length > 0) {
                             appliedTags.add(tag.name);
-                            tagUsage.set(tag.name, tagInstances += 1);
+                            tagUsage.set(tag.name, (tagInstances += 1));
                         }
                     });
                 });
@@ -254,7 +255,7 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
         });
 
         // Save ImageSets
-        await tags.forEachAsync(async (tag) => {
+        await tags.forEachAsync(async tag => {
             const tagInstances = tagUsage.get(tag.name) || 0;
             if (!exportUnassignedTags && tagInstances === 0) {
                 return;
@@ -282,7 +283,6 @@ export class PascalVOCExportProvider extends ExportProvider<IPascalVOCExportProv
 
                 const trainImageSetFileName = `${imageSetsMainFolderName}/${tag.name}_train.txt`;
                 await this.storageProvider.writeText(trainImageSetFileName, trainArray.join(os.EOL));
-
             } else {
                 const imageSetFileName = `${imageSetsMainFolderName}/${tag.name}.txt`;
                 await this.storageProvider.writeText(imageSetFileName, assetList.join(os.EOL));

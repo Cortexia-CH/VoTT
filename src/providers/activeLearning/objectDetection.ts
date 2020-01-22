@@ -7,7 +7,7 @@ import { strings } from "../../common/strings";
 
 // tslint:disable-next-line:interface-over-type-literal
 export type DetectedObject = {
-    bbox: [number, number, number, number];  // [x, y, width, height]
+    bbox: [number, number, number, number]; // [x, y, width, height]
     class: string;
     score: number;
 };
@@ -46,8 +46,10 @@ export class ObjectDetection {
      */
     public async load(modelFolderPath: string) {
         try {
-            if (modelFolderPath.toLowerCase().startsWith("http://") ||
-                modelFolderPath.toLowerCase().startsWith("https://")) {
+            if (
+                modelFolderPath.toLowerCase().startsWith("http://") ||
+                modelFolderPath.toLowerCase().startsWith("https://")
+            ) {
                 this.model = await tf.loadGraphModel(modelFolderPath + "/model.json");
 
                 const response = await axios.get(modelFolderPath + "/classes.json");
@@ -59,9 +61,9 @@ export class ObjectDetection {
             }
 
             // Warmup the model.
-            const result = await this.model.executeAsync(tf.zeros([1, 300, 300, 3])) as tf.Tensor[];
-            result.forEach(async (t) => await t.data());
-            result.forEach(async (t) => t.dispose());
+            const result = (await this.model.executeAsync(tf.zeros([1, 300, 300, 3]))) as tf.Tensor[];
+            result.forEach(async t => await t.data());
+            result.forEach(async t => t.dispose());
             this.modelLoaded = true;
         } catch (err) {
             this.modelLoaded = false;
@@ -76,12 +78,16 @@ export class ObjectDetection {
      * @param xRatio Width compression ratio between the HTMLImageElement and the original image.
      * @param yRatio Height compression ratio between the HTMLImageElement and the original image.
      */
-    public async predictImage(image: ImageObject, predictTag: boolean, xRatio: number, yRatio: number)
-        : Promise<IRegion[]> {
+    public async predictImage(
+        image: ImageObject,
+        predictTag: boolean,
+        xRatio: number,
+        yRatio: number
+    ): Promise<IRegion[]> {
         const regions: IRegion[] = [];
 
         const predictions = await this.detect(image);
-        predictions.forEach((prediction) => {
+        predictions.forEach(prediction => {
             const left = Math.max(0, prediction.bbox[0] * xRatio);
             const top = Math.max(0, prediction.bbox[1] * yRatio);
             const width = Math.max(0, prediction.bbox[2] * xRatio);
@@ -90,29 +96,31 @@ export class ObjectDetection {
             regions.push({
                 id: shortid.generate(),
                 type: RegionType.Rectangle,
-                tags: predictTag ? [{name: prediction.class, color: "#ffffff"}] : [],
+                tags: predictTag ? [{ name: prediction.class, color: "#ffffff" }] : [],
                 boundingBox: {
                     left,
                     top,
                     width,
-                    height,
+                    height
                 },
-                points: [{
-                    x: left,
-                    y: top,
-                },
-                {
-                    x: left + width,
-                    y: top,
-                },
-                {
-                    x: left + width,
-                    y: top + height,
-                },
-                {
-                    x: left,
-                    y: top + height,
-                }],
+                points: [
+                    {
+                        x: left,
+                        y: top
+                    },
+                    {
+                        x: left + width,
+                        y: top
+                    },
+                    {
+                        x: left + width,
+                        y: top + height
+                    },
+                    {
+                        x: left,
+                        y: top + height
+                    }
+                ]
             });
         });
 
@@ -163,7 +171,7 @@ export class ObjectDetection {
         // 2. box location with shape of [1, 1917, 1, 4]
         // where 1917 is the number of box detectors, 90 is the number of classes.
         // and 4 is the four coordinates of the box.
-        const result = await this.model.executeAsync(batched) as tf.Tensor[];
+        const result = (await this.model.executeAsync(batched)) as tf.Tensor[];
 
         const scores = result[0].dataSync() as Float32Array;
         const boxes = result[1].dataSync() as Float32Array;
@@ -192,8 +200,13 @@ export class ObjectDetection {
     }
 
     private buildDetectedObjects(
-        width: number, height: number, boxes: Float32Array, scores: number[],
-        indexes: Float32Array, classes: number[]): DetectedObject[] {
+        width: number,
+        height: number,
+        boxes: Float32Array,
+        scores: number[],
+        indexes: Float32Array,
+        classes: number[]
+    ): DetectedObject[] {
         const count = indexes.length;
         const objects: DetectedObject[] = [];
 
@@ -213,7 +226,7 @@ export class ObjectDetection {
             objects.push({
                 bbox: bbox as [number, number, number, number],
                 class: this.getClass(i, indexes, classes),
-                score: scores[indexes[i]],
+                score: scores[indexes[i]]
             });
         }
 
@@ -231,9 +244,7 @@ export class ObjectDetection {
         return "";
     }
 
-    private calculateMaxScores(
-        scores: Float32Array, numBoxes: number,
-        numClasses: number): [number[], number[]] {
+    private calculateMaxScores(scores: Float32Array, numBoxes: number, numClasses: number): [number[], number[]] {
         const maxes = [];
         const classes = [];
         for (let i = 0; i < numBoxes; i++) {

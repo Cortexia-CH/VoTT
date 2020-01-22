@@ -12,7 +12,7 @@ import { IPoint, ITag } from "./applicationState";
  * @member tag_colors - List of all tag colors corresponding to the tags in "tags"
  */
 export interface IV1Project {
-    frames: {[frameName: string]: IV1Region[]};
+    frames: { [frameName: string]: IV1Region[] };
     framerate: string;
     inputTags: string;
     suggestiontype: string;

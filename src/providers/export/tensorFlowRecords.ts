@@ -38,7 +38,7 @@ export class TFRecordsExportProvider extends ExportProvider {
     public async export(): Promise<void> {
         const allAssets = await this.getAssetsForExport();
         const exportObject: any = { ...this.project };
-        exportObject.assets = _.keyBy(allAssets, (assetMetadata) => assetMetadata.asset.id);
+        exportObject.assets = _.keyBy(allAssets, assetMetadata => assetMetadata.asset.id);
 
         // Create Export Folder
         const exportFolderName = `${this.project.name.replace(/\s/g, "-")}-TFRecords-export`;
@@ -49,7 +49,7 @@ export class TFRecordsExportProvider extends ExportProvider {
     }
 
     private async exportRecords(exportFolderName: string, allAssets: IAssetMetadata[]) {
-        return await allAssets.mapAsync(async (element) => {
+        return await allAssets.mapAsync(async element => {
             return await this.exportSingleRecord(exportFolderName, element);
         });
     }
@@ -74,7 +74,7 @@ export class TFRecordsExportProvider extends ExportProvider {
                     ymax: [],
                     difficult: [],
                     truncated: [],
-                    view: [],
+                    view: []
                 };
 
                 if (!element.asset.size || element.asset.size.width === 0 || element.asset.size.height === 0) {
@@ -91,8 +91,11 @@ export class TFRecordsExportProvider extends ExportProvider {
                 builder.addFeature("image/width", FeatureType.Int64, imageInfo.width);
                 builder.addFeature("image/filename", FeatureType.String, element.asset.name);
                 builder.addFeature("image/source_id", FeatureType.String, element.asset.name);
-                builder.addFeature("image/key/sha256", FeatureType.String, CryptoJS.SHA256(imageBuffer)
-                    .toString(CryptoJS.enc.Base64));
+                builder.addFeature(
+                    "image/key/sha256",
+                    FeatureType.String,
+                    CryptoJS.SHA256(imageBuffer).toString(CryptoJS.enc.Base64)
+                );
                 builder.addFeature("image/encoded", FeatureType.Binary, imageBuffer);
                 builder.addFeature("image/format", FeatureType.String, element.asset.name.split(".").pop());
                 builder.addArrayFeature("image/object/bbox/xmin", FeatureType.Float, imageInfo.xmin);
@@ -106,7 +109,10 @@ export class TFRecordsExportProvider extends ExportProvider {
                 builder.addArrayFeature("image/object/view", FeatureType.String, imageInfo.view);
 
                 // Save TFRecords
-                const fileName = element.asset.name.split(".").slice(0, -1).join(".");
+                const fileName = element.asset.name
+                    .split(".")
+                    .slice(0, -1)
+                    .join(".");
                 const fileNamePath = `${exportFolderName}/${fileName}.tfrecord`;
                 await this.writeTFRecords(fileNamePath, [builder.build()]);
 
@@ -144,20 +150,18 @@ export class TFRecordsExportProvider extends ExportProvider {
     }
 
     private updateAssetTagArrays(element: IAssetMetadata, imageInfo: IImageInfo) {
-        element.regions.filter((region) => region.boundingBox)
-            .forEach((region) => {
+        element.regions
+            .filter(region => region.boundingBox)
+            .forEach(region => {
                 region.tags.forEach((tag: ITag) => {
-                    const index = this.project.tags
-                        .findIndex((projectTag) => projectTag.name === tag.name);
+                    const index = this.project.tags.findIndex(projectTag => projectTag.name === tag.name);
 
                     imageInfo.text.push(tag.name);
                     imageInfo.label.push(index);
                     imageInfo.xmin.push(region.boundingBox.left / imageInfo.width);
                     imageInfo.ymin.push(region.boundingBox.top / imageInfo.height);
-                    imageInfo.xmax.push((region.boundingBox.left + region.boundingBox.width)
-                        / imageInfo.width);
-                    imageInfo.ymax.push((region.boundingBox.top + region.boundingBox.height)
-                        / imageInfo.height);
+                    imageInfo.xmax.push((region.boundingBox.left + region.boundingBox.width) / imageInfo.width);
+                    imageInfo.ymax.push((region.boundingBox.top + region.boundingBox.height) / imageInfo.height);
                     imageInfo.difficult.push(0);
                     imageInfo.truncated.push(0);
                     imageInfo.view.push("Unspecified");
@@ -171,10 +175,10 @@ export class TFRecordsExportProvider extends ExportProvider {
             const pbtxtFileName = `${exportFolderName}/tf_label_map.pbtxt`;
 
             let id = 1;
-            const items = project.tags.map((element) => {
+            const items = project.tags.map(element => {
                 const params = {
                     id: (id++).toString(),
-                    tag: element.name,
+                    tag: element.name
                 };
 
                 return interpolate(itemTemplate, params);

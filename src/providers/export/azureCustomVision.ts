@@ -2,12 +2,20 @@ import _ from "lodash";
 import { ExportProvider, ExportAssetState, IExportResults } from "./exportProvider";
 import Guard from "../../common/guard";
 import {
-    IProject, IExportFormat, IAssetMetadata,
-    IBoundingBox, ISize, IExportProviderOptions, ITag,
+    IProject,
+    IExportFormat,
+    IAssetMetadata,
+    IBoundingBox,
+    ISize,
+    IExportProviderOptions,
+    ITag
 } from "../../models/applicationState";
 import {
-    AzureCustomVisionService, IAzureCustomVisionServiceOptions, IAzureCustomVisionProject,
-    IAzureCustomVisionTag, IAzureCustomVisionRegion,
+    AzureCustomVisionService,
+    IAzureCustomVisionServiceOptions,
+    IAzureCustomVisionProject,
+    IAzureCustomVisionTag,
+    IAzureCustomVisionRegion
 } from "./azureCustomVision/azureCustomVisionService";
 import HtmlFileReader from "../../common/htmlFileReader";
 
@@ -36,7 +44,7 @@ export interface ITagList {
 
 export enum NewOrExisting {
     New = "new",
-    Existing = "existing",
+    Existing = "existing"
 }
 
 /**
@@ -54,7 +62,7 @@ export enum AzureRegion {
     AustraliaEast = "australiaeast",
     CentralIndia = "centralindia",
     UKSouth = "uksouth",
-    JapanEast = "japaneast",
+    JapanEast = "japaneast"
 }
 
 /**
@@ -74,7 +82,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
 
         const cusomVisionServiceOptions: IAzureCustomVisionServiceOptions = {
             apiKey: options.apiKey,
-            baseUrl: `https://${options.region}.api.cognitive.microsoft.com/customvision/v2.2/Training`,
+            baseUrl: `https://${options.region}.api.cognitive.microsoft.com/customvision/v2.2/Training`
         };
         this.customVisionService = new AzureCustomVisionService(cusomVisionServiceOptions);
     }
@@ -88,26 +96,26 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
         const assetsToExport = await this.getAssetsForExport();
         const tagMap = _.keyBy(customVisionTags, "name");
 
-        const results = await assetsToExport.mapAsync(async (asset) => {
+        const results = await assetsToExport.mapAsync(async asset => {
             try {
                 await this.uploadAsset(asset, tagMap);
                 return {
                     asset,
-                    success: true,
+                    success: true
                 };
             } catch (e) {
                 return {
                     asset,
                     success: false,
-                    error: e,
+                    error: e
                 };
             }
         });
 
         return {
-            completed: results.filter((r) => r.success),
-            errors: results.filter((r) => !r.success),
-            count: results.length,
+            completed: results.filter(r => r.success),
+            errors: results.filter(r => !r.success),
+            count: results.length
         };
     }
 
@@ -127,7 +135,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
             description: customVisionOptions.description,
             classificationType: customVisionOptions.classificationType,
             domainId: customVisionOptions.domainId,
-            projectType: customVisionOptions.projectType,
+            projectType: customVisionOptions.projectType
         };
 
         customVisionProject = await this.customVisionService.create(customVisionProject);
@@ -137,7 +145,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
             region: customVisionOptions.region,
             apiKey: customVisionOptions.apiKey,
             projectId: customVisionProject.id,
-            newOrExisting: NewOrExisting.Existing,
+            newOrExisting: NewOrExisting.Existing
         };
     }
 
@@ -151,11 +159,12 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
         const customVisionTagNames = _.keyBy(customVisionTags, "name");
 
         const createTagTasks = await this.project.tags
-            .filter((projectTag) => {
+            .filter(projectTag => {
                 return !customVisionTagNames[projectTag.name];
-            }).map((projectTag) => {
+            })
+            .map(projectTag => {
                 const newTag: IAzureCustomVisionTag = {
-                    name: projectTag.name,
+                    name: projectTag.name
                 };
                 return this.customVisionService.createTag(customVisionOptions.projectId, newTag);
             });
@@ -182,7 +191,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
         const allRegions: IAzureCustomVisionRegion[] = [];
 
         // Generate the regions for Azure Custom Vision
-        assetMetadata.regions.forEach((region) => {
+        assetMetadata.regions.forEach(region => {
             if (region.boundingBox) {
                 region.tags.forEach((tag: ITag) => {
                     const customVisionTag = tags[tag.name];
@@ -191,7 +200,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
                         const newRegion: IAzureCustomVisionRegion = {
                             imageId: newImage.id,
                             tagId: customVisionTag.id,
-                            ...boundingBox,
+                            ...boundingBox
                         };
                         allRegions.push(newRegion);
                     }
@@ -216,7 +225,7 @@ export class AzureCustomVisionProvider extends ExportProvider<IAzureCustomVision
             left: boundingBox.left / size.width,
             top: boundingBox.top / size.height,
             width: boundingBox.width / size.width,
-            height: boundingBox.height / size.height,
+            height: boundingBox.height / size.height
         };
     }
 }

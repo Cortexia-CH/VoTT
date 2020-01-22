@@ -457,7 +457,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     private onCtrlTagClicked = (tag: ITag): void => {
         this.setState(
             {
-                selectedTag: tag.name,
+                selectedTag: tag.name
             },
             () => this.canvas.current.applyTag(tag)
         );
