@@ -5,7 +5,7 @@ export const mapTrackingActionToApiBody = (action: ITrackingAction): IActionRequ
     return {
         type: action.type,
         timestamp: `${action.timestamp}`,
-        regions: action.regions,
+        regions: action.regions.map(item => ({...item, tags: item.tags.map(tagItem => tagItem.name ? tagItem.name : tagItem)})),
         is_modified: action.isModified,
         user_id: action.userId,
         image_id: parseInt(action.imageId, 10)

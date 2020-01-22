@@ -26,7 +26,7 @@ interface IUserCredentials {
 export interface IActionRequest {
     type: string;
     timestamp: string;
-    regions: IRegion[];
+    regions: any[];
     is_modified: boolean;
     user_id: number;
     image_id: number;
