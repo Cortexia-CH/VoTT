@@ -28,7 +28,11 @@ export default interface IProjectActions {
     exportProject(project: IProject): Promise<void> | Promise<IExportResults>;
     loadAssets(project: IProject): Promise<IAsset[]>;
     loadAssetMetadata(project: IProject, asset: IAsset): Promise<IAssetMetadata>;
-    saveAssetMetadata(project: IProject, assetMetadata: IAssetMetadata, tagsWithId: ITagWithId[]): Promise<IAssetMetadata>;
+    saveAssetMetadata(
+        project: IProject,
+        assetMetadata: IAssetMetadata,
+        tagsWithId: ITagWithId[]
+    ): Promise<IAssetMetadata>;
     updateProjectTag(project: IProject, oldTagName: string, newTagName: string): Promise<IAssetMetadata[]>;
     deleteProjectTag(project: IProject, tagName): Promise<IAssetMetadata[]>;
 }
@@ -176,7 +180,7 @@ export function saveAssetMetadata(
     return async (dispatch: Dispatch) => {
         const assetService = new AssetService(project);
         const savedMetadata = await assetService.save(newAssetMetadata);
-        dispatch(saveAssetMetadataAction({savedMetadata, tagsWithId}));
+        dispatch(saveAssetMetadataAction({ savedMetadata, tagsWithId }));
 
         return { ...savedMetadata };
     };
@@ -320,7 +324,8 @@ export interface ILoadAssetMetadataAction extends IPayloadAction<string, IAssetM
 /**
  * Save asset metadata action type
  */
-export interface ISaveAssetMetadataAction extends IPayloadAction<string, {savedMetadata: IAssetMetadata, tagsWithId: ITagWithId[]}> {
+export interface ISaveAssetMetadataAction
+    extends IPayloadAction<string, { savedMetadata: IAssetMetadata; tagsWithId: ITagWithId[] }> {
     type: ActionTypes.SAVE_ASSET_METADATA_SUCCESS;
 }
 

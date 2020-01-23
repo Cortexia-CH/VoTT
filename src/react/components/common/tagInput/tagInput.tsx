@@ -136,7 +136,7 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
     public async componentDidMount() {
         document.body.appendChild(this.portalDiv);
         this.setState({
-            portalElement: ReactDOM.findDOMNode(this.portalDiv) as Element,
+            portalElement: ReactDOM.findDOMNode(this.portalDiv) as Element
         });
     }
 

@@ -147,7 +147,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         isValid: true,
         showInvalidRegionWarning: false,
         magnifierModalIsOpen: false,
-        litters: [],
+        litters: []
     };
 
     private activeLearningService: ActiveLearningService = null;
