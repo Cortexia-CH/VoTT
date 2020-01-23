@@ -145,7 +145,7 @@ export class TagInput extends React.Component<ITagInputProps, ITagInputState> {
     }
 
     public componentDidUpdate(prevProps: ITagInputProps) {
-        const {litters} = this.props;
+        const { litters } = this.props;
         if (prevProps.litters !== litters) {
             this.setState({
                 tags: buildTags(litters)
