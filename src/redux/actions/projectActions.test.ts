@@ -121,8 +121,8 @@ describe("Project Redux Actions", () => {
         expect(actions.length).toEqual(0);
     });
 
-    it("Close project dispatches redux action", () => {
-        projectActions.closeProject()(store.dispatch);
+    it("Close project dispatches redux action", async () => {
+        await projectActions.closeProject()(store.dispatch);
         const actions = store.getActions();
 
         expect(actions.length).toEqual(1);
@@ -177,7 +177,7 @@ describe("Project Redux Actions", () => {
         mockAssetService.prototype.save = jest.fn(() => assetMetadata);
 
         const project = MockFactory.createTestProject("TestProject");
-        const result = await projectActions.saveAssetMetadata(project, assetMetadata)(store.dispatch);
+        const result = await projectActions.saveAssetMetadata(project, assetMetadata, [])(store.dispatch);
         const actions = store.getActions();
 
         expect(actions.length).toEqual(1);
@@ -197,7 +197,7 @@ describe("Project Redux Actions", () => {
         mockAssetService.prototype.save = jest.fn(() => assetMetadata);
 
         const project = MockFactory.createTestProject("TestProject");
-        const result = await projectActions.saveAssetMetadata(project, assetMetadata)(store.dispatch);
+        const result = await projectActions.saveAssetMetadata(project, assetMetadata, [])(store.dispatch);
 
         expect(result.version).toEqual(appInfo.version);
     });

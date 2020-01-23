@@ -140,7 +140,7 @@ export default class CanvasHelpers {
         const tags = region.tags
             .map((tagName) => {
                 const projectTag = projectTags.find((projectTag) => projectTag.name === tagName);
-                return projectTag ? new Tag(projectTag.name, projectTag.color) : null;
+                return projectTag ? new Tag(projectTag.name.replace(/\(|\)|\/|\./g, ""), projectTag.color) : null;
             })
             .filter((tag) => tag !== null);
 
