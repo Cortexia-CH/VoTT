@@ -185,7 +185,7 @@ describe("Project Redux Actions", () => {
         expect(actions.length).toEqual(1);
         expect(actions[0]).toEqual({
             type: ActionTypes.SAVE_ASSET_METADATA_SUCCESS,
-            payload: {savedMetadata: assetMetadata, tagsWithId: []}
+            payload: { savedMetadata: assetMetadata, tagsWithId: [] }
         });
 
         expect(mockAssetService.prototype.save).toBeCalledWith(assetMetadata);

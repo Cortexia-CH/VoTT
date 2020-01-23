@@ -3,7 +3,7 @@ import { ActionTypes } from "../actions/actionTypes";
 import { IProject, ITag } from "../../models/applicationState";
 import { AnyAction } from "../actions/actionCreators";
 
-const defaultTagColor = '#000000';
+const defaultTagColor = "#000000";
 
 /**
  * Reducer for project. Actions handled:
