@@ -182,7 +182,8 @@ describe("Editor Page Component", () => {
 
         await MockFactory.flushUi();
         wrapper.update();
-
+        
+       
         const expectedAsset = editorPage.state().assets[0];
         const partialProject = {
             id: testProject.id,
@@ -197,7 +198,8 @@ describe("Editor Page Component", () => {
                     ...expectedAsset,
                     state: AssetState.Visited
                 }
-            })
+            }),
+            [{color: "#333333", name: undefined, id: 0}]
         );
         expect(saveProjectSpy).toBeCalledWith(expect.objectContaining(partialProject));
     });
@@ -345,7 +347,7 @@ describe("Editor Page Component", () => {
                     ...expectedAsset,
                     state: AssetState.Visited
                 }
-            })
+            }), [{"color": "#333333", "id": 0, "name": undefined}]
         );
         expect(saveProjectSpy).toBeCalledWith(expect.objectContaining(partialProject));
     });

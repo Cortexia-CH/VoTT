@@ -107,7 +107,7 @@ describe("Current Project Reducer", () => {
             version: "",
         };
 
-        const action = saveAssetMetadataAction(assetMetadata);
+        const action = saveAssetMetadataAction({savedMetadata: assetMetadata, tagsWithId: []});
         const result = reducer(state, action);
         expect(result).not.toBe(state);
         expect(result.assets[testAssets[0].id]).toEqual(assetMetadata.asset);
@@ -127,7 +127,7 @@ describe("Current Project Reducer", () => {
             [MockFactory.createTestRegion("Region 1", [expectedTag.name])],
         );
 
-        const action = saveAssetMetadataAction(assetMetadata);
+        const action = saveAssetMetadataAction({savedMetadata: assetMetadata, tagsWithId: []});
         const result = reducer(state, action);
         expect(result).not.toBe(state);
         expect(result.tags).toEqual([

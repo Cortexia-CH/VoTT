@@ -3,6 +3,8 @@ import { ActionTypes } from "../actions/actionTypes";
 import { IProject, ITag } from "../../models/applicationState";
 import { AnyAction } from "../actions/actionCreators";
 
+const defaultTagColor = '#000000';
+
 /**
  * Reducer for project. Actions handled:
  * DELETE_PROJECT_SUCCESS
@@ -45,9 +47,10 @@ export const reducer = (state: IProject = null, action: AnyAction): IProject => 
             let updateTags = false;
             assetTags.forEach(tag => {
                 if (!state.tags || state.tags.length === 0 || !state.tags.find(projectTag => tag === projectTag.name)) {
+                    const tagWithId = action.payload.tagsWithId.filter(item => item.name === tag)[0];
                     newTags.push({
                         name: tag,
-                        color: action.payload.tagsWithId.filter(item => item.name === tag)[0].color
+                        color: tagWithId ? tagWithId.color : defaultTagColor
                     });
                     updateTags = true;
                 }
