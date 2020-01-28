@@ -462,7 +462,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
      * Listens for {number key} and calls `onTagClicked` with tag corresponding to that number
      * @param event KeyDown event
      */
-    private handleTagHotKey = async (event: KeyboardEvent): Promise<void> => {
+    private handleTagHotKey = (event: KeyboardEvent): void => {
         this.setState({ pressedKeys: [...this.state.pressedKeys, parseInt(event.key, 10)] });
         _.debounce(() => {
             const tag = this.getTagFromPressedKeys();
