@@ -121,7 +121,7 @@ export default class TagInputItem extends React.Component<ITagInputItemProps, IT
     };
 
     private getTagContent = () => {
-        const {index} = this.props;
+        const { index } = this.props;
         return (
             <div className={"tag-name-container"}>
                 <div className="tag-name-body">
