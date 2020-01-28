@@ -641,7 +641,7 @@ describe("Editor Page Component", () => {
         });
 
         it("sets selected tag when hot key is pressed", async () => {
-            _.debounce = jest.fn((fn) => fn);
+            _.debounce = jest.fn(fn => fn);
             const project = MockFactory.createTestProject("test", 5);
             const store = createReduxStore({
                 ...MockFactory.initialState(),
@@ -657,7 +657,7 @@ describe("Editor Page Component", () => {
 
             expect(editorPage.state().selectedTag).toEqual(strings.wasteTypes[1]);
         });
- 
+
         it("does not set selected tag when invalid hot key is pressed", async () => {
             const tagLength = 5;
             const project = MockFactory.createTestProject("test", tagLength);
