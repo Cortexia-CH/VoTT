@@ -448,7 +448,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     };
 
     private getTagFromPressedKeys = (): ITag => {
-        const {tags} = this.props.project;
+        const { tags } = this.props.project;
         const index = parseInt(this.state.pressedKeys.join(""), 10);
         if (index < tags.length) {
             return tags[index];
