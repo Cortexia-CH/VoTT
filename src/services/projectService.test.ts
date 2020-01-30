@@ -4,7 +4,7 @@ import MockFactory from "../common/mockFactory";
 import { StorageProviderFactory } from "../providers/storage/storageProviderFactory";
 import {
     IProject, IExportFormat, ISecurityToken,
-    AssetState, IActiveLearningSettings, ModelPathType,
+    AssetState, IActiveLearningSettings, ModelPathType, ITag,
 } from "../models/applicationState";
 import { constants } from "../common/constants";
 import { ExportProviderFactory } from "../providers/export/exportProviderFactory";
@@ -13,6 +13,9 @@ import { encryptProject, decryptProject } from "../common/utils";
 import { ExportAssetState } from "../providers/export/exportProvider";
 import { IVottJsonExportProviderOptions } from "../providers/export/vottJson";
 import { IPascalVOCExportProviderOptions } from "../providers/export/pascalVOC";
+import apiService, { ILitter } from "../services/apiService";
+import { strings } from "../common/strings";
+jest.mock("../services/apiService");
 
 describe("Project Service", () => {
     let projectSerivce: IProjectService = null;
@@ -43,13 +46,18 @@ describe("Project Service", () => {
 
         storageProviderMock.writeText.mockClear();
         storageProviderMock.deleteFile.mockClear();
+        jest.spyOn(apiService, "getLitters").mockImplementation(() =>
+            Promise.resolve({
+                data: [MockFactory.createTestLitter(1)]
+            })
+        );
     });
 
     it("Load decrypts any project settings using the specified key", async () => {
         const encryptedProject = encryptProject(testProject, securityToken);
         const decryptedProject = await projectSerivce.load(encryptedProject, securityToken);
-
-        expect(decryptedProject).toEqual(testProject);
+        const litter: ILitter = MockFactory.createTestLitter(1);
+        expect(decryptedProject).toEqual({...testProject, tags: [{name: strings.wasteTypes[litter.id], color: '#333333'}]});
     });
 
     it("Saves calls project storage provider to write project", async () => {
