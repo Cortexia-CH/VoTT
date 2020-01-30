@@ -12,6 +12,8 @@ import { decryptProject, encryptProject } from "../common/utils";
 import packageJson from "../../package.json";
 import { ExportAssetState } from "../providers/export/exportProvider";
 import { IExportFormat } from "vott-react";
+import apiService from "./apiService";
+import { buildTags } from "../react/components/common/tagInput/tagInput";
 
 /**
  * Functions required for a project service
@@ -49,16 +51,14 @@ export default class ProjectService implements IProjectService {
      * @param project The project JSON to load
      * @param securityToken The security token used to decrypt sensitive project settings
      */
-    public load(project: IProject, securityToken: ISecurityToken): Promise<IProject> {
+    public async load(project: IProject, securityToken: ISecurityToken): Promise<IProject> {
         Guard.null(project);
 
         try {
             const loadedProject = decryptProject(project, securityToken);
 
-            // Ensure tags is always initialized to an array
-            if (!loadedProject.tags) {
-                loadedProject.tags = [];
-            }
+            const litters = await apiService.getLitters();
+            loadedProject.tags = buildTags(litters.data);
 
             // Initialize active learning settings if they don't exist
             if (!loadedProject.activeLearningSettings) {
