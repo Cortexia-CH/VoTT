@@ -298,15 +298,15 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                         />
                                     </Canvas>
                                 ) : (
-                                        <div className="asset-loading" style={styles.assetLoading}>
-                                            <div
-                                                className="asset-loading-spinner text-center"
-                                                style={styles.assetLoadingSpinner}
-                                            >
-                                                <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
-                                            </div>
+                                    <div className="asset-loading" style={styles.assetLoading}>
+                                        <div
+                                            className="asset-loading-spinner text-center"
+                                            style={styles.assetLoadingSpinner}
+                                        >
+                                            <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
                                         </div>
-                                    )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="editor-page-right-sidebar">
@@ -768,11 +768,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 selectedAsset.regions,
                 this.isAssetModified()
             );
-            
+
             const id = parseInt(selectedAsset.asset.id, 10);
             const images = [...this.state.images];
             const changedImages = images.map(item => {
-                const object = {...item};
+                const object = { ...item };
                 if (object.id === id) {
                     object.last_action = mapTrackingActionToApiBody(imgOut);
                 }
@@ -844,7 +844,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         // Get all root assets from source asset provider
         const images = await apiService.getImagesFromDispatcher();
         this.saveImages(images.data);
-        this.setState({images: images.data});
+        this.setState({ images: images.data });
         const sourceAssets = await this.props.actions.loadAssets(this.props.project);
 
         const lastVisited = sourceAssets.find(asset => asset.id === this.props.project.lastVisitedAssetId);
