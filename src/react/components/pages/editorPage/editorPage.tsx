@@ -46,6 +46,7 @@ import ITrackingActions, * as trackingActions from "../../../../redux/actions/tr
 import { MagnifierModalMessage } from "./MagnifierModalMessage";
 import apiService, { ILitter, IImageWithAction } from "../../../../services/apiService";
 import CanvasHelpers from "./canvasHelpers";
+import { mapTrackingActionToApiBody } from "../../../../services/ApiMapper";
 
 /**
  * Properties for Editor Page
@@ -104,6 +105,7 @@ export interface IEditorPageState {
     selectedAssetBase?: IAssetMetadata;
     litters: ILitter[];
     pressedKeys: number[];
+    images: IImageWithAction[];
 }
 
 function mapStateToProps(state: IApplicationState) {
@@ -148,7 +150,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         showInvalidRegionWarning: false,
         magnifierModalIsOpen: false,
         litters: [],
-        pressedKeys: []
+        pressedKeys: [],
+        images: []
     };
 
     private activeLearningService: ActiveLearningService = null;
@@ -295,15 +298,15 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                         />
                                     </Canvas>
                                 ) : (
-                                    <div className="asset-loading" style={styles.assetLoading}>
-                                        <div
-                                            className="asset-loading-spinner text-center"
-                                            style={styles.assetLoadingSpinner}
-                                        >
-                                            <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
+                                        <div className="asset-loading" style={styles.assetLoading}>
+                                            <div
+                                                className="asset-loading-spinner text-center"
+                                                style={styles.assetLoadingSpinner}
+                                            >
+                                                <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
                             </div>
                         </div>
                         <div className="editor-page-right-sidebar">
@@ -759,13 +762,28 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
          * Track user leaves the image
          */
         if (selectedAsset && selectedAsset.asset) {
-            await trackingActions.trackingImgOut(
+            const imgOut = await trackingActions.trackingImgOut(
                 auth.userId,
                 selectedAsset.asset.id,
                 selectedAsset.regions,
                 this.isAssetModified()
             );
+            
+            const id = parseInt(selectedAsset.asset.id, 10);
+            const images = [...this.state.images];
+            const changedImages = images.map(item => {
+                const object = {...item};
+                if (object.id === id) {
+                    object.last_action = mapTrackingActionToApiBody(imgOut);
+                }
+                return object;
+            });
+            this.setState({
+                images: changedImages
+            });
+            this.saveImages(changedImages);
         }
+
         const assetMetadata = await actions.loadAssetMetadata(project, asset);
 
         try {
@@ -825,7 +843,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
 
         // Get all root assets from source asset provider
         const images = await apiService.getImagesFromDispatcher();
-        this.props.actions.saveProjectImages(images.data);
+        this.saveImages(images.data);
+        this.setState({images: images.data});
         const sourceAssets = await this.props.actions.loadAssets(this.props.project);
 
         const lastVisited = sourceAssets.find(asset => asset.id === this.props.project.lastVisitedAssetId);
