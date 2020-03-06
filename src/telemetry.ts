@@ -13,9 +13,8 @@ if (Env.get() !== "production") {
     // for development/testing
     // myho-appinsights
     debug = true;
-    maxBatchSize = 0;  // send telemetry as soon as it's collected
+    maxBatchSize = 0; // send telemetry as soon as it's collected
 }
-
 
 /**
  * create an app insights connection for web version
