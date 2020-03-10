@@ -295,15 +295,15 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                         />
                                     </Canvas>
                                 ) : (
-                                    <div className="asset-loading" style={styles.assetLoading}>
-                                        <div
-                                            className="asset-loading-spinner text-center"
-                                            style={styles.assetLoadingSpinner}
-                                        >
-                                            <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
+                                        <div className="asset-loading" style={styles.assetLoading}>
+                                            <div
+                                                className="asset-loading-spinner text-center"
+                                                style={styles.assetLoadingSpinner}
+                                            >
+                                                <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
                             </div>
                         </div>
                         <div className="editor-page-right-sidebar">
@@ -877,7 +877,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 const previousIndex = indexAssetToRemove - 1;
                 const assetToSelect =
                     newAssets[previousIndex] !== undefined ? newAssets[previousIndex] : newAssets[indexAssetToRemove];
-                this.selectAsset(assetToSelect);
+                if (assetToSelect !== undefined) {
+                    this.selectAsset(assetToSelect);
+                } else if (newAssets.length > 0) {
+                    this.selectAsset(newAssets[0]);
+                }
             }
             this.setState({
                 assets: newAssets
