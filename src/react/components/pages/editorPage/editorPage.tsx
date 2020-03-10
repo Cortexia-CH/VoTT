@@ -295,15 +295,15 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                         />
                                     </Canvas>
                                 ) : (
-                                        <div className="asset-loading" style={styles.assetLoading}>
-                                            <div
-                                                className="asset-loading-spinner text-center"
-                                                style={styles.assetLoadingSpinner}
-                                            >
-                                                <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
-                                            </div>
+                                    <div className="asset-loading" style={styles.assetLoading}>
+                                        <div
+                                            className="asset-loading-spinner text-center"
+                                            style={styles.assetLoadingSpinner}
+                                        >
+                                            <i className="fas fa-circle-notch fa-spin" style={styles.icon} />
                                         </div>
-                                    )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="editor-page-right-sidebar">
