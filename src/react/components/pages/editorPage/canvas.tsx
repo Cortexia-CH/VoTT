@@ -375,7 +375,7 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
     };
 
     /**
-     * Method called when deleting a region from the editor
+     * Method called when selecting a region on the editor
      * @param {string} id the id of the selected region
      * @param {boolean} multiSelect boolean whether region was selected with multi selection
      * @returns {void}
