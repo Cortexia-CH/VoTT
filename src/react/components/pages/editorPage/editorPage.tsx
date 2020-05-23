@@ -208,7 +208,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             this.state.endpointType !== prevState.endpointType ||
             (this.props.project && this.state.assets.length === 0)
         ) {
-            await this.loadProjectAssets(false, true)
+            await this.loadProjectAssets(false, true);
         }
 
         // Navigating directly to the page via URL (ie, http://vott/projects/a1b2c3dEf/edit) sets the default state
@@ -602,7 +602,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         // The root asset can either be the actual asset being edited (ex: VideoFrame) or the top level / root
         // asset selected from the side bar (image/video).
         const rootAsset = { ...(assetMetadata.asset.parent || assetMetadata.asset) };
-        console.log('========BEFORE========');
+        console.log("========BEFORE========");
         console.log(assetMetadata);
         if (this.isTaggableAssetType(assetMetadata.asset)) {
             assetMetadata.asset.state = assetMetadata.regions.length > 0 ? AssetState.Tagged : AssetState.Visited;
@@ -647,7 +647,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 ...rootAsset
             };
         }
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
         console.log(assetMetadata);
 
         this.setState({ childAssets, assets, isValid: true, selectedAsset: assetMetadata });
@@ -868,9 +868,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                 return true;
             }
             const oldBoundingBox = oldAssetRegion.boundingBox;
-            console.log(oldAssetRegion.boundingBox)
+            console.log(oldAssetRegion.boundingBox);
             const newBoundingBox = region.boundingBox;
-            console.log(newBoundingBox)
+            console.log(newBoundingBox);
             return (
                 region.id !== oldAssetRegion.id ||
                 JSON.stringify(region.points) !== JSON.stringify(oldAssetRegion.points) ||
