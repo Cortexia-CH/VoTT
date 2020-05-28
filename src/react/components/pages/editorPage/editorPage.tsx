@@ -854,6 +854,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         try {
             await trackingActions.trackingImgIn(auth.userId, assetMetadata.asset.name, assetMetadata.regions);
         } catch (e) {
+            console.log(e)
             console.warn(strings.consoleMessages.imgInFailed);
         }
     };
